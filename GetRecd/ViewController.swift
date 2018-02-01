@@ -1,14 +1,14 @@
 //
-//  FirstViewController.swift
-//  Get Rec'd
+//  ViewController.swift
+//  GetRecd
 //
-//  Created by Sawyer Blatz on 1/31/18.
+//  Created by Sawyer Blatz on 2/1/18.
 //  Copyright © 2018 CS 407. All rights reserved.
 //
 
 import UIKit
 
-class FirstViewController: UIViewController {
+class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

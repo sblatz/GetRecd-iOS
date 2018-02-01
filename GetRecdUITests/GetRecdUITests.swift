@@ -1,14 +1,14 @@
 //
-//  Get_Rec_dUITests.swift
-//  Get Rec'dUITests
+//  GetRecdUITests.swift
+//  GetRecdUITests
 //
-//  Created by Sawyer Blatz on 1/31/18.
+//  Created by Sawyer Blatz on 2/1/18.
 //  Copyright © 2018 CS 407. All rights reserved.
 //
 
 import XCTest
 
-class Get_Rec_dUITests: XCTestCase {
+class GetRecdUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()

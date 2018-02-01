@@ -1,15 +1,15 @@
 //
-//  Get_Rec_dTests.swift
-//  Get Rec'dTests
+//  GetRecdTests.swift
+//  GetRecdTests
 //
-//  Created by Sawyer Blatz on 1/31/18.
+//  Created by Sawyer Blatz on 2/1/18.
 //  Copyright © 2018 CS 407. All rights reserved.
 //
 
 import XCTest
-@testable import Get_Rec_d
+@testable import GetRecd
 
-class Get_Rec_dTests: XCTestCase {
+class GetRecdTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
