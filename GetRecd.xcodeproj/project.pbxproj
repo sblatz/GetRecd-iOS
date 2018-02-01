@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2451055F2023D2AC001AC6F6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2451055E2023D2AC001AC6F6 /* Info.plist */; };
 		245156C320238B1A000E8082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245156C220238B1A000E8082 /* AppDelegate.swift */; };
 		245156C820238B1A000E8082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 245156C620238B1A000E8082 /* Main.storyboard */; };
 		245156CD20238B1A000E8082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 245156CB20238B1A000E8082 /* LaunchScreen.storyboard */; };
@@ -42,11 +43,11 @@
 		20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21FF20879242F0EF14232BFF /* Pods-GetRecdUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecdUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecdUITests/Pods-GetRecdUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2451055E2023D2AC001AC6F6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245156BF20238B1A000E8082 /* GetRecd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GetRecd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		245156C220238B1A000E8082 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		245156C720238B1A000E8082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		245156CC20238B1A000E8082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		245156CE20238B1A000E8082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245156D320238B1A000E8082 /* GetRecdTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GetRecdTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		245156D720238B1A000E8082 /* GetRecdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecdTests.swift; sourceTree = "<group>"; };
 		245156D920238B1A000E8082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -117,10 +118,11 @@
 			isa = PBXGroup;
 			children = (
 				24E476DF20238D9A00D65361 /* Assets.xcassets */,
+				2451055E2023D2AC001AC6F6 /* Info.plist */,
 				24E8479A2023D102000033E3 /* Utilities */,
-				24E847992023D0BA000033E3 /* Controller */,
-				24E847982023D0A5000033E3 /* View */,
-				24E847972023D08F000033E3 /* Model */,
+				24E847992023D0BA000033E3 /* Controllers */,
+				24E847982023D0A5000033E3 /* Views */,
+				24E847972023D08F000033E3 /* Models */,
 			);
 			path = GetRecd;
 			sourceTree = "<group>";
@@ -143,31 +145,30 @@
 			path = GetRecdUITests;
 			sourceTree = "<group>";
 		};
-		24E847972023D08F000033E3 /* Model */ = {
+		24E847972023D08F000033E3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				245156C220238B1A000E8082 /* AppDelegate.swift */,
-				245156CE20238B1A000E8082 /* Info.plist */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
-		24E847982023D0A5000033E3 /* View */ = {
+		24E847982023D0A5000033E3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				245156C620238B1A000E8082 /* Main.storyboard */,
 				245156CB20238B1A000E8082 /* LaunchScreen.storyboard */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
-		24E847992023D0BA000033E3 /* Controller */ = {
+		24E847992023D0BA000033E3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				245156F220238BC7000E8082 /* IntroViewController.swift */,
 				245156F420238BDB000E8082 /* CreateAccountViewController.swift */,
 			);
-			path = Controller;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		24E8479A2023D102000033E3 /* Utilities */ = {
@@ -316,6 +317,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2451055F2023D2AC001AC6F6 /* Info.plist in Resources */,
 				245156CD20238B1A000E8082 /* LaunchScreen.storyboard in Resources */,
 				24E476E020238D9A00D65361 /* Assets.xcassets in Resources */,
 				245156C820238B1A000E8082 /* Main.storyboard in Resources */,
