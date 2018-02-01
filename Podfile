@@ -7,6 +7,7 @@ target 'GetRecd' do
 
   # Pods for GetRecd
   pod "Pastel"
+  pod "LTMorphingLabel"
 
   target 'GetRecdTests' do
     inherit! :search_paths
