@@ -7,32 +7,30 @@
 //
 
 import UIKit
-import Shift
+import Pastel
 
 class IntroViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let gradientView = view as? PastelView {
+            gradientView.startPastelPoint = .topRight
+            gradientView.endPastelPoint = .bottomLeft
+            /*
+            gradientView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
+              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),
+              UIColor(red: 123/255, green: 31/255, blue: 162/255, alpha: 1.0),
+              UIColor(red: 32/255, green: 76/255, blue: 255/255, alpha: 1.0),
+              UIColor(red: 32/255, green: 158/255, blue: 255/255, alpha: 1.0),
+              UIColor(red: 90/255, green: 120/255, blue: 127/255, alpha: 1.0),
+              UIColor(red: 58/255, green: 255/255, blue: 217/255, alpha: 1.0)])
+             */
 
-        setupGradient()
+            gradientView.setColors([UIColor(red:0.33, green:0.34, blue:0.95, alpha:1.0), UIColor(red:0.78, green:0.46, blue:0.83, alpha:1.0)])
 
-        if let view = self.view as? ShiftView {
-            view.setColors([UIColor(red:0.77, green:0.45, blue:0.83, alpha:1.0), UIColor(red:0.33, green:0.34, blue:0.95, alpha:1.0)])
+            gradientView.startAnimation()
+
         }
-
-    }
-
-    func setupGradient() {
-        let gradient = CAGradientLayer()
-        gradient.frame = self.view.bounds
-        gradient.colors = [
-            UIColor(red:0.33, green:0.34, blue:0.95, alpha:1.0).cgColor,
-            UIColor(red:0.77, green:0.45, blue:0.83, alpha:1.0).cgColor
-        ]
-        gradient.startPoint = CGPoint(x:0, y:0)
-        gradient.endPoint = CGPoint(x:1, y:1)
-        self.view.layer.insertSublayer(gradient, at: 0 )
-
     }
 
     override func didReceiveMemoryWarning() {

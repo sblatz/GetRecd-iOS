@@ -15,7 +15,7 @@
         <scene sceneID="oSQ-at-kz1">
             <objects>
                 <viewController id="jCp-z8-H9K" customClass="IntroViewController" customModule="GetRecd" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Vfe-53-xS6" customClass="ShiftView" customModule="Shift">
+                    <view key="view" contentMode="scaleToFill" id="Vfe-53-xS6" customClass="PastelView" customModule="Pastel">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -155,7 +155,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Enk-dw-5bz" userLabel="Email View">
                                 <rect key="frame" x="37.5" y="147" width="300" height="40"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mail" translatesAutoresizingMaskIntoConstraints="NO" id="eZ5-1X-Io3">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="email" translatesAutoresizingMaskIntoConstraints="NO" id="eZ5-1X-Io3">
                                         <rect key="frame" x="0.0" y="10" width="20" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="20" id="NoM-tT-pd2"/>
@@ -292,10 +292,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="email" width="50" height="50"/>
         <image name="lock" width="50" height="50"/>
-        <image name="mail" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="PrL-0J-i8l"/>
+        <segue reference="u83-if-vHS"/>
     </inferredMetricsTieBreakers>
 </document>
