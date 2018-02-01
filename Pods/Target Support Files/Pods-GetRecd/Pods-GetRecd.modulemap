@@ -1,0 +1,6 @@
+framework module Pods_GetRecd {
+  umbrella header "Pods-GetRecd-umbrella.h"
+
+  export *
+  module * { export * }
+}

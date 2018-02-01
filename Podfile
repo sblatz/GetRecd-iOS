@@ -1,18 +1,20 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'Get Rec\'d' do
+target 'GetRecd' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Get Rec'd
+  # Pods for GetRecd
+  pod "Pastel"
+  pod "LTMorphingLabel"
 
-  target 'Get Rec\'dTests' do
+  target 'GetRecdTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  target 'Get Rec\'dUITests' do
+  target 'GetRecdUITests' do
     inherit! :search_paths
     # Pods for testing
   end
