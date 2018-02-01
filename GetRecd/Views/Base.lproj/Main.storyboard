@@ -10,6 +10,14 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans-Regular</string>
+        </array>
+        <array key="OpenSans-SemiBold.ttf">
+            <string>OpenSans-SemiBold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Intro View Controller-->
         <scene sceneID="oSQ-at-kz1">
@@ -20,8 +28,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Get Rec'd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ByO-lV-NJT">
-                                <rect key="frame" x="0.0" y="241" width="375" height="33.5"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
+                                <rect key="frame" x="0.0" y="238" width="375" height="39.5"/>
+                                <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="29"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -37,7 +45,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -45,26 +53,26 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your next favorite" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dna-fJ-uYv">
-                                <rect key="frame" x="65.5" y="304" width="243.5" height="50"/>
+                                <rect key="frame" x="65.5" y="297.5" width="243.5" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="IPY-6g-jjo"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="20"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="is just a few taps away." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="14b-YJ-899">
-                                <rect key="frame" x="0.0" y="369" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="387.5" width="375" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="byZ-FT-Wvv"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="20"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o6d-Ae-03u" userLabel="mediaLabel" customClass="LTMorphingLabel" customModule="LTMorphingLabel">
-                                <rect key="frame" x="0.0" y="334" width="375" height="50"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
+                                <rect key="frame" x="0.0" y="342.5" width="375" height="50"/>
+                                <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="30"/>
                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -78,17 +86,26 @@
                                     <segue destination="pse-ig-54G" kind="show" id="u83-if-vHS"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star" translatesAutoresizingMaskIntoConstraints="NO" id="pq3-nZ-YnN">
+                                <rect key="frame" x="137.5" y="88" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="PCE-IE-QYk"/>
+                                    <constraint firstAttribute="width" constant="100" id="Yzk-Xb-N1e"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.56862745100000001" green="0.40000000000000002" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="dna-fJ-uYv" firstAttribute="height" secondItem="o6d-Ae-03u" secondAttribute="height" id="0dj-iE-rUD"/>
                             <constraint firstItem="BoW-z7-9Lc" firstAttribute="bottom" secondItem="nga-lp-FKb" secondAttribute="bottom" constant="20" id="2AE-gU-Zt7"/>
+                            <constraint firstItem="ByO-lV-NJT" firstAttribute="top" secondItem="pq3-nZ-YnN" secondAttribute="bottom" constant="50" id="40j-4y-cDq"/>
+                            <constraint firstItem="pq3-nZ-YnN" firstAttribute="centerX" secondItem="BoW-z7-9Lc" secondAttribute="centerX" id="6Eb-TM-Swa"/>
                             <constraint firstItem="nga-lp-FKb" firstAttribute="width" secondItem="Vfe-53-xS6" secondAttribute="width" id="7qU-uo-N3r"/>
-                            <constraint firstItem="dna-fJ-uYv" firstAttribute="top" secondItem="ByO-lV-NJT" secondAttribute="bottom" constant="30" id="8vR-Xw-wRG"/>
+                            <constraint firstItem="dna-fJ-uYv" firstAttribute="top" secondItem="ByO-lV-NJT" secondAttribute="bottom" constant="20" id="8vR-Xw-wRG"/>
                             <constraint firstItem="o6d-Ae-03u" firstAttribute="width" secondItem="Vfe-53-xS6" secondAttribute="width" id="9p3-Er-6IY"/>
                             <constraint firstItem="14b-YJ-899" firstAttribute="width" secondItem="o6d-Ae-03u" secondAttribute="width" id="AgJ-9G-wrN"/>
                             <constraint firstItem="dna-fJ-uYv" firstAttribute="centerX" secondItem="ByO-lV-NJT" secondAttribute="centerX" id="F3g-pU-RGa"/>
-                            <constraint firstItem="o6d-Ae-03u" firstAttribute="top" secondItem="dna-fJ-uYv" secondAttribute="bottom" constant="-20" id="G3e-p7-zBW"/>
+                            <constraint firstItem="o6d-Ae-03u" firstAttribute="top" secondItem="dna-fJ-uYv" secondAttribute="bottom" constant="-5" id="G3e-p7-zBW"/>
                             <constraint firstItem="ByO-lV-NJT" firstAttribute="width" secondItem="Vfe-53-xS6" secondAttribute="width" id="Ggy-44-FqV"/>
                             <constraint firstItem="ByO-lV-NJT" firstAttribute="centerX" secondItem="BoW-z7-9Lc" secondAttribute="centerX" id="HoL-pK-tcQ"/>
                             <constraint firstItem="dna-fJ-uYv" firstAttribute="width" secondItem="ByO-lV-NJT" secondAttribute="width" multiplier="0.65" id="J7h-1D-aCC"/>
@@ -100,7 +117,7 @@
                             <constraint firstItem="zAk-g8-vRv" firstAttribute="width" secondItem="ByO-lV-NJT" secondAttribute="width" multiplier="0.8" id="fLZ-82-d0x"/>
                             <constraint firstItem="ByO-lV-NJT" firstAttribute="centerY" secondItem="BoW-z7-9Lc" secondAttribute="centerY" multiplier="0.75" id="jiY-lJ-Mos"/>
                             <constraint firstItem="14b-YJ-899" firstAttribute="centerX" secondItem="o6d-Ae-03u" secondAttribute="centerX" id="sKF-rg-oST"/>
-                            <constraint firstItem="14b-YJ-899" firstAttribute="top" secondItem="o6d-Ae-03u" secondAttribute="bottom" constant="-15" id="uH1-xh-Gmx"/>
+                            <constraint firstItem="14b-YJ-899" firstAttribute="top" secondItem="o6d-Ae-03u" secondAttribute="bottom" constant="-5" id="uH1-xh-Gmx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BoW-z7-9Lc"/>
                     </view>
@@ -297,6 +314,7 @@
     <resources>
         <image name="email" width="50" height="50"/>
         <image name="lock" width="50" height="50"/>
+        <image name="star" width="800" height="768"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="u83-if-vHS"/>
