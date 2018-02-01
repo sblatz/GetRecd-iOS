@@ -15,10 +15,11 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
     @IBOutlet weak var mediaLabel: LTMorphingLabel!
 
     let mediaTypes = ["song", "artist", "movie", "tv show", "album"]
-    var mediaCount = 0
+    var mediaCount = -1
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mediaLabel.text = ""
         mediaLabel.delegate = self
         mediaLabel.morphingEffect = .evaporate
 
