@@ -26,20 +26,11 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
         if let gradientView = view as? PastelView {
             gradientView.startPastelPoint = .topRight
             gradientView.endPastelPoint = .bottomLeft
-/*
-            gradientView.setColors([UIColor(red: 156/255, green: 39/255, blue: 176/255, alpha: 1.0),
-              UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0),
-              UIColor(red: 123/255, green: 31/255, blue: 162/255, alpha: 1.0),
-              UIColor(red: 32/255, green: 76/255, blue: 255/255, alpha: 1.0),
-              UIColor(red: 32/255, green: 158/255, blue: 255/255, alpha: 1.0),
-              UIColor(red: 90/255, green: 120/255, blue: 127/255, alpha: 1.0),
-              UIColor(red: 58/255, green: 255/255, blue: 217/255, alpha: 1.0)])
-*/
 
             gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
                                     UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
                                     UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
-            
+
             gradientView.startAnimation()
         }
 
