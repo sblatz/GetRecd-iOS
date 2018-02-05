@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2451055F2023D2AC001AC6F6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2451055E2023D2AC001AC6F6 /* Info.plist */; };
 		2451056B2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056C2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056D2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
@@ -49,6 +48,9 @@
 		57AC00E60D925AC61FB1A99E /* Pods_GetRecdTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */; };
 		672D0E3CEEFA24D2A3D349A3 /* Pods_GetRecd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */; };
 		80A1ADDA2B538296773C88D0 /* Pods_GetRecdUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */; };
+		FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FA202681BA00E15E0B /* DataService.swift */; };
+		FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FC202681C100E15E0B /* AuthService.swift */; };
+		FC0AE6FF2026842300E15E0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FE2026842300E15E0B /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,9 @@
 		A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF09BAC38792B9A12189E65C /* Pods-GetRecd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.debug.xcconfig"; sourceTree = "<group>"; };
 		E521BA2623ADDFD472904EE3 /* Pods-GetRecd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.release.xcconfig"; sourceTree = "<group>"; };
+		FC0AE6FA202681BA00E15E0B /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		FC0AE6FC202681C100E15E0B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		FC0AE6FE2026842300E15E0B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,13 +179,15 @@
 		245156C120238B1A000E8082 /* GetRecd */ = {
 			isa = PBXGroup;
 			children = (
+				245156C220238B1A000E8082 /* AppDelegate.swift */,
 				24E476DF20238D9A00D65361 /* Assets.xcassets */,
-				2451055E2023D2AC001AC6F6 /* Info.plist */,
 				245105602023DAD6001AC6F6 /* Fonts */,
-				24E8479A2023D102000033E3 /* Utilities */,
-				24E847992023D0BA000033E3 /* Controllers */,
-				24E847982023D0A5000033E3 /* Views */,
+				2451055E2023D2AC001AC6F6 /* Info.plist */,
+				FC0AE6F92026810500E15E0B /* Services */,
+				FC0AE6F8202680D000E15E0B /* Utilities */,
 				24E847972023D08F000033E3 /* Models */,
+				24E847982023D0A5000033E3 /* Views */,
+				24E847992023D0BA000033E3 /* Controllers */,
 			);
 			path = GetRecd;
 			sourceTree = "<group>";
@@ -206,7 +213,7 @@
 		24E847972023D08F000033E3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				245156C220238B1A000E8082 /* AppDelegate.swift */,
+				FC0AE6FE2026842300E15E0B /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -214,8 +221,8 @@
 		24E847982023D0A5000033E3 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				245156C620238B1A000E8082 /* Main.storyboard */,
 				245156CB20238B1A000E8082 /* LaunchScreen.storyboard */,
+				245156C620238B1A000E8082 /* Main.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -227,13 +234,6 @@
 				245156F420238BDB000E8082 /* CreateAccountViewController.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		24E8479A2023D102000033E3 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utilities;
 			sourceTree = "<group>";
 		};
 		732509C928B81803BC3DFB94 /* Pods */ = {
@@ -257,6 +257,22 @@
 				20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FC0AE6F8202680D000E15E0B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		FC0AE6F92026810500E15E0B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FC0AE6FC202681C100E15E0B /* AuthService.swift */,
+				FC0AE6FA202681BA00E15E0B /* DataService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -382,7 +398,6 @@
 				2451057A2023DAE8001AC6F6 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				245105712023DAE8001AC6F6 /* OpenSans-SemiBold.ttf in Resources */,
 				245105802023DAE8001AC6F6 /* OpenSans-BoldItalic.ttf in Resources */,
-				2451055F2023D2AC001AC6F6 /* Info.plist in Resources */,
 				245156CD20238B1A000E8082 /* LaunchScreen.storyboard in Resources */,
 				245105862023DAE8001AC6F6 /* OpenSans-ExtraBold.ttf in Resources */,
 				24E476E020238D9A00D65361 /* Assets.xcassets in Resources */,
@@ -451,13 +466,33 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/LTMorphingLabel/LTMorphingLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Pastel/Pastel.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTMorphingLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pastel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -521,9 +556,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -587,7 +625,10 @@
 			files = (
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
+				FC0AE6FF2026842300E15E0B /* User.swift in Sources */,
+				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
+				FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -755,7 +796,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3GKN44XQ72;
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
@@ -771,7 +812,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3GKN44XQ72;
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
