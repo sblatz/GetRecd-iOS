@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Pastel
 
 class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 
@@ -19,10 +20,21 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var confirmPasswordView: UIView!
     @IBOutlet weak var confirmPasswordTextField: UITextField!
 
-
+    @IBOutlet weak var orView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let gradientView = view as? PastelView {
+            gradientView.startPastelPoint = .topRight
+            gradientView.endPastelPoint = .bottomLeft
+
+            gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
+                                    UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
+                                    UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
+
+            gradientView.startAnimation()
+        }
 
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
         view.addGestureRecognizer(tap)
@@ -31,6 +43,27 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
         setupVisuals()
+
+        lineDraw(viewLi: orView)
+    }
+
+    func lineDraw(viewLi:UIView) {
+        var border = CALayer()
+        let width = CGFloat(1.0)
+        border.borderColor = UIColor.white.cgColor
+        border.frame = CGRect(x: 0, y: viewLi.frame.size.height/2 + 1, width:  viewLi.frame.size.width / 2 - 30, height: width)
+        border.borderWidth = width
+        viewLi.layer.addSublayer(border)
+        viewLi.layer.masksToBounds = true
+
+        border = CALayer()
+        border.borderColor = UIColor.white.cgColor
+        border.frame = CGRect(x: viewLi.frame.size.width / 2 + 30, y: viewLi.frame.size.height/2 + 1, width: viewLi.frame.size.width, height: width)
+        border.borderWidth = width
+        viewLi.layer.addSublayer(border)
+        viewLi.layer.masksToBounds = true
+
+
     }
 
     func setupVisuals() {
