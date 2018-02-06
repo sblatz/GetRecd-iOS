@@ -44,6 +44,7 @@
 		245156E320238B1A000E8082 /* GetRecdUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245156E220238B1A000E8082 /* GetRecdUITests.swift */; };
 		245156F320238BC7000E8082 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245156F220238BC7000E8082 /* IntroViewController.swift */; };
 		245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245156F420238BDB000E8082 /* CreateAccountViewController.swift */; };
+		24687FB7202A371000CC990D /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24687FB6202A371000CC990D /* SignInViewController.swift */; };
 		24E476E020238D9A00D65361 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24E476DF20238D9A00D65361 /* Assets.xcassets */; };
 		57AC00E60D925AC61FB1A99E /* Pods_GetRecdTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */; };
 		672D0E3CEEFA24D2A3D349A3 /* Pods_GetRecd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */; };
@@ -95,6 +96,7 @@
 		245156E420238B1A000E8082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245156F220238BC7000E8082 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		245156F420238BDB000E8082 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		24687FB6202A371000CC990D /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		24E476DF20238D9A00D65361 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = GetRecd/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		4262CAA143F97E5F8C4E9A07 /* Pods-GetRecdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecdTests/Pods-GetRecdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		45C527E70A5C82CB269C99D1 /* Pods-GetRecdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecdUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecdUITests/Pods-GetRecdUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 			children = (
 				245156F220238BC7000E8082 /* IntroViewController.swift */,
 				245156F420238BDB000E8082 /* CreateAccountViewController.swift */,
+				24687FB6202A371000CC990D /* SignInViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24687FB7202A371000CC990D /* SignInViewController.swift in Sources */,
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
