@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2451055F2023D2AC001AC6F6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2451055E2023D2AC001AC6F6 /* Info.plist */; };
 		2451056B2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056C2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056D2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
@@ -382,7 +381,6 @@
 				2451057A2023DAE8001AC6F6 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				245105712023DAE8001AC6F6 /* OpenSans-SemiBold.ttf in Resources */,
 				245105802023DAE8001AC6F6 /* OpenSans-BoldItalic.ttf in Resources */,
-				2451055F2023D2AC001AC6F6 /* Info.plist in Resources */,
 				245156CD20238B1A000E8082 /* LaunchScreen.storyboard in Resources */,
 				245105862023DAE8001AC6F6 /* OpenSans-ExtraBold.ttf in Resources */,
 				24E476E020238D9A00D65361 /* Assets.xcassets in Resources */,

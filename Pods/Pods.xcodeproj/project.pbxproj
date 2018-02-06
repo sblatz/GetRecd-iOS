@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -77,13 +77,13 @@
 		1CFB4472B01429154D7633B3274DA34C /* Pods-GetRecd-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GetRecd-resources.sh"; sourceTree = "<group>"; };
 		221D64DD55327113CCC1A358DFE2C0C1 /* LTMorphingLabel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LTMorphingLabel.h; path = LTMorphingLabel/LTMorphingLabel.h; sourceTree = "<group>"; };
 		22E4C02BAEFBB4245D1E50CD17640698 /* Pods-GetRecdUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GetRecdUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		2444A0BF07A924A3B5FC6862E5E36034 /* Pastel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Pastel.modulemap; sourceTree = "<group>"; };
+		2444A0BF07A924A3B5FC6862E5E36034 /* Pastel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Pastel.modulemap; sourceTree = "<group>"; };
 		277BC49977E46A0D31DE0C88AD7E96B7 /* Pods-GetRecd-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-GetRecd-acknowledgements.markdown"; sourceTree = "<group>"; };
-		2A01C9A1AFFBBFB169AFADAA4E4D5671 /* LTMorphingLabel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = LTMorphingLabel.framework; path = LTMorphingLabel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		31D887A442C967D3EF1F9B85F3658E32 /* Pods-GetRecdUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-GetRecdUITests.modulemap"; sourceTree = "<group>"; };
+		2A01C9A1AFFBBFB169AFADAA4E4D5671 /* LTMorphingLabel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LTMorphingLabel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		31D887A442C967D3EF1F9B85F3658E32 /* Pods-GetRecdUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-GetRecdUITests.modulemap"; sourceTree = "<group>"; };
 		33083C616C9CA8AF16FA7C690BC673C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		33EA2DF64FE07BE62C120C732C0BA150 /* Pods-GetRecd-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-GetRecd-umbrella.h"; sourceTree = "<group>"; };
-		360919948EEB133FC1861F9ED45CDBBA /* Pastel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pastel.framework; path = Pastel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		360919948EEB133FC1861F9ED45CDBBA /* Pastel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pastel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		377D8A31889C4B5BBACEA51F528A039B /* LTStringDiffResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LTStringDiffResult.swift; path = LTMorphingLabel/LTStringDiffResult.swift; sourceTree = "<group>"; };
 		37E1A0A8341C0216274B2ECD0E2994ED /* LTMorphingLabel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LTMorphingLabel.swift; path = LTMorphingLabel/LTMorphingLabel.swift; sourceTree = "<group>"; };
 		3917A50EB224EEDBC66971700D698782 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -98,17 +98,17 @@
 		5D71F88732E9FB69EBD792C34AC38937 /* LTMorphingLabel+Pixelate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "LTMorphingLabel+Pixelate.swift"; path = "LTMorphingLabel/LTMorphingLabel+Pixelate.swift"; sourceTree = "<group>"; };
 		5EF13BCD45509F72B02D2659739C14A2 /* Pods-GetRecdTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-GetRecdTests-umbrella.h"; sourceTree = "<group>"; };
 		5FC1104B51A87E43B8D03F7C129E8D90 /* Pods-GetRecdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GetRecdTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6943C5D18C0CD2A8CCE41AF0CE2BD085 /* Pods_GetRecd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_GetRecd.framework; path = "Pods-GetRecd.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6943C5D18C0CD2A8CCE41AF0CE2BD085 /* Pods_GetRecd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72123489B0B6E61D7F221AFED23C35EB /* PastelView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PastelView.swift; path = Pastel/Classes/PastelView.swift; sourceTree = "<group>"; };
 		74200C904E5AD71E8D72C872B3FBCAF4 /* LTCharacterLimbo.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LTCharacterLimbo.swift; path = LTMorphingLabel/LTCharacterLimbo.swift; sourceTree = "<group>"; };
 		7645E30079FE435611A40C81EABA40F7 /* Pods-GetRecdUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-GetRecdUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7715024DA2382276F5F41FE1B4E644CF /* Pastel-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pastel-umbrella.h"; sourceTree = "<group>"; };
 		77CB81546C1D00F5753756D2E9F73A55 /* Pods-GetRecdUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GetRecdUITests.release.xcconfig"; sourceTree = "<group>"; };
-		7F63E1573914207EF20DA5150CB9C4C6 /* Pods-GetRecd.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-GetRecd.modulemap"; sourceTree = "<group>"; };
+		7F63E1573914207EF20DA5150CB9C4C6 /* Pods-GetRecd.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-GetRecd.modulemap"; sourceTree = "<group>"; };
 		84A57B0E4E5DF4C421C9BE1B8EC8A6EE /* Pods-GetRecdUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-GetRecdUITests-acknowledgements.plist"; sourceTree = "<group>"; };
 		85617113E5AB8DA02A356CC37DCFA064 /* Pods-GetRecd-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-GetRecd-dummy.m"; sourceTree = "<group>"; };
 		8CF345D500F4B81CF50A74BDCF19EC4E /* Pods-GetRecdTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-GetRecdTests-dummy.m"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93FA98FB471E73AD324C5D44CDA8278E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9574A0EECFF74D3EE791FA7199397157 /* LTMorphingEffect.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LTMorphingEffect.swift; path = LTMorphingLabel/LTMorphingEffect.swift; sourceTree = "<group>"; };
 		97DFE92403D743761198A9295EE265A0 /* Pods-GetRecdTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-GetRecdTests-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -118,19 +118,19 @@
 		B5D6BC593B7AB5C7FEFFE0EE97F640BB /* Pods-GetRecdTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-GetRecdTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		BA2DF26F73928B734B61C6E54CE5085A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF5787DB01D580FEF88EB039F7DCF5B6 /* PastelGradient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PastelGradient.swift; path = Pastel/Classes/PastelGradient.swift; sourceTree = "<group>"; };
-		BFD7BF338905568FDBF4091BDFCFA9B2 /* LTMorphingLabel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = LTMorphingLabel.modulemap; sourceTree = "<group>"; };
+		BFD7BF338905568FDBF4091BDFCFA9B2 /* LTMorphingLabel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = LTMorphingLabel.modulemap; sourceTree = "<group>"; };
 		C176A77FBC85418346ED77B312E0267E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7492B75DF9849537FFCCB7FC06E7618 /* Smoke.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = Smoke.png; path = LTMorphingLabel/Particles/Smoke.png; sourceTree = "<group>"; };
 		C9A10424088DDCE632EB4DE4A102CD8C /* LTCharacterDiffResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LTCharacterDiffResult.swift; path = LTMorphingLabel/LTCharacterDiffResult.swift; sourceTree = "<group>"; };
 		CC22500BBA660903B6F06E599EC98C00 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CD23751FB71E9B4E18E49DD58BD7B53D /* Pods-GetRecdUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GetRecdUITests-resources.sh"; sourceTree = "<group>"; };
-		D9566579482F7F2A0AEB5279AAEDDEDD /* Pods_GetRecdUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_GetRecdUITests.framework; path = "Pods-GetRecdUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9566579482F7F2A0AEB5279AAEDDEDD /* Pods_GetRecdUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB11F9EC4741580EF8F055A1CED4B6CD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2DC0EB02240D50800EA06C6B7DDD14F /* Pods-GetRecd-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GetRecd-frameworks.sh"; sourceTree = "<group>"; };
 		E33F8EA701AB424499B8DA2000930DAF /* LTMorphingLabel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = LTMorphingLabel.xcconfig; sourceTree = "<group>"; };
 		E5F152DEAF75806086F1F3D603390ED9 /* Pods-GetRecdUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GetRecdUITests-frameworks.sh"; sourceTree = "<group>"; };
-		E6DB5FA679B3BC5AF2EC401F0731813E /* Pods-GetRecdTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-GetRecdTests.modulemap"; sourceTree = "<group>"; };
-		EEC6C819E73500C372A04CA5BFC6994A /* Pods_GetRecdTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_GetRecdTests.framework; path = "Pods-GetRecdTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6DB5FA679B3BC5AF2EC401F0731813E /* Pods-GetRecdTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-GetRecdTests.modulemap"; sourceTree = "<group>"; };
+		EEC6C819E73500C372A04CA5BFC6994A /* Pods_GetRecdTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF01A0BF1C0C8BF3F03F8BC89B6E3440 /* Fragment.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = Fragment.png; path = LTMorphingLabel/Particles/Fragment.png; sourceTree = "<group>"; };
 		FB7751D4D791D1183FB66D3CCA52CD8E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		FBEB56E488C5A19EC6F2BCC642915DE8 /* Pods-GetRecd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GetRecd.release.xcconfig"; sourceTree = "<group>"; };
@@ -239,7 +239,6 @@
 				72123489B0B6E61D7F221AFED23C35EB /* PastelView.swift */,
 				BFC4BAABB529125DDBF6749EE7909F7B /* Support Files */,
 			);
-			name = Pastel;
 			path = Pastel;
 			sourceTree = "<group>";
 		};
@@ -325,7 +324,6 @@
 				7CCA7D46771F22E6B317AFC9706A70E1 /* Resources */,
 				180B424822244DA90ADBF969CCA1F3A3 /* Support Files */,
 			);
-			name = LTMorphingLabel;
 			path = LTMorphingLabel;
 			sourceTree = "<group>";
 		};
@@ -513,7 +511,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0920;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -896,6 +894,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;

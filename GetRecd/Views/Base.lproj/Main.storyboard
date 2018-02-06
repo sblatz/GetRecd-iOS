@@ -141,7 +141,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YZN-ej-1N4" userLabel="Spacing View">
-                                <rect key="frame" x="0.0" y="434.5" width="375" height="179.5"/>
+                                <rect key="frame" x="0.0" y="444.5" width="375" height="169.5"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9YN-GU-lY3" userLabel="Error Spacing View">
+                                <rect key="frame" x="0.0" y="286" width="375" height="62"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an Account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PUQ-a4-JYQ">
                                 <rect key="frame" x="0.0" y="52" width="375" height="42.5"/>
@@ -160,7 +164,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CEk-sI-RJR">
-                                <rect key="frame" x="37" y="334.5" width="300" height="50"/>
+                                <rect key="frame" x="37" y="344.5" width="300" height="50"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="99F-ze-aRp"/>
@@ -275,7 +279,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54K-jo-vHa">
-                                <rect key="frame" x="37" y="550" width="300" height="50"/>
+                                <rect key="frame" x="37" y="555" width="300" height="50"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="YE2-Qi-B3o"/>
@@ -294,7 +298,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0lh-PK-UVb">
-                                <rect key="frame" x="37" y="480" width="300" height="50"/>
+                                <rect key="frame" x="37" y="485" width="300" height="50"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Ie0-DL-REB"/>
@@ -313,7 +317,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3S-RG-030">
-                                <rect key="frame" x="0.0" y="434.5" width="375" height="20"/>
+                                <rect key="frame" x="0.0" y="444.5" width="375" height="20"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZF0-Vu-Zue">
                                         <rect key="frame" x="179.5" y="0.0" width="17" height="20"/>
@@ -330,15 +334,25 @@
                                     <constraint firstItem="ZF0-Vu-Zue" firstAttribute="centerY" secondItem="b3S-RG-030" secondAttribute="centerY" id="jKp-KH-4LH"/>
                                 </constraints>
                             </view>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter a valid email address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jbm-7w-Trw">
+                                <rect key="frame" x="72.5" y="308.5" width="231.5" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.97264164689999999" green="0.96851366760000002" blue="0.9726544023" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.56862745100000001" green="0.40000000000000002" blue="0.88235294119999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Enk-dw-5bz" firstAttribute="centerX" secondItem="PUQ-a4-JYQ" secondAttribute="centerX" id="0wn-CI-ScM"/>
+                            <constraint firstItem="9YN-GU-lY3" firstAttribute="centerX" secondItem="Phi-0P-lWW" secondAttribute="centerX" id="2NY-f0-A2C"/>
+                            <constraint firstItem="9YN-GU-lY3" firstAttribute="width" secondItem="esL-hm-sbV" secondAttribute="width" id="3az-Sd-Hyr"/>
                             <constraint firstItem="54K-jo-vHa" firstAttribute="centerX" secondItem="0lh-PK-UVb" secondAttribute="centerX" id="3y4-o0-abD"/>
-                            <constraint firstItem="CEk-sI-RJR" firstAttribute="top" secondItem="W7H-rT-hKh" secondAttribute="bottom" constant="40" id="6W3-de-hoX"/>
+                            <constraint firstItem="CEk-sI-RJR" firstAttribute="top" secondItem="W7H-rT-hKh" secondAttribute="bottom" constant="50" id="6W3-de-hoX"/>
                             <constraint firstItem="IIV-h3-TYy" firstAttribute="top" secondItem="Enk-dw-5bz" secondAttribute="bottom" constant="20" id="ADj-TK-QFJ"/>
                             <constraint firstItem="W7H-rT-hKh" firstAttribute="centerX" secondItem="IIV-h3-TYy" secondAttribute="centerX" id="E8s-WI-ZQH"/>
+                            <constraint firstItem="CEk-sI-RJR" firstAttribute="top" secondItem="9YN-GU-lY3" secondAttribute="bottom" constant="-3.5" id="Fu3-TR-Ipi"/>
                             <constraint firstItem="CEk-sI-RJR" firstAttribute="centerX" secondItem="rDI-fF-3J3" secondAttribute="centerX" id="GV5-1a-rnx"/>
+                            <constraint firstItem="Jbm-7w-Trw" firstAttribute="centerY" secondItem="9YN-GU-lY3" secondAttribute="centerY" id="Ifh-RG-l2a"/>
                             <constraint firstItem="W7H-rT-hKh" firstAttribute="width" secondItem="IIV-h3-TYy" secondAttribute="width" id="JAg-RJ-9rO"/>
                             <constraint firstItem="b3S-RG-030" firstAttribute="top" secondItem="CEk-sI-RJR" secondAttribute="bottom" constant="50" id="Lat-U2-U2q"/>
                             <constraint firstItem="0lh-PK-UVb" firstAttribute="centerX" secondItem="CEk-sI-RJR" secondAttribute="centerX" id="MEg-Fg-MWo"/>
@@ -361,6 +375,8 @@
                             <constraint firstItem="Enk-dw-5bz" firstAttribute="width" secondItem="PUQ-a4-JYQ" secondAttribute="width" multiplier="0.8" id="iZj-DX-yuB"/>
                             <constraint firstItem="W7H-rT-hKh" firstAttribute="top" secondItem="IIV-h3-TYy" secondAttribute="bottom" constant="20" id="ijs-7c-dSn"/>
                             <constraint firstItem="0lh-PK-UVb" firstAttribute="width" secondItem="CEk-sI-RJR" secondAttribute="width" id="jcW-ry-Mz2"/>
+                            <constraint firstItem="9YN-GU-lY3" firstAttribute="top" secondItem="W7H-rT-hKh" secondAttribute="bottom" constant="-8.5" id="l54-He-GYt"/>
+                            <constraint firstItem="Jbm-7w-Trw" firstAttribute="centerX" secondItem="9YN-GU-lY3" secondAttribute="centerX" id="lc5-BO-Xxg"/>
                             <constraint firstItem="W7H-rT-hKh" firstAttribute="height" secondItem="IIV-h3-TYy" secondAttribute="height" id="lo6-cn-bUj"/>
                             <constraint firstItem="YZN-ej-1N4" firstAttribute="centerX" secondItem="rDI-fF-3J3" secondAttribute="centerX" id="mqa-lR-eyq"/>
                             <constraint firstItem="IIV-h3-TYy" firstAttribute="height" secondItem="Enk-dw-5bz" secondAttribute="height" id="oIv-HP-VP3"/>
@@ -376,6 +392,7 @@
                         <outlet property="confirmPasswordView" destination="W7H-rT-hKh" id="Iak-Vg-nop"/>
                         <outlet property="emailTextField" destination="dSf-B4-01S" id="S3V-dk-ms0"/>
                         <outlet property="emailView" destination="Enk-dw-5bz" id="qg5-Mi-RAD"/>
+                        <outlet property="errorLabel" destination="Jbm-7w-Trw" id="EQH-ld-4dV"/>
                         <outlet property="orView" destination="b3S-RG-030" id="5Nk-tw-nNF"/>
                         <outlet property="passwordTextField" destination="5lL-iv-E7k" id="rZa-gu-pp6"/>
                         <outlet property="passwordView" destination="IIV-h3-TYy" id="NKq-vJ-PcF"/>
