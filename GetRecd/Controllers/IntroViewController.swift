@@ -24,20 +24,25 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
         mediaLabel.delegate = self
         mediaLabel.morphingEffect = .evaporate
 
+        let mediaLabelTimer = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(mediaLabelAnimation), userInfo: nil, repeats: true)
+        mediaLabelTimer.fire()
+
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         if let gradientView = view as? PastelView {
             gradientView.startPastelPoint = .topRight
             gradientView.endPastelPoint = .bottomLeft
+            gradientView.animationDuration = 4.0
 
             gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
                                     UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
                                     UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
 
             gradientView.startAnimation()
+
+            print(gradientView.animationDuration)
         }
-
-        let mediaLabelTimer = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(mediaLabelAnimation), userInfo: nil, repeats: true)
-        mediaLabelTimer.fire()
-
     }
 
     @objc func mediaLabelAnimation() {

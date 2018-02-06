@@ -25,17 +25,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let gradientView = view as? PastelView {
-            gradientView.startPastelPoint = .topRight
-            gradientView.endPastelPoint = .bottomLeft
-
-            gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
-                                    UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
-                                    UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
-
-            gradientView.startAnimation()
-        }
 
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
         view.addGestureRecognizer(tap)
@@ -46,6 +35,19 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         setupVisuals()
 
         drawHorizontalLine(view: orView)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        if let gradientView = view as? PastelView {
+            gradientView.startPastelPoint = .topRight
+            gradientView.endPastelPoint = .bottomLeft
+
+            gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
+                                    UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
+                                    UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
+
+            gradientView.startAnimation()
+        }
     }
 
     func drawHorizontalLine (view: UIView) {

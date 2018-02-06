@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24270FCD202A533100AC6642 /* NavigationViewController.swift */; };
 		2451056B2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056C2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056D2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
@@ -73,6 +74,7 @@
 		20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21FF20879242F0EF14232BFF /* Pods-GetRecdUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecdUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecdUITests/Pods-GetRecdUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24270FCD202A533100AC6642 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		2451055E2023D2AC001AC6F6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		245105622023DAE4001AC6F6 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				245156F220238BC7000E8082 /* IntroViewController.swift */,
+				24270FCD202A533100AC6642 /* NavigationViewController.swift */,
 				245156F420238BDB000E8082 /* CreateAccountViewController.swift */,
 				24687FB6202A371000CC990D /* SignInViewController.swift */,
 			);
@@ -589,6 +592,7 @@
 				24687FB7202A371000CC990D /* SignInViewController.swift in Sources */,
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
+				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

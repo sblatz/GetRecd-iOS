@@ -23,6 +23,14 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
+        view.addGestureRecognizer(tap)
+
+        setupVisuals()
+        drawHorizontalLine(view: orView)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         if let gradientView = view as? PastelView {
             gradientView.startPastelPoint = .topRight
             gradientView.endPastelPoint = .bottomLeft
@@ -33,12 +41,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
 
             gradientView.startAnimation()
         }
-
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
-        view.addGestureRecognizer(tap)
-
-        setupVisuals()
-        drawHorizontalLine(view: orView)
     }
 
     func setupVisuals() {
