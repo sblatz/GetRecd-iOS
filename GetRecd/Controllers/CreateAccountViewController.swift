@@ -44,26 +44,24 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         confirmPasswordTextField.delegate = self
         setupVisuals()
 
-        lineDraw(viewLi: orView)
+        drawHorizontalLine(view: orView)
     }
 
-    func lineDraw(viewLi:UIView) {
+    func drawHorizontalLine (view: UIView) {
         var border = CALayer()
         let width = CGFloat(1.0)
         border.borderColor = UIColor.white.cgColor
-        border.frame = CGRect(x: 0, y: viewLi.frame.size.height/2 + 1, width:  viewLi.frame.size.width / 2 - 30, height: width)
+        border.frame = CGRect(x: 0, y: view.frame.size.height/2 + 1, width:  view.frame.size.width / 2 - 30, height: width)
         border.borderWidth = width
-        viewLi.layer.addSublayer(border)
-        viewLi.layer.masksToBounds = true
+        view.layer.addSublayer(border)
+        view.layer.masksToBounds = true
 
         border = CALayer()
         border.borderColor = UIColor.white.cgColor
-        border.frame = CGRect(x: viewLi.frame.size.width / 2 + 30, y: viewLi.frame.size.height/2 + 1, width: viewLi.frame.size.width, height: width)
+        border.frame = CGRect(x: view.frame.size.width / 2 + 30, y: view.frame.size.height/2 + 1, width: view.frame.size.width, height: width)
         border.borderWidth = width
-        viewLi.layer.addSublayer(border)
-        viewLi.layer.masksToBounds = true
-
-
+        view.layer.addSublayer(border)
+        view.layer.masksToBounds = true
     }
 
     func setupVisuals() {
@@ -112,17 +110,5 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
 }
 

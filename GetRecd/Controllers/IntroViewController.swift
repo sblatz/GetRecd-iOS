@@ -16,6 +16,7 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
 
     let mediaTypes = ["song", "artist", "movie", "tv show", "album"]
     var mediaCount = -1
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
