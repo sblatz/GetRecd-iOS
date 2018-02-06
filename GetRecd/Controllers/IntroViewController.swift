@@ -26,7 +26,6 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
 
         let mediaLabelTimer = Timer.scheduledTimer(timeInterval: 2.5, target: self, selector: #selector(mediaLabelAnimation), userInfo: nil, repeats: true)
         mediaLabelTimer.fire()
-
     }
 
     override func viewWillAppear(_ animated: Bool) {
