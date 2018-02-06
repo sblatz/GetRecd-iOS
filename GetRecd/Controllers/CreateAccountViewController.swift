@@ -33,7 +33,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
         setupVisuals()
-
         drawHorizontalLine(view: orView)
     }
 
@@ -111,7 +110,6 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             errorLabel.isHidden = false
         } else {
             // Segue to home screen
-
         }
     }
 

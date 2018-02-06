@@ -39,8 +39,6 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
                                     UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
 
             gradientView.startAnimation()
-
-            print(gradientView.animationDuration)
         }
     }
 
@@ -50,12 +48,7 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
         }
 
         mediaCount += 1
-
-        //UIView.animate(withDuration: 0.5) {
         mediaLabel.text = mediaTypes[self.mediaCount]
-            //self.mediaLabel.text = self.mediaTypes[self.mediaCount]
-        //}
-
     }
 
     func morphingDidStart(_ label: LTMorphingLabel) {

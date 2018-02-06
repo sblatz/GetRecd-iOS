@@ -16,5 +16,4 @@ class NavigationViewController: UINavigationController {
         self.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationBar.shadowImage = UIImage()
     }
-
 }

@@ -81,7 +81,6 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
 
         // Try to sign the user in with the given credentials
         // Update errorLabel if necessary, otherwise segue to main screen!
-
     }
 
     @objc func dismissKeyboard(sender: UITapGestureRecognizer) {
