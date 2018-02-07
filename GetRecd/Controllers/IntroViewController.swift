@@ -34,6 +34,7 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
             gradientView.endPastelPoint = .bottomLeft
             gradientView.animationDuration = 4.0
 
+
             gradientView.setColors([UIColor(red:0.35, green:0.28, blue:0.98, alpha:1.0),
                                     UIColor(red:0.78, green:0.43, blue:0.84, alpha:1.0),
                                     UIColor(red:0.19, green:0.14, blue:0.68, alpha:1.0)])
@@ -48,6 +49,7 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
         }
 
         mediaCount += 1
+
         mediaLabel.text = mediaTypes[self.mediaCount]
     }
 
@@ -63,4 +65,3 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
 
     }
 }
-
