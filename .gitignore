@@ -141,3 +141,5 @@ playground.xcworkspace
 
 # End of https://www.gitignore.io/api/osx,swift,objective-c,xcode
 
+# Martin's changes:
+.idea

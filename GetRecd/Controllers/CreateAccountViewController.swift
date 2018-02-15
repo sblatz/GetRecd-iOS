@@ -109,7 +109,16 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
             errorLabel.text = "Please ensure passwords match"
             errorLabel.isHidden = false
         } else {
-            // Segue to home screen
+            AuthService.instance.createAccountWithEmail(email: emailText, password: passwordText, responseHandler: { (creationResponse) in
+                if creationResponse.isEmpty {
+                    self.errorLabel.isHidden = true
+                    DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email" : emailText])
+                    // Show the home screen.
+                } else {
+                    self.errorLabel.text = creationResponse
+                    self.errorLabel.isHidden = false
+                }
+            })
         }
     }
 

@@ -541,7 +541,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="signInButonPressed:" destination="pse-ig-54G" eventType="touchUpInside" id="aOD-Fj-9aq"/>
+                                    <action selector="signInButtonPressed:" destination="pse-ig-54G" eventType="touchUpInside" id="aOD-Fj-9aq"/>
                                     <action selector="signUpButtonPressed:" destination="0Xu-Dl-gGC" eventType="touchUpInside" id="mGk-cI-pzq"/>
                                 </connections>
                             </button>
