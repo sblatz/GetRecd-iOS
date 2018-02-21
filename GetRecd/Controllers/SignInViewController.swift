@@ -8,8 +8,9 @@
 
 import UIKit
 import Pastel
+import GoogleSignIn
 
-class SignInViewController: UIViewController, UITextFieldDelegate {
+class SignInViewController: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate {
 
     @IBOutlet weak var emailView: UIView!
     @IBOutlet weak var emailTextField: UITextField!
@@ -99,6 +100,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 }
             })
         }
+    }
+
+    @IBAction func googleSignInButtonPressed(_ sender: Any) {
+        AuthService.instance.googleAuthenticate(forViewController: self)
     }
 
     @objc func dismissKeyboard(sender: UITapGestureRecognizer) {

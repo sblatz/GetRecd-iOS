@@ -311,6 +311,9 @@
                                         <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="googleSignInButtonPressed:" destination="0Xu-Dl-gGC" eventType="touchUpInside" id="hiz-dN-b5e"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0lh-PK-UVb">
                                 <rect key="frame" x="37" y="432.5" width="300" height="50"/>
@@ -503,6 +506,9 @@
                                         <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="googleSignInButtonPressed:" destination="pse-ig-54G" eventType="touchUpInside" id="eUB-WW-EFB"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YMP-Ve-jIG">
                                 <rect key="frame" x="37.5" y="412.5" width="300" height="50"/>

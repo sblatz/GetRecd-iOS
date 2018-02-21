@@ -13,10 +13,51 @@ import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 
-class AuthService {
+class AuthService: NSObject, GIDSignInDelegate {
     // Static variable used to call AuthService functions
     static let instance = AuthService()
     private var authInstance: Auth?
+
+    private override init() {
+        super.init()
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+    }
+
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+
+        guard let authentication = user.authentication else { return }
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                accessToken: authentication.accessToken)
+
+        Auth.auth().signIn(with: credential) { (user, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            var userData = [String:Any]()
+            if (user!.displayName != nil) {
+                userData["name"] = user?.displayName!
+            }
+            if (user!.email != nil) {
+                userData["email"] = user?.email!
+            }
+            if (user!.photoURL != nil) {
+                userData["photoURL"] = user?.photoURL!.absoluteString
+            }
+            DataService.instance.createOrUpdateUser(uid: user!.uid, userData: userData)
+            // Show the home screen.
+        }
+    }
+
+    func googleAuthenticate(forViewController controller: GIDSignInUIDelegate) {
+        GIDSignIn.sharedInstance().uiDelegate = controller
+        GIDSignIn.sharedInstance().signIn()
+    }
 
     func createAccountWithEmail(email: String, password: String, responseHandler: @escaping (String) -> (Void)) {
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
