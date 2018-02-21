@@ -64,4 +64,8 @@ class IntroViewController: UIViewController, LTMorphingLabelDelegate {
     func morphingOnProgress(_ label: LTMorphingLabel, progress: Float) {
 
     }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
 }

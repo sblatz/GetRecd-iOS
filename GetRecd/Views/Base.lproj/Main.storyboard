@@ -193,7 +193,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -308,7 +308,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
@@ -324,7 +324,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
@@ -332,7 +332,7 @@
                                 <rect key="frame" x="0.0" y="394" width="375" height="20"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZF0-Vu-Zue">
-                                        <rect key="frame" x="179.5" y="0.0" width="17" height="20"/>
+                                        <rect key="frame" x="179" y="0.0" width="17" height="20"/>
                                         <fontDescription key="fontDescription" name="OpenSans-Light" family="Open Sans" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -403,6 +403,7 @@
                         <outlet property="orView" destination="b3S-RG-030" id="5Nk-tw-nNF"/>
                         <outlet property="passwordTextField" destination="5lL-iv-E7k" id="rZa-gu-pp6"/>
                         <outlet property="passwordView" destination="IIV-h3-TYy" id="NKq-vJ-PcF"/>
+                        <segue destination="GIN-vW-f6q" kind="show" identifier="RecFeed" id="qmB-dB-jqF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tUg-qf-3by" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -499,7 +500,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
@@ -515,7 +516,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
@@ -537,7 +538,7 @@
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="20"/>
+                                        <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -549,7 +550,7 @@
                                 <rect key="frame" x="0.0" y="374" width="375" height="20"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="or" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZhJ-yT-haQ">
-                                        <rect key="frame" x="179" y="0.0" width="17" height="20"/>
+                                        <rect key="frame" x="179.5" y="0.0" width="17" height="20"/>
                                         <fontDescription key="fontDescription" name="OpenSans-Light" family="Open Sans" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -621,11 +622,20 @@
                         <outlet property="orView" destination="hJJ-LR-g5p" id="fPq-7D-n14"/>
                         <outlet property="passwordTextField" destination="tS8-mo-1yB" id="6aQ-H3-zQi"/>
                         <outlet property="passwordView" destination="OEg-DH-bAs" id="lHi-7s-gXI"/>
+                        <segue destination="GIN-vW-f6q" kind="show" identifier="RecFeed" id="BHr-wl-sQw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8y-2s-TS0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1953" y="1274"/>
+        </scene>
+        <!--RecFeed-->
+        <scene sceneID="OZm-aD-3st">
+            <objects>
+                <viewControllerPlaceholder storyboardName="RecFeed" id="GIN-vW-f6q" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1V2-2l-MXB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1097" y="1295"/>
         </scene>
         <!--Navigation View Controller-->
         <scene sceneID="DiU-Ic-K1S">
@@ -655,4 +665,7 @@
         <image name="lock" width="50" height="50"/>
         <image name="star" width="800" height="768"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="qmB-dB-jqF"/>
+    </inferredMetricsTieBreakers>
 </document>

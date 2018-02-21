@@ -54,6 +54,13 @@
 		FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FA202681BA00E15E0B /* DataService.swift */; };
 		FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FC202681C100E15E0B /* AuthService.swift */; };
 		FC0AE6FF2026842300E15E0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FE2026842300E15E0B /* User.swift */; };
+		FC1229522036BA640080151B /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC1229512036BA640080151B /* Profile.storyboard */; };
+		FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1229532036BA7E0080151B /* ProfileViewController.swift */; };
+		FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */; };
+		FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */; };
+		FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */; };
+		FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */; };
+		FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBAF911203E112000DFC323 /* UITextView+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +120,13 @@
 		FC0AE6FA202681BA00E15E0B /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		FC0AE6FC202681C100E15E0B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		FC0AE6FE2026842300E15E0B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FC1229512036BA640080151B /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		FC1229532036BA7E0080151B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
+		FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecFeed.storyboard; sourceTree = "<group>"; };
+		FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewController.swift; sourceTree = "<group>"; };
+		FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecFeedViewController.swift; sourceTree = "<group>"; };
+		FCBAF911203E112000DFC323 /* UITextView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +244,9 @@
 			children = (
 				245156C620238B1A000E8082 /* Main.storyboard */,
 				24065A2C202A6ABC00272A61 /* LaunchScreen.storyboard */,
+				FC1229512036BA640080151B /* Profile.storyboard */,
+				FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */,
+				FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,6 +258,9 @@
 				24270FCD202A533100AC6642 /* NavigationViewController.swift */,
 				245156F420238BDB000E8082 /* CreateAccountViewController.swift */,
 				24687FB6202A371000CC990D /* SignInViewController.swift */,
+				FC1229532036BA7E0080151B /* ProfileViewController.swift */,
+				FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */,
+				FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -271,6 +291,7 @@
 		FC0AE6F8202680D000E15E0B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				FCBAF911203E112000DFC323 /* UITextView+Extension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -407,11 +428,13 @@
 				2451057A2023DAE8001AC6F6 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				245105712023DAE8001AC6F6 /* OpenSans-SemiBold.ttf in Resources */,
 				245105802023DAE8001AC6F6 /* OpenSans-BoldItalic.ttf in Resources */,
+				FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */,
 				24065A2D202A6ABC00272A61 /* LaunchScreen.storyboard in Resources */,
 				245105862023DAE8001AC6F6 /* OpenSans-ExtraBold.ttf in Resources */,
 				24E476E020238D9A00D65361 /* Assets.xcassets in Resources */,
 				2451057D2023DAE8001AC6F6 /* OpenSans-Light.ttf in Resources */,
 				245105832023DAE8001AC6F6 /* OpenSans-LightItalic.ttf in Resources */,
+				FC1229522036BA640080151B /* Profile.storyboard in Resources */,
 				245156C820238B1A000E8082 /* Main.storyboard in Resources */,
 				BF8CB8F304DE0513CB0C7719 /* GoogleService-Info.plist in Resources */,
 			);
@@ -639,8 +662,13 @@
 				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
 				FC0AE6FF2026842300E15E0B /* User.swift in Sources */,
 				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
+				FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */,
+				FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */,
+				FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */,
+				FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
 				FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */,
+				FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

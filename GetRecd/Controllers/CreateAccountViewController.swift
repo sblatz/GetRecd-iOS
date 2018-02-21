@@ -113,7 +113,9 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                 if creationResponse.isEmpty {
                     self.errorLabel.isHidden = true
                     DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email" : emailText])
-                    // Show the home screen.
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "RecFeed", sender: self)
+                    }
                 } else {
                     self.errorLabel.text = creationResponse
                     self.errorLabel.isHidden = false
@@ -130,6 +132,10 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
         } else if textField == confirmPasswordTextField {
             textField.endEditing(true)
         }
+        return true
+    }
+    
+    override var prefersStatusBarHidden: Bool {
         return true
     }
 }

@@ -90,7 +90,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
                 if authenticationResponse.isEmpty {
                     self.errorLabel.isHidden = true
                     DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email" : emailText])
-                    // Show the home screen.
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "RecFeed", sender: self)
+                    }
                 } else {
                     self.errorLabel.text = authenticationResponse
                     self.errorLabel.isHidden = false
@@ -115,5 +117,9 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
 }

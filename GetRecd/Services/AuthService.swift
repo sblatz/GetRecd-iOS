@@ -48,13 +48,31 @@ class AuthService {
         return isAuthenticated() ? authInstance!.currentUser!.uid : ""
     }
 
-    func signOut() {
+    func signOut(success: @escaping (Bool) -> (Void)) {
         if authInstance != nil {
             do {
                 try authInstance!.signOut()
             } catch let signOutError as NSError {
+                success(false)
                 print("Error signing out: %@", signOutError)
             }
+            
+            success(true)
         }
+    }
+    
+    
+    func deleteAccount(success: @escaping (Bool) -> (Void)) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        DataService.instance.deleteUser(uid: uid)
+        Auth.auth().currentUser?.delete(completion: { (error) in
+            if error != nil {
+                success(false)
+                print("DELETE USER ERROR: \(String(describing: error))")
+            } else {
+                success(true)
+            }
+        })
     }
 }
