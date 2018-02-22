@@ -18,22 +18,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="REC FEED" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9wy-iy-Ajy">
-                                <rect key="frame" x="148" y="281" width="78" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REC FEED" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9wy-iy-Ajy" userLabel="REC FEED">
+                                <rect key="frame" x="148" y="308.5" width="78" height="21"/>
+                                <accessibility key="accessibilityConfiguration" identifier="REC FEED" label="REC FEED">
+                                    <accessibilityTraits key="traits" staticText="YES"/>
+                                </accessibility>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Qe-nB-6Zw">
+                                <rect key="frame" x="0.0" y="454.5" width="375" height="30"/>
+                                <state key="normal" title="Add Likes"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <accessibility key="accessibilityConfiguration" identifier="recFeedView">
+                            <bool key="isElement" value="YES"/>
+                        </accessibility>
+                        <constraints>
+                            <constraint firstItem="6Qe-nB-6Zw" firstAttribute="top" secondItem="9wy-iy-Ajy" secondAttribute="bottom" constant="125" id="8Gq-Jx-YvF"/>
+                            <constraint firstItem="9wy-iy-Ajy" firstAttribute="centerX" secondItem="4Oo-Et-X6F" secondAttribute="centerX" id="HEU-5f-LSb"/>
+                            <constraint firstItem="9wy-iy-Ajy" firstAttribute="centerY" secondItem="4Oo-Et-X6F" secondAttribute="centerY" id="aM8-6k-gCw"/>
+                            <constraint firstItem="6Qe-nB-6Zw" firstAttribute="centerX" secondItem="4Oo-Et-X6F" secondAttribute="centerX" id="bUJ-ik-7TJ"/>
+                            <constraint firstItem="6Qe-nB-6Zw" firstAttribute="width" secondItem="B6d-Ma-rxm" secondAttribute="width" id="xbI-xP-jXo"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="4Oo-Et-X6F"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Feed" id="9Ym-zL-QGM"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eQ8-k6-mri" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1244" y="-788"/>
+            <point key="canvasLocation" x="1244" y="-788.45577211394311"/>
         </scene>
         <!--Profile-->
         <scene sceneID="VXE-4R-OsS">

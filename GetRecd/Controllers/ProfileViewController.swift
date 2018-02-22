@@ -19,8 +19,6 @@ class ProfileViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        getCurrentUser()
         self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
     }
     

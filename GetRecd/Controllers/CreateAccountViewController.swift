@@ -11,6 +11,9 @@ import Pastel
 
 class CreateAccountViewController: AuthenticationViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var nameView: UIView!
+    @IBOutlet weak var nameTextField: UITextField!
+
     @IBOutlet weak var emailView: UIView!
     @IBOutlet weak var emailTextField: UITextField!
 
@@ -29,6 +32,7 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
         view.addGestureRecognizer(tap)
 
+        nameTextField.delegate = self
         emailTextField.delegate = self
         passwordTextField.delegate = self
         confirmPasswordTextField.delegate = self
@@ -69,6 +73,13 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
     func setupVisuals() {
         var border = CALayer()
         let borderWidth: CGFloat = 1
+
+        border.borderColor = UIColor(red:1, green:1, blue:1, alpha:1.0).cgColor
+        border.frame = CGRect(x: 0, y: nameView.frame.size.height - borderWidth, width: nameView.frame.size.width, height: 1)
+        border.borderWidth = borderWidth
+        nameView.layer.addSublayer(border)
+
+        border = CALayer()
         border.borderColor = UIColor(red:1, green:1, blue:1, alpha:1.0).cgColor
         border.frame = CGRect(x: 0, y: emailView.frame.size.height - borderWidth, width: emailView.frame.size.width, height: 1)
         border.borderWidth = borderWidth
@@ -95,24 +106,28 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
         // Shake the password fields if they are not matching
         // Shake the email field if no email entered / email already exists
         // Push to tab view if successful creation
+        guard let nameText = nameTextField.text else {return}
         guard let emailText = emailTextField.text else {return}
         guard let passwordText = passwordTextField.text else {return}
         guard let confirmText = confirmPasswordTextField.text else {return}
 
-        if emailText.count == 0 || !emailText.contains("@") {
-            errorLabel.text = "Please enter a valid email address"
+        if nameText.count == 0 {
+            errorLabel.text = "Please enter a name with at least one character."
+            errorLabel.isHidden = false
+        } else if emailText.count == 0 || !emailText.contains("@") {
+            errorLabel.text = "Please enter a valid email address."
             errorLabel.isHidden = false
         } else if passwordText.count < 6 || confirmText.count < 6 {
-            errorLabel.text = "Please enter a password with at least six characters"
+            errorLabel.text = "Please enter a password with at least six characters."
             errorLabel.isHidden = false
         } else if passwordText != confirmText {
-            errorLabel.text = "Please ensure passwords match"
+            errorLabel.text = "Please ensure passwords match."
             errorLabel.isHidden = false
         } else {
             AuthService.instance.createAccountWithEmail(email: emailText, password: passwordText, responseHandler: { (creationResponse) in
                 if creationResponse.isEmpty {
                     self.errorLabel.isHidden = true
-                    DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email" : emailText])
+                    DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email": emailText, "name": nameText])
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "RecFeed", sender: self)
                     }
@@ -129,7 +144,9 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailTextField {
+        if textField == nameTextField {
+            emailTextField.becomeFirstResponder()
+        } else if textField == emailTextField {
             passwordTextField.becomeFirstResponder()
         } else if textField == passwordTextField {
             confirmPasswordTextField.becomeFirstResponder()

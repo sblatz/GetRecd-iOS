@@ -26,6 +26,8 @@ class SignInViewController: AuthenticationViewController, UITextFieldDelegate {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
         view.addGestureRecognizer(tap)
 
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
         setupVisuals()
         drawHorizontalLine(view: orView)
     }
@@ -80,10 +82,10 @@ class SignInViewController: AuthenticationViewController, UITextFieldDelegate {
         guard let passwordText = passwordTextField.text else {return}
 
         if emailText.count == 0 || !emailText.contains("@") {
-            errorLabel.text = "Please enter a valid email address"
+            errorLabel.text = "Please enter a valid email address."
             errorLabel.isHidden = false
         } else if passwordText.count < 6 {
-            errorLabel.text = "Please enter a password with at least six characters"
+            errorLabel.text = "Please enter a password with at least six characters."
             errorLabel.isHidden = false
         } else {
             AuthService.instance.signInWithEmail(email: emailText, password: passwordText, responseHandler: { (authenticationResponse) in

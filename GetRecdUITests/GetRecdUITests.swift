@@ -27,10 +27,99 @@ class GetRecdUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+
+    // MARK - Account Sign in Tests
+
+    // MARK - Account Creation Tests
+
+    // Test error case for an email being taken
+    func testEmailTaken() {
+        let app = XCUIApplication()
+        app.buttons["GET STARTED"].tap()
+
+        let nameTextField = app.textFields["Name"]
+        nameTextField.tap()
+        nameTextField.typeText("Sawyer")
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("sdblatz@gmail.com")
+
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("password")
+
+        let confirmPasswordSecureTextField = app.secureTextFields["Confirm Password"]
+        confirmPasswordSecureTextField.tap()
+        confirmPasswordSecureTextField.typeText("password")
+
+        app.buttons["SIGN UP"].tap()
+
+        let errorLabel = app.staticTexts.element(matching: .any, identifier: "errorLabel").label
+        assert(errorLabel == "The email address is already in use by another account.")
     }
-    
+
+    // Test error case of passwords not matching
+    func testPasswordMismatch() {
+        let app = XCUIApplication()
+        app.buttons["GET STARTED"].tap()
+
+        let nameTextField = app.textFields["Name"]
+        nameTextField.tap()
+        nameTextField.typeText("Sawyer")
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("sdblatz@gmail.com")
+
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("password")
+
+        let confirmPasswordSecureTextField = app.secureTextFields["Confirm Password"]
+        confirmPasswordSecureTextField.tap()
+        confirmPasswordSecureTextField.typeText("1234345345")
+
+        app.buttons["SIGN UP"].tap()
+
+        let errorLabel = app.staticTexts.element(matching: .any, identifier: "errorLabel").label
+        assert(errorLabel == "Please ensure passwords match.")
+    }
+
+    // Test error case of no email entered
+    func testMissingEmail() {
+        let app = XCUIApplication()
+        app.buttons["GET STARTED"].tap()
+
+        let nameTextField = app.textFields["Name"]
+        nameTextField.tap()
+        nameTextField.typeText("Sawyer")
+
+        app.buttons["SIGN UP"].tap()
+    }
+
+    // TODO: Make this test actually check for segue (button is not being detected!!)
+    // Test successful account creation
+    func testSuccessfulLogin() {
+        let app = XCUIApplication()
+        app.buttons["GET STARTED"].tap()
+
+        let nameTextField = app.textFields["Name"]
+        nameTextField.tap()
+        nameTextField.typeText("Sawyer")
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("t@ma.com")
+
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("password")
+
+        let confirmPasswordSecureTextField = app.secureTextFields["Confirm Password"]
+        confirmPasswordSecureTextField.tap()
+        confirmPasswordSecureTextField.typeText("password")
+
+        app.buttons["SIGN UP"].tap()
+    }
 }

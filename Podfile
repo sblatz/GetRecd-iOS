@@ -17,7 +17,8 @@ target 'GetRecd' do
   pod "GoogleSignIn"
 
   target 'GetRecdTests' do
-    inherit! :search_paths
+    use_frameworks!
+    inherit! :complete
     # Pods for testing
   end
 
