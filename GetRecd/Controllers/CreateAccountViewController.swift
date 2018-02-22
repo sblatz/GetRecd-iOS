@@ -8,9 +8,8 @@
 
 import UIKit
 import Pastel
-import GoogleSignIn
 
-class CreateAccountViewController: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate {
+class CreateAccountViewController: AuthenticationViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailView: UIView!
     @IBOutlet weak var emailTextField: UITextField!
@@ -54,14 +53,14 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate, GIDSig
         var border = CALayer()
         let width = CGFloat(1.0)
         border.borderColor = UIColor.white.cgColor
-        border.frame = CGRect(x: 0, y: view.frame.size.height/2 + 1, width:  view.frame.size.width / 2 - 30, height: width)
+        border.frame = CGRect(x: 0, y: view.frame.size.height / 2 + 1, width:  view.frame.size.width / 2 - 30, height: width)
         border.borderWidth = width
         view.layer.addSublayer(border)
         view.layer.masksToBounds = true
 
         border = CALayer()
         border.borderColor = UIColor.white.cgColor
-        border.frame = CGRect(x: view.frame.size.width / 2 + 30, y: view.frame.size.height/2 + 1, width: view.frame.size.width, height: width)
+        border.frame = CGRect(x: view.frame.size.width / 2 + 30, y: view.frame.size.height / 2 + 1, width: view.frame.size.width, height: width)
         border.borderWidth = width
         view.layer.addSublayer(border)
         view.layer.masksToBounds = true

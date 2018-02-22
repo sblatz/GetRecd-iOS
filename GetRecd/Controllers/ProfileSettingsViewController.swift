@@ -78,7 +78,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
         userData["bio"] = bioTextView.text
         
         if profilePictureURL != nil {
-            userData["photoURL"] = profilePictureURL
+            userData["profilePictureURL"] = profilePictureURL
         }
         
         DataService.instance.createOrUpdateUser(uid: currentUser.userID, userData: userData)

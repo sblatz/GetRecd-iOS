@@ -63,7 +63,7 @@ class User {
             self._bio = bio
         }
         
-        if let profilePictureURL = userDict["photoURL"] as? String {
+        if let profilePictureURL = userDict["profilePictureURL"] as? String {
             self._profilePictureURL = profilePictureURL
         }
     }

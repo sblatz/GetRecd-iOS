@@ -39,22 +39,26 @@ class AuthService: NSObject, GIDSignInDelegate {
                 print(error.localizedDescription)
                 return
             }
+            guard let user = user else {return}
             var userData = [String:Any]()
-            if (user!.displayName != nil) {
-                userData["name"] = user?.displayName!
+            if (user.displayName != nil) {
+                userData["name"] = user.displayName!
             }
-            if (user!.email != nil) {
-                userData["email"] = user?.email!
+            if (user.email != nil) {
+                userData["email"] = user.email!
             }
-            if (user!.photoURL != nil) {
-                userData["photoURL"] = user?.photoURL!.absoluteString
+            if (user.photoURL != nil) {
+                userData["profilePictureURL"] = user.photoURL!.absoluteString
             }
-            DataService.instance.createOrUpdateUser(uid: user!.uid, userData: userData)
-            // Show the home screen.
+            DataService.instance.createOrUpdateUser(uid: user.uid, userData: userData)
+            DispatchQueue.main.async {
+                let viewController = signIn.uiDelegate as! UIViewController
+                viewController.performSegue(withIdentifier: "RecFeed", sender: viewController)
+            }
         }
     }
 
-    func googleAuthenticate(forViewController controller: GIDSignInUIDelegate) {
+    func googleAuthenticate(forViewController controller: AuthenticationViewController) {
         GIDSignIn.sharedInstance().uiDelegate = controller
         GIDSignIn.sharedInstance().signIn()
     }
@@ -97,7 +101,6 @@ class AuthService: NSObject, GIDSignInDelegate {
                 success(false)
                 print("Error signing out: %@", signOutError)
             }
-            
             success(true)
         }
     }
@@ -110,7 +113,7 @@ class AuthService: NSObject, GIDSignInDelegate {
         Auth.auth().currentUser?.delete(completion: { (error) in
             if error != nil {
                 success(false)
-                print("DELETE USER ERROR: \(String(describing: error))")
+                print("Error deleting user: \(String(describing: error))")
             } else {
                 success(true)
             }
