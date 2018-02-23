@@ -53,6 +53,22 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             return 0
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 1:
+            switch indexPath.row {
+            case 0:
+            case 1:
+                MusicService.sharedInstance.requestAppleCloudServiceAuthorization()
+                MusicService.sharedInstance.requestAppleMediaLibraryAuthorization()
+            default:
+                break
+            }
+        default:
+            break
+        }
+    }
 
     @IBAction func savePressed(_ sender: Any) {
         saveUserInfo()

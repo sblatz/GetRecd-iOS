@@ -53,6 +53,7 @@
 		672D0E3CEEFA24D2A3D349A3 /* Pods_GetRecd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */; };
 		80A1ADDA2B538296773C88D0 /* Pods_GetRecdUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */; };
 		BF8CB8F304DE0513CB0C7719 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */; };
+		C77C4A52203CD3A50001839E /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C4A51203CD3A50001839E /* MusicService.swift */; };
 		FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FA202681BA00E15E0B /* DataService.swift */; };
 		FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FC202681C100E15E0B /* AuthService.swift */; };
 		FC0AE6FF2026842300E15E0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FE2026842300E15E0B /* User.swift */; };
@@ -119,8 +120,9 @@
 		A16198CB7811E4B353967BF8 /* Pods-GetRecd-GetRecdTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd-GetRecdTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd-GetRecdTests/Pods-GetRecd-GetRecdTests.release.xcconfig"; sourceTree = "<group>"; };
 		5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C3C136C3B3D671B984FF4611 /* Pods-GetRecd-GetRecdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd-GetRecdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd-GetRecdTests/Pods-GetRecd-GetRecdTests.debug.xcconfig"; sourceTree = "<group>"; };
+		BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C77C4A51203CD3A50001839E /* MusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
 		DF09BAC38792B9A12189E65C /* Pods-GetRecd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.debug.xcconfig"; sourceTree = "<group>"; };
 		E521BA2623ADDFD472904EE3 /* Pods-GetRecd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.release.xcconfig"; sourceTree = "<group>"; };
 		FC0AE6FA202681BA00E15E0B /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 			children = (
 				FC0AE6FC202681C100E15E0B /* AuthService.swift */,
 				FC0AE6FA202681BA00E15E0B /* DataService.swift */,
+				C77C4A51203CD3A50001839E /* MusicService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -696,6 +699,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24687FB7202A371000CC990D /* SignInViewController.swift in Sources */,
+				C77C4A52203CD3A50001839E /* MusicService.swift in Sources */,
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
 				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
@@ -868,7 +872,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3YC9K4952Y;
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
@@ -884,7 +888,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3YC9K4952Y;
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;

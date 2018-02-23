@@ -10,11 +10,13 @@ import Foundation
 import UIKit
 import FirebaseDatabase
 import FirebaseStorage
+import FirebaseAuth
 
 class DataService {
     // Static instance variable used to call DataService functions
     static let instance = DataService()
     private var _REF_USERS = Database.database().reference().child("Users")
+    private var _REF_USERLIKES = Database.database().reference().child("UsersLikes")
 
     // Firebase Storage reference (TODO: Need to create storage)
     private var _REF_PROFILE_PICS = Storage.storage().reference().child("profile-pics")
@@ -89,5 +91,47 @@ class DataService {
     func deleteUser(uid: String) {
         print("DELETING USER: \(uid)")
         REF_USERS.child(uid).removeValue()
+    }
+    
+    
+    func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        let currUserAppleMusicLikesRef = currUserLikesRef.child("AppleMusic")
+        let currUserSpotifyLikesRef = currUserLikesRef.child("Spotify")
+        
+        for song in appleMusicSongs {
+            currUserAppleMusicLikesRef.child(song).setValue(true)
+        }
+        
+        for song in spotifySongs {
+            currUserSpotifyLikesRef.child(song).setValue(true)
+        }
+        
+        success()
+    }
+    
+    func getLikedSongs(sucesss: @escaping ([(String, Song.SongType)]) -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        
+        currUserLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+            
+            var result = [(String, Song.SongType)]()
+            if let appleMusicList = data["AppleMusic"] as? [String: Bool] {
+                for (key, _) in appleMusicList {
+                    result.append((key, Song.SongType.AppleMusic))
+                }
+            }
+            
+            if let spotifyMusicList = data["Spotify"] as? [String: Bool] {
+                for (key, _) in spotifyMusicList {
+                    result.append((key, Song.SongType.Spotify))
+                }
+            }
+            
+            sucesss(result)
+        }
     }
 }
