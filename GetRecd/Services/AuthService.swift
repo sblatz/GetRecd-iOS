@@ -29,27 +29,19 @@ class AuthService: NSObject, GIDSignInDelegate {
             print(error.localizedDescription)
             return
         }
-
         guard let authentication = user.authentication else { return }
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                accessToken: authentication.accessToken)
-
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
         Auth.auth().signIn(with: credential) { (user, error) in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
+            self.authInstance = Auth.auth()
             guard let user = user else {return}
             var userData = [String:Any]()
-            if (user.displayName != nil) {
-                userData["name"] = user.displayName!
-            }
-            if (user.email != nil) {
-                userData["email"] = user.email!
-            }
-            if (user.photoURL != nil) {
-                userData["profilePictureURL"] = user.photoURL!.absoluteString
-            }
+            userData["name"] = user.displayName
+            userData["email"] = user.email
+            userData["profilePictureURL"] = user.photoURL?.absoluteString
             DataService.instance.createOrUpdateUser(uid: user.uid, userData: userData)
             DispatchQueue.main.async {
                 let viewController = signIn.uiDelegate as! UIViewController
@@ -61,6 +53,43 @@ class AuthService: NSObject, GIDSignInDelegate {
     func googleAuthenticate(forViewController controller: AuthenticationViewController) {
         GIDSignIn.sharedInstance().uiDelegate = controller
         GIDSignIn.sharedInstance().signIn()
+    }
+    
+    func facebookAuthenticate(forViewController controller: AuthenticationViewController) {
+        let loginManager = LoginManager()
+        loginManager.logIn(readPermissions: [.publicProfile, .email], viewController: controller) { (loginResult) in
+            switch loginResult {
+            case .success(_, _, let accessToken):
+                let firebaseCredential = FacebookAuthProvider.credential(withAccessToken: accessToken.authenticationToken)
+                Auth.auth().signIn(with: firebaseCredential) { (user, error) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    let graphConnection = GraphRequestConnection()
+                    graphConnection.add(GraphRequest(graphPath: "/me", parameters: ["fields": "email, name, picture"], accessToken: accessToken)) { (httpResponse, result) in
+                        switch result {
+                        case .success(let response):
+                            self.authInstance = Auth.auth()
+                            guard let user = user else {return}
+                            var userData = [String:Any]()
+                            userData["name"] = response.dictionaryValue?["name"]
+                            userData["email"] = response.dictionaryValue?["email"]
+                            userData["profilePictureURL"] = ((response.dictionaryValue?["picture"] as? [String: Any])?["data"] as? [String: Any])?["url"] as? String
+                            DataService.instance.createOrUpdateUser(uid: user.uid, userData: userData)
+                            controller.performSegue(withIdentifier: "RecFeed", sender: controller)
+                        case .failed(let error):
+                            print(error)
+                        }
+                    }
+                    graphConnection.start()
+                }
+            case .cancelled:
+                print("Cancelled Facebook login.")
+            case .failed(let error):
+                print(error)
+            }
+        }
     }
 
     func createAccountWithEmail(email: String, password: String, responseHandler: @escaping (String) -> (Void)) {

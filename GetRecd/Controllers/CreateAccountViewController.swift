@@ -139,10 +139,6 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
         }
     }
     
-    @IBAction func googleSignInButtonPressed(_ sender: Any) {
-        AuthService.instance.googleAuthenticate(forViewController: self)
-    }
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == nameTextField {
             emailTextField.becomeFirstResponder()
