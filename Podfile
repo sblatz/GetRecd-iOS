@@ -8,9 +8,18 @@ target 'GetRecd' do
   # Pods for GetRecd
   pod "Pastel"
   pod "LTMorphingLabel"
+  pod "Firebase/Core"
+  pod "Firebase/Database"
+  pod "Firebase/Auth"
+  pod "Firebase/Storage"
+  pod "FacebookCore"
+  pod "FacebookLogin"
+  pod "GoogleSignIn"
+  pod 'SpotifyLogin', '~> 0.1'
 
   target 'GetRecdTests' do
-    inherit! :search_paths
+    use_frameworks!
+    inherit! :complete
     # Pods for testing
   end
 
