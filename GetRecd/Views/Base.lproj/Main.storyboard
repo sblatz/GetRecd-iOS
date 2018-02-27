@@ -373,7 +373,7 @@
                                         <rect key="frame" x="35" y="0.0" width="265" height="40"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" keyboardType="emailAddress" returnKeyType="next"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
                                                 <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
@@ -570,8 +570,9 @@
                                     <action selector="facebookSignInButtonPressed:" destination="pse-ig-54G" eventType="touchUpInside" id="0ph-X7-e09"/>
                                 </connections>
                             </button>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter a valid email address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hzH-z5-szU">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter a valid email address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hzH-z5-szU" userLabel="errorLabel">
                                 <rect key="frame" x="37.5" y="190" width="300" height="44"/>
+                                <accessibility key="accessibilityConfiguration" label="errorLabel"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="14"/>
                                 <color key="textColor" red="0.97264164689999999" green="0.96851366760000002" blue="0.9726544023" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -717,6 +718,6 @@
         <image name="star" width="800" height="768"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="qmB-dB-jqF"/>
+        <segue reference="BHr-wl-sQw"/>
     </inferredMetricsTieBreakers>
 </document>

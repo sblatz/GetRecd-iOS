@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14101" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dQe-8a-Qpi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dQe-8a-Qpi">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Avenir.ttc">
+            <string>Avenir-Heavy</string>
+            <string>Avenir-Medium</string>
+        </array>
         <array key="OpenSans-Bold.ttf">
             <string>OpenSans-Bold</string>
         </array>
@@ -26,7 +30,7 @@
         <scene sceneID="Mgr-FG-RVC">
             <objects>
                 <tableViewController id="dQe-8a-Qpi" customClass="ProfileViewController" customModule="GetRecd" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="gvh-EP-GOQ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" id="gvh-EP-GOQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -125,34 +129,34 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="CKT-iE-IQo">
                                                     <rect key="frame" x="94.5" y="11" width="186.5" height="41"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wGv-ru-k4R">
-                                                            <rect key="frame" x="0.0" y="0.0" width="53.5" height="41"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="wGv-ru-k4R">
+                                                            <rect key="frame" x="0.0" y="0.0" width="55.5" height="41"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ETB-Pd-LOQ">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="53.5" height="20.5"/>
-                                                                    <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="15"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="55.5" height="19.5"/>
+                                                                    <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="14"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grI-nK-vno">
-                                                                    <rect key="frame" x="0.0" y="20.5" width="53.5" height="20.5"/>
+                                                                    <rect key="frame" x="0.0" y="19.5" width="55.5" height="21.5"/>
                                                                     <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="15"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kbD-Qs-Jr3">
-                                                            <rect key="frame" x="153.5" y="0.0" width="33" height="41"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="kbD-Qs-Jr3">
+                                                            <rect key="frame" x="155.5" y="0.0" width="31" height="41"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Recs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O4w-AO-0UM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="33" height="20.5"/>
-                                                                    <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="15"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="31" height="19.5"/>
+                                                                    <fontDescription key="fontDescription" name="OpenSans-SemiBold" family="Open Sans" pointSize="14"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9E-I1-jw1">
-                                                                    <rect key="frame" x="0.0" y="20.5" width="33" height="20.5"/>
+                                                                    <rect key="frame" x="0.0" y="19.5" width="31" height="21.5"/>
                                                                     <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="15"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -179,15 +183,17 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="103.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hQD-JL-Nnd">
-                                                    <rect key="frame" x="167" y="36" width="41" height="30"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Music"/>
-                                                    <connections>
-                                                        <segue destination="cEi-eg-94A" kind="presentation" id="Hij-GD-gXA"/>
-                                                    </connections>
-                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YtS-fb-Z2v">
+                                                    <rect key="frame" x="162" y="39.5" width="52" height="26"/>
+                                                    <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="19"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="YtS-fb-Z2v" firstAttribute="centerY" secondItem="xnY-oa-YAv" secondAttribute="centerY" id="4Xo-V5-Yt3"/>
+                                                <constraint firstItem="YtS-fb-Z2v" firstAttribute="centerX" secondItem="xnY-oa-YAv" secondAttribute="centerX" id="l09-Fy-dRP"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -198,12 +204,13 @@
                             <outlet property="delegate" destination="dQe-8a-Qpi" id="GLm-gM-M8Z"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Profile" id="SZl-s5-EUM"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="tabProfile" id="SZl-s5-EUM"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="bioTextView" destination="h8D-UR-7zj" id="fyF-kG-hAX"/>
                         <outlet property="nameLabel" destination="oOd-xc-2T8" id="DGi-dN-pMQ"/>
                         <outlet property="profilePicture" destination="LCq-uh-W45" id="uIE-kb-bHx"/>
+                        <segue destination="cEi-eg-94A" kind="presentation" identifier="showMusicLikes" id="hNt-na-OEe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5y6-7T-qU0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -214,7 +221,7 @@
         <scene sceneID="gDy-eF-kDj">
             <objects>
                 <tableViewController id="TxQ-00-8n3" customClass="ProfileSettingsViewController" customModule="GetRecd" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ehf-xw-9ya">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ehf-xw-9ya">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -356,20 +363,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link Spotify" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NyP-GH-iGY">
-                                                    <rect key="frame" x="16" y="11" width="81" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="81" id="6hl-ou-SNw"/>
-                                                        <constraint firstAttribute="height" constant="21" id="tQY-Kz-8Jf"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="OpenSans-Regular" family="Open Sans" pointSize="15"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zZy-AI-bXQ">
+                                                    <rect key="frame" x="17" y="0.5" width="307" height="43.5"/>
+                                                    <state key="normal" title="Link Spotify">
+                                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="NyP-GH-iGY" firstAttribute="centerY" secondItem="kyd-YU-ONV" secondAttribute="centerY" id="0IM-aC-AST"/>
-                                                <constraint firstItem="NyP-GH-iGY" firstAttribute="leading" secondItem="kyd-YU-ONV" secondAttribute="leading" constant="16" id="xcF-c5-Upq"/>
+                                                <constraint firstItem="zZy-AI-bXQ" firstAttribute="height" secondItem="kyd-YU-ONV" secondAttribute="height" id="9ZW-dc-Jf5"/>
+                                                <constraint firstItem="zZy-AI-bXQ" firstAttribute="centerX" secondItem="kyd-YU-ONV" secondAttribute="centerX" id="My2-Kd-rn0"/>
+                                                <constraint firstItem="zZy-AI-bXQ" firstAttribute="width" secondItem="kyd-YU-ONV" secondAttribute="width" multiplier="0.9" id="ZNZ-f0-Q1s"/>
+                                                <constraint firstItem="zZy-AI-bXQ" firstAttribute="centerY" secondItem="kyd-YU-ONV" secondAttribute="centerY" id="eKK-aI-BRx"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -522,7 +527,7 @@
                                         <rect key="frame" x="0.0" y="847" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xxG-zX-aJS" id="xnR-n2-kE1">
-                                            <rect key="frame" x="0.0" y="0.0" width="349" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log Out" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0iY-1d-f5U">
@@ -552,6 +557,7 @@
                     </tableView>
                     <connections>
                         <outlet property="bioTextView" destination="L3u-cs-Xci" id="geo-x5-iH3"/>
+                        <outlet property="linkSpotifyButton" destination="zZy-AI-bXQ" id="9Vv-ia-PW5"/>
                         <outlet property="profilePicture" destination="jXx-0H-qQj" id="xz0-IR-Upl"/>
                         <segue destination="kKH-37-Dih" kind="show" identifier="SignIn" id="UKb-bK-7ri"/>
                     </connections>
@@ -681,7 +687,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="biF-YD-6Mx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="745" y="501"/>
+            <point key="canvasLocation" x="761" y="501"/>
         </scene>
         <!--Main-->
         <scene sceneID="mLB-4G-g5S">
@@ -698,5 +704,6 @@
         <image name="profile-pic" width="512" height="512"/>
         <image name="save-button" width="39" height="39"/>
         <image name="settings" width="36" height="35"/>
+        <image name="tabProfile" width="25" height="25"/>
     </resources>
 </document>

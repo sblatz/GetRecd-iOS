@@ -13,7 +13,9 @@ class SearchViewController: UITableViewController {
     @IBOutlet weak var likeButton: UIButton!
     
     var searchController = UISearchController(searchResultsController: nil)
-    
+    var timerToQueryMusic: Timer?
+    var searchString = ""
+
     /// A `DispatchQueue` used for synchornizing the setting of `mediaItems` to avoid threading issues with various `UITableView` delegate callbacks.
     var setterQueue = DispatchQueue(label: "SearchViewController")
     
@@ -64,7 +66,6 @@ class SearchViewController: UITableViewController {
     
     @IBAction func onAdd(_ sender: Any) {
         DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
-            
         })
     }
     
@@ -81,8 +82,7 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? SongCell {
-            
-            
+
             if cell.accessoryType == .checkmark {
                 cell.accessoryType = .none
                 switch cell.song.type {
@@ -103,7 +103,6 @@ class SearchViewController: UITableViewController {
                     default:
                         break
                 }
-                
             }
         }
         
@@ -118,24 +117,39 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-        
+
+        // Reset the cell from previous use:
+        cell.artistLabel.text = ""
+        cell.artworkView.image = UIImage()
+        cell.nameLabel.text = ""
+
         cell.tag = indexPath.row
         cell.artworkView.tag = indexPath.row
         let song = songs[indexPath.row]
-        
         cell.song = song
-        
         return cell
     }
-
 }
 
 extension SearchViewController: UISearchResultsUpdating {
+
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchString = searchController.searchBar.text else {
             return
         }
-        
+
+        self.searchString = searchString
+
+        // Check if user is still actively typing... if so, delay the call by one second:
+        if let timer = timerToQueryMusic {
+            timer.invalidate()
+        }
+
+        timerToQueryMusic = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(queryForMusic), userInfo: nil, repeats: false)
+    }
+
+    // Function called after 1 second delay of user typing
+    @objc func queryForMusic() {
         if searchString == "" {
             self.setterQueue.sync {
                 self.songs = []
@@ -143,10 +157,11 @@ extension SearchViewController: UISearchResultsUpdating {
         } else {
             MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
                 guard error == nil else {
+                    print(error)
                     self.songs = []
                     return
                 }
-                MusicService.sharedInstance.performAppleMusicCatalogSearch(with: searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: { (appleMusicSongs, error) in
+                MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
                     guard error == nil else {
                         self.songs = []
                         return
@@ -158,7 +173,6 @@ extension SearchViewController: UISearchResultsUpdating {
                     self.songs = newResult
                 })
             }
-            
         }
     }
 }
@@ -168,4 +182,3 @@ extension SearchViewController: UISearchBarDelegate {
         self.songs = []
     }
 }
-

@@ -25,7 +25,6 @@ class ProfileViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         getCurrentUser()
         
         // Hide the navigation bar on the this view controller
@@ -44,6 +43,18 @@ class ProfileViewController: UITableViewController {
         if segue.identifier == "Settings", let settingsVC = segue.destination as? ProfileSettingsViewController {
             settingsVC.currentUser = currentUser
             settingsVC.profilePictureImage = profilePicture.image
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath.row)
+        switch (indexPath.row) {
+            case 2:
+                // Segue to music
+                self.performSegue(withIdentifier: "showMusicLikes", sender: nil)
+                tableView.deselectRow(at: indexPath, animated: true)
+            default:
+                break
         }
     }
     
@@ -69,6 +80,4 @@ class ProfileViewController: UITableViewController {
             })
         }
     }
-    
 }
-

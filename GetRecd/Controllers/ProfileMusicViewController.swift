@@ -58,15 +58,13 @@ class ProfileMusicViewController: UITableViewController {
         return songIds.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             return tableView.dequeueReusableCell(withIdentifier: "BarCell", for: indexPath)
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-        // Configure the cell...
-        
+
         let song = songIds[indexPath.row]
         
         if song.1 == .Spotify {
@@ -83,10 +81,6 @@ class ProfileMusicViewController: UITableViewController {
                 }
             }
         }
-
         return cell
     }
-    
-
-
 }

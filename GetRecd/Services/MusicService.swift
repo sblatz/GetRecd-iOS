@@ -10,6 +10,7 @@ import Foundation
 import StoreKit
 import MediaPlayer
 
+
 class MusicService: NSObject {
     
     static let sharedInstance = MusicService()
@@ -445,7 +446,7 @@ class MusicService: NSObject {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer BQDyO-ze0h2sE28XOt6JU4BjQ0QH5mUHKdm6gkayklM_RWIN-a2xXucjEF84wLi_X6kd8RMnGFJ0PiW45ITYLa_LYH9WN5-wrqwyHhY_60_LEbAO51-9xGtu2qW_47fcSH_OW3SUdiGZUQ", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer BQA5SQsVflu2c04C0TK_UgRN76i4NbnnbMF2sfPBGrxXV_mBp3tyPEI87E37yq5xhi50qSwX4OduigcHK0gKA09Xq1hG67YfAdn4PKGAMX2k5Y44Iq9ZYsdHxA7TPgICqrpIg0DJ8G0LOHgweA", forHTTPHeaderField: "Authorization")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
         print(urlRequest)
@@ -485,7 +486,7 @@ class MusicService: NSObject {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer BQDyO-ze0h2sE28XOt6JU4BjQ0QH5mUHKdm6gkayklM_RWIN-a2xXucjEF84wLi_X6kd8RMnGFJ0PiW45ITYLa_LYH9WN5-wrqwyHhY_60_LEbAO51-9xGtu2qW_47fcSH_OW3SUdiGZUQ", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer BQA5SQsVflu2c04C0TK_UgRN76i4NbnnbMF2sfPBGrxXV_mBp3tyPEI87E37yq5xhi50qSwX4OduigcHK0gKA09Xq1hG67YfAdn4PKGAMX2k5Y44Iq9ZYsdHxA7TPgICqrpIg0DJ8G0LOHgweA", forHTTPHeaderField: "Authorization")
         let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             print(response)
             guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {

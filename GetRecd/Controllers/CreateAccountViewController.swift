@@ -8,7 +8,6 @@
 
 import UIKit
 import Pastel
-
 class CreateAccountViewController: AuthenticationViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameView: UIView!
@@ -29,6 +28,7 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard(sender:)))
         view.addGestureRecognizer(tap)
 

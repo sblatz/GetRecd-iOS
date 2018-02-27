@@ -8,12 +8,14 @@
 
 import UIKit
 import FirebaseStorage
+import SpotifyLogin
 
 class ProfileSettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var bioTextView: UITextView!
-    
+    @IBOutlet weak var linkSpotifyButton: UIButton!
+
     var imagePicker: UIImagePickerController!
     var currentUser: User!
     var profilePictureImage: UIImage? = #imageLiteral(resourceName: "profile-pic")
@@ -22,7 +24,11 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+
+        let button = SpotifyLoginButton(viewController: self, scopes: [.streaming, .userLibraryRead])
+        var cell = linkSpotifyButton.superview?.superview!
+        cell?.addSubview(button)
+        button.frame = linkSpotifyButton.frame
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,6 +38,20 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
             self.profilePicture.image = self.profilePictureImage
             self.bioTextView.text = self.currentUser.bio
+        }
+
+
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("in view will appear")
+        SpotifyLogin.shared.getAccessToken { (accessToken, error) in
+            print(accessToken)
+            print(error)
+            if error != nil {
+                // User is not logged in, show log in flow.
+            }
         }
     }
 
@@ -51,22 +71,6 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             return 4
         default:
             return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 1:
-            switch indexPath.row {
-            case 0:
-            case 1:
-                MusicService.sharedInstance.requestAppleCloudServiceAuthorization()
-                MusicService.sharedInstance.requestAppleMediaLibraryAuthorization()
-            default:
-                break
-            }
-        default:
-            break
         }
     }
 
@@ -113,33 +117,50 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             }
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("CELL SELECTED: \(indexPath.section)")
-        if indexPath.section == 3, indexPath.row == 3 {
-            print("LOG OUT PRESSED")
-            logOut()
-        }
-        
-        if indexPath.section == 3, indexPath.row == 2 {
-            print("DELETE ACCOUNT PRESSED")
-            
-            let alert = UIAlertController(title: "Deleting Account", message: "Are you sure you want to delete your account? This cannot be undone!", preferredStyle: .alert)
-            let yes = UIAlertAction(title: "Yes", style: .destructive, handler: { (action) in
-                self.deleteAccount()
-            })
-            
-            let no = UIAlertAction(title: "No", style: .default, handler: { (action) in
-                alert.dismiss(animated: true, completion: nil)
-            })
-            
-            alert.addAction(yes)
-            alert.addAction(no)
-            self.present(alert, animated: true, completion: nil)
+        print("Section: \(indexPath.section), Cell: \(indexPath.row)")
+
+
+        switch indexPath.section {
+            // Music Authorization
+            case 2:
+                switch indexPath.row {
+                    case 0:
+                        print("Authenticate with Spotify")
+                    case 1:
+                        print("Authenticate with Apple music")
+                        MusicService.sharedInstance.requestAppleCloudServiceAuthorization()
+                        MusicService.sharedInstance.requestAppleMediaLibraryAuthorization()
+                    default:
+                        break
+                    }
+            // Account Deletion & Log Out
+            case 3:
+                switch indexPath.row {
+                case 2:
+                    let alert = UIAlertController(title: "Deleting Account", message: "Are you sure you want to delete your account? This cannot be undone!", preferredStyle: .alert)
+                    let yes = UIAlertAction(title: "Yes", style: .destructive, handler: { (action) in
+                        self.deleteAccount()
+                    })
+
+                    let no = UIAlertAction(title: "No", style: .default, handler: { (action) in
+                        alert.dismiss(animated: true, completion: nil)
+                    })
+
+                    alert.addAction(yes)
+                    alert.addAction(no)
+                    self.present(alert, animated: true, completion: nil)
+                case 3:
+                    logOut()
+                default:
+                    break
+                }
+            default:
+                break
         }
     }
-    
-    
+
     @IBAction func editPicturePressed(_ sender: Any) {
         DispatchQueue.main.async {
             self.imagePicker = UIImagePickerController()

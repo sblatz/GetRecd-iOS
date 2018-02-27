@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+import SpotifyLogin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
+        SpotifyLogin.shared.configure(clientID: "b2a4e9e6c816448cb0ee30b7f62d25b1", clientSecret: "8d309459ae7744b18d73616d4cba9aa0", redirectURL: URL(string: "GetRecd://cs407.GetRecd")!)
+
         return true
     }
 
@@ -46,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+        let handled = SpotifyLogin.shared.applicationOpenURL(url) { (error) in }
         return GIDSignIn.sharedInstance().handle(url,
                 sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
                 annotation: [:])
