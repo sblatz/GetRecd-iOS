@@ -9,11 +9,11 @@
 import Foundation
 import StoreKit
 import MediaPlayer
-
+import SafariServices
 
 class MusicService: NSObject {
     
-    static let sharedInstance = MusicService()
+    static var sharedInstance = MusicService()
     
     // Apple Music stuff
     /// The base URL for all Apple Music API network calls.
@@ -424,85 +424,73 @@ class MusicService: NSObject {
         
     }
     
+    
+    
+    var spotifyAuth: SPTAuth!
+    var spotifyPlayer: SPTAudioStreamingController!
+    
+    func audioTest() {
+        spotifyPlayer?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp" , startingWith: 0, startingWithPosition: 0, callback: { (error) in
+            print(error?.localizedDescription)
+        })
+    }
+    
     func searchSpotify(with term: String, completion: @escaping CatalogSearchCompletionHandler) {
-        // Create the URL components for the network call.
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "api.spotify.com"
-        urlComponents.path = "/v1/search"
-        
-        let expectedTerms = term.replacingOccurrences(of: " ", with: "%20")
-        let urlParameters = ["q": expectedTerms,
-                             "type": "track"]
-        
-        var queryItems = [URLQueryItem]()
-        for (key, value) in urlParameters {
-            queryItems.append(URLQueryItem(name: key, value: value))
-        }
-        
-        urlComponents.queryItems = queryItems
-        
-        // Create and configure the `URLRequest`.
-        
-        var urlRequest = URLRequest(url: urlComponents.url!)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer BQA5SQsVflu2c04C0TK_UgRN76i4NbnnbMF2sfPBGrxXV_mBp3tyPEI87E37yq5xhi50qSwX4OduigcHK0gKA09Xq1hG67YfAdn4PKGAMX2k5Y44Iq9ZYsdHxA7TPgICqrpIg0DJ8G0LOHgweA", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
-        print(urlRequest)
-        let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+        let request = try? SPTSearch.createRequestForSearch(withQuery: term, queryType: .queryTypeTrack, accessToken: spotifyAuth.session.accessToken)
+    
+        let task = URLSession.shared.dataTask(with: request!) { (data, response, error) in
+            
             guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
                 completion([], error)
                 return
             }
             
             do {
-                let json = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-                let tracks = json["tracks"] as! [String: Any]
-                let items = tracks["items"] as! [[String: Any]]
+                let results = try! SPTSearch.searchResults(from: data!, with: response!, queryType: .queryTypeTrack)
+                let tracks = results.items as! [SPTPartialTrack]
                 
                 var songResult = [Song]()
-                for track in items {
+                for track in tracks {
                     songResult.append(try Song(spotifyData: track))
                 }
-                
                 completion(songResult, nil)
             } catch {
                 fatalError("An error occurred: \(error.localizedDescription)")
             }
+            
         }
         
         task.resume()
     }
     
     func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
-        // Create the URL components for the network call.
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "api.spotify.com"
-        urlComponents.path = "/v1/tracks/\(id)"
-        
-        // Create and configure the `URLRequest`.
-        
-        var urlRequest = URLRequest(url: urlComponents.url!)
-        urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer BQA5SQsVflu2c04C0TK_UgRN76i4NbnnbMF2sfPBGrxXV_mBp3tyPEI87E37yq5xhi50qSwX4OduigcHK0gKA09Xq1hG67YfAdn4PKGAMX2k5Y44Iq9ZYsdHxA7TPgICqrpIg0DJ8G0LOHgweA", forHTTPHeaderField: "Authorization")
-        let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
-            print(response)
-            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
-                return
-            }
-            
-            do {
-                let json = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+        try? SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else if let data = data {
+                let track = data as! SPTTrack
+                let song = try! Song(spotifyData: track)
+//                var downloadTask:URLSessionDownloadTask
+//                downloadTask = URLSession.shared.downloadTask(with: URL(string: song.preview!)!, completionHandler: { (URL, response, error) -> Void in
+//                    do {
+//                        var player = try AVAudioPlayer(contentsOf: URL!)
+//                        player.prepareToPlay()
+//                        player.volume = 1.0
+//                        player.play()
+//                    } catch let error as NSError {
+//                        //self.player = nil
+//                        print(error.localizedDescription)
+//                    } catch {
+//                        print("AVAudioPlayer init failed")
+//                    }
+//                })
+//                
+//                downloadTask.resume()
                 
-                completion(try Song(spotifyData: json))
-            } catch {
-                fatalError("An error occurred: \(error.localizedDescription)")
+                
+                completion(song)
             }
-        }
-        
-        task.resume()
+        })
     }
 }
 

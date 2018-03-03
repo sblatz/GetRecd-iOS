@@ -9,19 +9,30 @@
 import UIKit
 import Firebase
 import GoogleSignIn
-import SpotifyLogin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        SpotifyLogin.shared.configure(clientID: "b2a4e9e6c816448cb0ee30b7f62d25b1", clientSecret: "8d309459ae7744b18d73616d4cba9aa0", redirectURL: URL(string: "GetRecd://cs407.GetRecd")!)
-
+        
+        MusicService.sharedInstance.spotifyAuth = SPTAuth.defaultInstance()
+        MusicService.sharedInstance.spotifyPlayer = SPTAudioStreamingController.sharedInstance()
+        MusicService.sharedInstance.spotifyAuth.clientID = "ee396a63623f4066a6d5be5d094ffa94"
+        MusicService.sharedInstance.spotifyAuth.redirectURL = URL(string: "GetRecd://spotify")!
+        MusicService.sharedInstance.spotifyAuth.sessionUserDefaultsKey = "spotify_session"
+        MusicService.sharedInstance.spotifyAuth.requestedScopes = [SPTAuthStreamingScope]
+        
+        try? MusicService.sharedInstance.spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
+    
+        let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
+        
+        if Auth.auth().currentUser != nil {
+            window?.rootViewController = storyboard.instantiateInitialViewController()
+        }
         return true
     }
 
@@ -49,7 +60,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-        let handled = SpotifyLogin.shared.applicationOpenURL(url) { (error) in }
+        // Handle callback from spotify with acess token
+        if url.absoluteString.contains("spotify") {
+            MusicService.sharedInstance.spotifyAuth.handleAuthCallback(withTriggeredAuthURL: url) { (error, session) in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else if session != nil {
+                    MusicService.sharedInstance.spotifyPlayer.login(withAccessToken: MusicService.sharedInstance.spotifyAuth.session.accessToken)
+                    MusicService.sharedInstance.audioTest()
+                }
+            }
+            
+            return true
+        }
+        
+        // Handle google login
         return GIDSignIn.sharedInstance().handle(url,
                 sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
                 annotation: [:])
