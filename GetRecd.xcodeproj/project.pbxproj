@@ -61,6 +61,11 @@
 		80A1ADDA2B538296773C88D0 /* Pods_GetRecdUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */; };
 		BF8CB8F304DE0513CB0C7719 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */; };
 		C77C4A52203CD3A50001839E /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C4A51203CD3A50001839E /* MusicService.swift */; };
+		C7EB9483204A3F0A00A99106 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EB9480204A3F0A00A99106 /* SpotifyAudioPlayback.framework */; };
+		C7EB9484204A3F0A00A99106 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = C7EB9481204A3F0A00A99106 /* .gitattributes */; };
+		C7EB9485204A3F0A00A99106 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EB9482204A3F0A00A99106 /* SpotifyAuthentication.framework */; };
+		C7EB9489204A404A00A99106 /* BridgeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7EB9488204A404A00A99106 /* BridgeViewController.m */; };
+		C7EB948B204A407A00A99106 /* SpotifyMetadata.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EB948A204A407A00A99106 /* SpotifyMetadata.framework */; };
 		FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FA202681BA00E15E0B /* DataService.swift */; };
 		FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FC202681C100E15E0B /* AuthService.swift */; };
 		FC0AE6FF2026842300E15E0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FE2026842300E15E0B /* User.swift */; };
@@ -137,6 +142,17 @@
 		BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C3C136C3B3D671B984FF4611 /* Pods-GetRecd-GetRecdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd-GetRecdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd-GetRecdTests/Pods-GetRecd-GetRecdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C77C4A51203CD3A50001839E /* MusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
+		C7EB9477204A3DA900A99106 /* GetRecd */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GetRecd; sourceTree = "<group>"; };
+		C7EB9479204A3E1B00A99106 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAuthentication.framework; path = "../../Downloads/ios-sdk-master/SpotifyAuthentication.framework"; sourceTree = "<group>"; };
+		C7EB947A204A3E1B00A99106 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAudioPlayback.framework; path = "../../Downloads/ios-sdk-master/SpotifyAudioPlayback.framework"; sourceTree = "<group>"; };
+		C7EB947B204A3E1B00A99106 /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = ../../Downloads/ios; sourceTree = "<group>"; };
+		C7EB9480204A3F0A00A99106 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
+		C7EB9481204A3F0A00A99106 /* .gitattributes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitattributes; sourceTree = "<group>"; };
+		C7EB9482204A3F0A00A99106 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
+		C7EB9486204A404A00A99106 /* GetRecd-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GetRecd-Bridging-Header.h"; sourceTree = "<group>"; };
+		C7EB9487204A404A00A99106 /* BridgeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeViewController.h; sourceTree = "<group>"; };
+		C7EB9488204A404A00A99106 /* BridgeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BridgeViewController.m; sourceTree = "<group>"; };
+		C7EB948A204A407A00A99106 /* SpotifyMetadata.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyMetadata.framework; sourceTree = "<group>"; };
 		DF09BAC38792B9A12189E65C /* Pods-GetRecd.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.debug.xcconfig"; sourceTree = "<group>"; };
 		E521BA2623ADDFD472904EE3 /* Pods-GetRecd.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd/Pods-GetRecd.release.xcconfig"; sourceTree = "<group>"; };
 		FC0AE6FA202681BA00E15E0B /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
@@ -156,7 +172,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C7EB948B204A407A00A99106 /* SpotifyMetadata.framework in Frameworks */,
 				672D0E3CEEFA24D2A3D349A3 /* Pods_GetRecd.framework in Frameworks */,
+				C7EB9485204A3F0A00A99106 /* SpotifyAuthentication.framework in Frameworks */,
+				C7EB9483204A3F0A00A99106 /* SpotifyAudioPlayback.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,6 +241,10 @@
 		245156C120238B1A000E8082 /* GetRecd */ = {
 			isa = PBXGroup;
 			children = (
+				C7EB9481204A3F0A00A99106 /* .gitattributes */,
+				C7EB948A204A407A00A99106 /* SpotifyMetadata.framework */,
+				C7EB9480204A3F0A00A99106 /* SpotifyAudioPlayback.framework */,
+				C7EB9482204A3F0A00A99106 /* SpotifyAuthentication.framework */,
 				245156C220238B1A000E8082 /* AppDelegate.swift */,
 				2451055E2023D2AC001AC6F6 /* Info.plist */,
 				24E476DF20238D9A00D65361 /* Assets.xcassets */,
@@ -232,6 +255,9 @@
 				24E847982023D0A5000033E3 /* Views */,
 				24E847992023D0BA000033E3 /* Controllers */,
 				BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */,
+				C7EB9487204A404A00A99106 /* BridgeViewController.h */,
+				C7EB9488204A404A00A99106 /* BridgeViewController.m */,
+				C7EB9486204A404A00A99106 /* GetRecd-Bridging-Header.h */,
 			);
 			path = GetRecd;
 			sourceTree = "<group>";
@@ -312,6 +338,10 @@
 		EBCF76D49DE25F8798D04164 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7EB947B204A3E1B00A99106 /* ios */,
+				C7EB947A204A3E1B00A99106 /* SpotifyAudioPlayback.framework */,
+				C7EB9479204A3E1B00A99106 /* SpotifyAuthentication.framework */,
+				C7EB9477204A3DA900A99106 /* GetRecd */,
 				A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */,
 				22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */,
 				20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */,
@@ -417,6 +447,7 @@
 				TargetAttributes = {
 					245156BE20238B1A000E8082 = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 					};
 					245156D220238B1A000E8082 = {
@@ -457,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				245105772023DAE8001AC6F6 /* OpenSans-Italic.ttf in Resources */,
+				C7EB9484204A3F0A00A99106 /* .gitattributes in Resources */,
 				2451056B2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */,
 				2451056E2023DAE8001AC6F6 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				245105742023DAE8001AC6F6 /* OpenSans-Bold.ttf in Resources */,
@@ -524,7 +556,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -548,7 +580,6 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/LTMorphingLabel/LTMorphingLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Pastel/Pastel.framework",
-				"${BUILT_PRODUCTS_DIR}/SpotifyLogin/SpotifyLogin.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -564,7 +595,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTMorphingLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pastel.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SpotifyLogin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -635,7 +665,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -674,7 +704,6 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/LTMorphingLabel/LTMorphingLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Pastel/Pastel.framework",
-				"${BUILT_PRODUCTS_DIR}/SpotifyLogin/SpotifyLogin.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -690,7 +719,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTMorphingLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pastel.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SpotifyLogin.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -729,6 +757,7 @@
 				C77C4A52203CD3A50001839E /* MusicService.swift in Sources */,
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				24D120AD20406EA40010BC8B /* SearchViewController.swift in Sources */,
+				C7EB9489204A404A00A99106 /* BridgeViewController.m in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
 				24D120A920406BD30010BC8B /* Helper.swift in Sources */,
 				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
@@ -903,12 +932,19 @@
 			baseConfigurationReference = DF09BAC38792B9A12189E65C /* Pods-GetRecd.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3YC9K4952Y;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GetRecd",
+				);
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GetRecd/GetRecd-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -919,12 +955,18 @@
 			baseConfigurationReference = E521BA2623ADDFD472904EE3 /* Pods-GetRecd.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = Q72GMFLLR4;
+				DEVELOPMENT_TEAM = 3YC9K4952Y;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/GetRecd",
+				);
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "GetRecd/GetRecd-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

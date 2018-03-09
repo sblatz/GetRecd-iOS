@@ -20,9 +20,7 @@ class ProfileMusicViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        MusicService.sharedInstance.getSpotifyTrack(with: "3n3Ppam7vgaVa1iaRUc9Lp") { (song) in
-            print(song.name)
-        }
+
     }
 
     override func viewDidAppear(_ animated: Bool) {

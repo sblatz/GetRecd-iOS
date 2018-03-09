@@ -1,1 +1,4 @@
 GetRecd/Pods/* linguist-vendored
+GetRecd/SpotifyAudioPlayback.framework/* linguist-vendored
+GetRecd/SpotifyAuthentication.framework/* linguist-vendored
+GetRecd/SpotifyMetadata.framework/* linguist-vendored

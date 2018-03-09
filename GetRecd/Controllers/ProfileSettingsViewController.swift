@@ -8,13 +8,11 @@
 
 import UIKit
 import FirebaseStorage
-import SpotifyLogin
 
 class ProfileSettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var bioTextView: UITextView!
-    @IBOutlet weak var linkSpotifyButton: UIButton!
 
     var imagePicker: UIImagePickerController!
     var currentUser: User!
@@ -25,10 +23,10 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
         super.viewDidLoad()
 
 
-        let button = SpotifyLoginButton(viewController: self, scopes: [.streaming, .userLibraryRead])
-        var cell = linkSpotifyButton.superview?.superview!
-        cell?.addSubview(button)
-        button.frame = linkSpotifyButton.frame
+        //let button = SpotifyLoginButton(viewController: self, scopes: [.streaming, .userLibraryRead])
+        //var cell = linkSpotifyButton.superview?.superview!
+        //cell?.addSubview(button)
+        //button.frame = linkSpotifyButton.frame
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,13 +44,6 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("in view will appear")
-        SpotifyLogin.shared.getAccessToken { (accessToken, error) in
-            print(accessToken)
-            print(error)
-            if error != nil {
-                // User is not logged in, show log in flow.
-            }
-        }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -127,7 +118,16 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             case 2:
                 switch indexPath.row {
                     case 0:
-                        print("Authenticate with Spotify")
+                        if (MusicService.sharedInstance.spotifyAuth.session != nil) {
+                            MusicService.sharedInstance.spotifyPlayer.login(withAccessToken: MusicService.sharedInstance.spotifyAuth.session.accessToken)
+                            MusicService.sharedInstance.searchSpotify(with: "Drake") { (songs, error) in
+                                print(songs[0].name)
+                            }
+                        } else {
+                            let authURL = MusicService.sharedInstance.spotifyAuth.spotifyAppAuthenticationURL()
+                            UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)
+                        }
+                
                     case 1:
                         print("Authenticate with Apple music")
                         MusicService.sharedInstance.requestAppleCloudServiceAuthorization()
