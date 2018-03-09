@@ -15,7 +15,6 @@ target 'GetRecd' do
   pod "FacebookCore"
   pod "FacebookLogin"
   pod "GoogleSignIn"
-  pod 'SpotifyLogin', '~> 0.1'
 
   target 'GetRecdTests' do
     use_frameworks!
