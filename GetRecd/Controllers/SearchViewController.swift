@@ -42,12 +42,37 @@ class SearchViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         definesPresentationContext = true
-        searchController.searchBar.delegate = self
-        tableView.tableHeaderView = searchController.searchBar
+
+        let searchBar = searchController.searchBar
+
+        headerView.addSubview(searchBar)
+        headerView.addSubview(segmentedControl)
+
+        searchBar.alpha = 0
+        searchBar.delegate = self
+
+        let constraint1 = NSLayoutConstraint(item: searchBar, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .top, multiplier: 1, constant: 0)
+        let constraint2 = NSLayoutConstraint(item: segmentedControl, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .top, multiplier: 1, constant: 0)
+        let constraint3 = NSLayoutConstraint(item: segmentedControl, attribute: .bottom, relatedBy: .equal, toItem: headerView, attribute: .bottom, multiplier: 1, constant: 0)
+
+        let constraint4 = NSLayoutConstraint(item: segmentedControl, attribute: .centerX, relatedBy: .equal, toItem: headerView, attribute: .centerX, multiplier: 1, constant: 0)
+
+        let constraint5 = NSLayoutConstraint(item: segmentedControl, attribute: .width, relatedBy: .equal, toItem: headerView, attribute: .width, multiplier: 1, constant: 0)
+
+        headerView.addConstraints([constraint1, constraint2, constraint3, constraint4, constraint5])
+
+        //tableView.tableHeaderView = searchController.searchBar
+        //tableView.tableHeaderView = segmentedControl
+
+        tableView.tableHeaderView = headerView
+
+        view.layoutIfNeeded()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -155,7 +180,7 @@ class SearchViewController: UITableViewController {
                 cell.movie = movie
                 return cell
             default:
-                break
+                return UITableViewCell()
         }
     }
 }
