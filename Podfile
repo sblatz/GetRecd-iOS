@@ -15,6 +15,7 @@ target 'GetRecd' do
   pod "FacebookCore"
   pod "FacebookLogin"
   pod "GoogleSignIn"
+  pod "TMDBSwift"
 
   target 'GetRecdTests' do
     use_frameworks!
