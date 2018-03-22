@@ -25,7 +25,6 @@ class MusicService: NSObject {
     /// The Apple Music API endpoint for requesting a the storefront of the currently logged in iTunes Store account.
     let userAppleStorefrontPathURLString = "/v1/me/storefront"
     
-    
     /// The instance of `SKCloudServiceController` that will be used for querying the available `SKCloudServiceCapability` and Storefront Identifier.
     let cloudServiceController = SKCloudServiceController()
     

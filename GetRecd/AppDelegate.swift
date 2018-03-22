@@ -27,12 +27,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MusicService.sharedInstance.spotifyAuth.requestedScopes = [SPTAuthStreamingScope]
         
         try? MusicService.sharedInstance.spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
-    
+
+
+        /*
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
-        
+
         if Auth.auth().currentUser != nil {
+            // Reauthenticate!
+            Auth.auth().currentUser?.reauthenticate(with: <#T##AuthCredential#>, completion: <#T##UserProfileChangeCallback?##UserProfileChangeCallback?##(Error?) -> Void#>)
+            print(Auth.auth().currentUser?.email)
+
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
+    */
+
+
         return true
     }
 
