@@ -47,6 +47,7 @@
 		245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245156F420238BDB000E8082 /* CreateAccountViewController.swift */; };
 		24687FB7202A371000CC990D /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24687FB6202A371000CC990D /* SignInViewController.swift */; };
 		24AEA6CA2064207F00B0C581 /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6C92064207F00B0C581 /* MovieService.swift */; };
+		24AEA6CC2064309200B0C581 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6CB2064309200B0C581 /* Movie.swift */; };
 		24D120A520406B720010BC8B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A420406B720010BC8B /* Song.swift */; };
 		24D120A720406BCB0010BC8B /* SerializationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A620406BCB0010BC8B /* SerializationError.swift */; };
 		24D120A920406BD30010BC8B /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A820406BD30010BC8B /* Helper.swift */; };
@@ -128,6 +129,7 @@
 		245156F420238BDB000E8082 /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		24687FB6202A371000CC990D /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		24AEA6C92064207F00B0C581 /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
+		24AEA6CB2064309200B0C581 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		24D120A420406B720010BC8B /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		24D120A620406BCB0010BC8B /* SerializationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializationError.swift; sourceTree = "<group>"; };
 		24D120A820406BD30010BC8B /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 			children = (
 				24D120A420406B720010BC8B /* Song.swift */,
 				FC0AE6FE2026842300E15E0B /* User.swift */,
+				24AEA6CB2064309200B0C581 /* Movie.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -773,6 +776,7 @@
 				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
 				24D120B120406ED20010BC8B /* SongCell.swift in Sources */,
 				FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */,
+				24AEA6CC2064309200B0C581 /* Movie.swift in Sources */,
 				FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */,
 				FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */,
 				FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */,

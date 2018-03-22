@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Search View Controller-->
+        <!--Search-->
         <scene sceneID="Cee-Ys-5xb">
             <objects>
                 <tableViewController id="Lbf-G5-ETF" customClass="SearchViewController" customModule="GetRecd" customModuleProvider="target" sceneMemberID="viewController">
@@ -19,9 +19,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <segmentedControl key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="58X-Fh-cdi">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Music"/>
+                                <segment title="Movies"/>
+                            </segments>
+                        </segmentedControl>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SongCell" rowHeight="107" id="YyF-cG-7bn" customClass="SongCell" customModule="GetRecd" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="107"/>
+                                <rect key="frame" x="0.0" y="58" width="375" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YyF-cG-7bn" id="0yE-Gp-XNJ">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="106.5"/>
@@ -85,7 +93,7 @@
                             <outlet property="delegate" destination="Lbf-G5-ETF" id="dww-No-fjF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="4zW-Ml-FxM">
+                    <navigationItem key="navigationItem" title="Search" id="4zW-Ml-FxM">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Whs-Go-o42">
                             <button key="customView" hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="IcD-ys-OQg">
                                 <rect key="frame" x="276" y="7" width="83" height="30"/>
@@ -100,6 +108,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="likeButton" destination="IcD-ys-OQg" id="aNq-G4-qIQ"/>
+                        <outlet property="segmentedControl" destination="58X-Fh-cdi" id="E00-tW-x78"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zf7-uW-2DB" userLabel="First Responder" sceneMemberID="firstResponder"/>

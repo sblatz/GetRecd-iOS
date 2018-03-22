@@ -11,14 +11,23 @@ import UIKit
 class SearchViewController: UITableViewController {
     
     @IBOutlet weak var likeButton: UIButton!
-    
+
+
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     var searchController = UISearchController(searchResultsController: nil)
     var timerToQueryMusic: Timer?
     var searchString = ""
 
     /// A `DispatchQueue` used for synchornizing the setting of `mediaItems` to avoid threading issues with various `UITableView` delegate callbacks.
     var setterQueue = DispatchQueue(label: "SearchViewController")
-    
+
+    var movies = [Movie]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     var songs = [Song]() {
         didSet {
             DispatchQueue.main.async {
@@ -32,12 +41,6 @@ class SearchViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -76,7 +79,6 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        print(songs.count)
         return songs.count
     }
     
@@ -145,7 +147,14 @@ extension SearchViewController: UISearchResultsUpdating {
             timer.invalidate()
         }
 
-        timerToQueryMusic = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(queryForMusic), userInfo: nil, repeats: false)
+        switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                timerToQueryMusic = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(queryForMusic), userInfo: nil, repeats: false)
+            case 1:
+                break
+            default:
+                break
+        }
     }
 
     // Function called after 1 second delay of user typing
