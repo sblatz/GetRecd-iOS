@@ -15,7 +15,7 @@ class SearchViewController: UITableViewController {
 
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var searchController = UISearchController(searchResultsController: nil)
-    var timerToQueryMusic: Timer?
+    var timerToQuery: Timer?
     var searchString = ""
 
     /// A `DispatchQueue` used for synchornizing the setting of `mediaItems` to avoid threading issues with various `UITableView` delegate callbacks.
@@ -143,46 +143,81 @@ extension SearchViewController: UISearchResultsUpdating {
         self.searchString = searchString
 
         // Check if user is still actively typing... if so, delay the call by one second:
-        if let timer = timerToQueryMusic {
+        if let timer = timerToQuery {
             timer.invalidate()
         }
 
-        switch segmentedControl.selectedSegmentIndex {
-            case 0:
-                timerToQueryMusic = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(queryForMusic), userInfo: nil, repeats: false)
-            case 1:
-                break
-            default:
-                break
-        }
+        timerToQuery = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.queryForSearch), userInfo: nil, repeats: false)
     }
 
-    // Function called after 1 second delay of user typing
-    @objc func queryForMusic() {
-        if searchString == "" {
-            self.setterQueue.sync {
-                self.songs = []
-            }
-        } else {
-            MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
-                guard error == nil else {
-                    print(error)
+    // The following functions are called after 1 second delay of user typing
+
+
+    @objc func queryForSearch() {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            if searchString == "" {
+                self.setterQueue.sync {
                     self.songs = []
-                    return
                 }
-                MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+            } else {
+                MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
                     guard error == nil else {
+                        print(error)
                         self.songs = []
                         return
                     }
-                    var newResult = appleMusicSongs + spotifySongs
-                    newResult.sort(by: { (first, second) -> Bool in
-                        return first.name < second.name
+                    MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+                        guard error == nil else {
+                            self.songs = []
+                            return
+                        }
+                        var newResult = appleMusicSongs + spotifySongs
+                        newResult.sort(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                        self.songs = newResult
                     })
-                    self.songs = newResult
-                })
+                }
             }
+        case 1:
+            if searchString == "" {
+                self.setterQueue.sync {
+                    self.songs = []
+                }
+            } else {
+                MovieService.sharedInstance.searchTMDB(forMovie: searchString, completion: { (movies, error) in
+                    guard error == nil else {
+                        print(error)
+                        self.movies = []
+                        return
+                    }
+
+
+                })
+                MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
+                    guard error == nil else {
+                        print(error)
+                        self.songs = []
+                        return
+                    }
+                    MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+                        guard error == nil else {
+                            self.songs = []
+                            return
+                        }
+                        var newResult = appleMusicSongs + spotifySongs
+                        newResult.sort(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                        self.songs = newResult
+                    })
+                }
+            }
+        default:
+            break
         }
+
     }
 }
 
