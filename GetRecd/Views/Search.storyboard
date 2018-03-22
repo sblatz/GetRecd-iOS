@@ -19,17 +19,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <segmentedControl key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="58X-Fh-cdi">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="Music"/>
-                                <segment title="Movies"/>
-                            </segments>
-                        </segmentedControl>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SongCell" rowHeight="107" id="YyF-cG-7bn" customClass="SongCell" customModule="GetRecd" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="58" width="375" height="107"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YyF-cG-7bn" id="0yE-Gp-XNJ">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="106.5"/>
@@ -88,7 +80,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieCell" rowHeight="107" id="lVN-cs-Ud3" customClass="MovieCell" customModule="GetRecd" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="165" width="375" height="107"/>
+                                <rect key="frame" x="0.0" y="135" width="375" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="lVN-cs-Ud3" id="5rk-2Y-iLS">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="106.5"/>
@@ -119,29 +111,20 @@
                                                 </label>
                                             </subviews>
                                         </stackView>
-                                        <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="SPu-1P-P18">
-                                            <rect key="frame" x="16" y="16" width="25" height="25"/>
-                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Xbw-Rw-YRH" firstAttribute="leading" secondItem="H2c-mA-T8n" secondAttribute="trailing" constant="16" id="1xn-kn-69m"/>
                                         <constraint firstAttribute="trailing" secondItem="Xbw-Rw-YRH" secondAttribute="trailing" constant="8" id="2s4-3l-GJH"/>
                                         <constraint firstItem="H2c-mA-T8n" firstAttribute="top" secondItem="5rk-2Y-iLS" secondAttribute="top" constant="16" id="JIY-vK-KOu"/>
-                                        <constraint firstItem="SPu-1P-P18" firstAttribute="height" secondItem="H2c-mA-T8n" secondAttribute="height" multiplier="1:3" id="NpD-Sb-RyV"/>
-                                        <constraint firstItem="SPu-1P-P18" firstAttribute="leading" secondItem="H2c-mA-T8n" secondAttribute="leading" id="SJZ-ka-U6c"/>
                                         <constraint firstItem="Xbw-Rw-YRH" firstAttribute="centerY" secondItem="H2c-mA-T8n" secondAttribute="centerY" id="dE1-si-xe4"/>
                                         <constraint firstItem="H2c-mA-T8n" firstAttribute="leading" secondItem="5rk-2Y-iLS" secondAttribute="leading" constant="16" id="dJd-Oz-Y2q"/>
-                                        <constraint firstItem="SPu-1P-P18" firstAttribute="top" secondItem="H2c-mA-T8n" secondAttribute="top" id="ft0-w5-3FW"/>
                                         <constraint firstAttribute="bottom" secondItem="H2c-mA-T8n" secondAttribute="bottom" constant="16" id="sb2-BB-IBf"/>
-                                        <constraint firstItem="SPu-1P-P18" firstAttribute="width" secondItem="H2c-mA-T8n" secondAttribute="width" multiplier="1:3" id="vLw-7Y-Ffl"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="artistLabel" destination="3K8-hW-3gW" id="vwF-7J-lcb"/>
                                     <outlet property="artworkView" destination="H2c-mA-T8n" id="9eL-7I-Z9C"/>
                                     <outlet property="nameLabel" destination="TKb-RL-ruS" id="6ic-JP-yTJ"/>
                                     <outlet property="releaseLabel" destination="3K8-hW-3gW" id="rsM-ge-92Q"/>
-                                    <outlet property="typeView" destination="SPu-1P-P18" id="z82-3O-4Ug"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -165,7 +148,6 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="likeButton" destination="IcD-ys-OQg" id="aNq-G4-qIQ"/>
-                        <outlet property="segmentedControl" destination="58X-Fh-cdi" id="E00-tW-x78"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zf7-uW-2DB" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -447,7 +447,7 @@
                         <outlet property="orView" destination="b3S-RG-030" id="5Nk-tw-nNF"/>
                         <outlet property="passwordTextField" destination="5lL-iv-E7k" id="rZa-gu-pp6"/>
                         <outlet property="passwordView" destination="IIV-h3-TYy" id="NKq-vJ-PcF"/>
-                        <segue destination="GIN-vW-f6q" kind="show" identifier="RecFeed" id="qmB-dB-jqF"/>
+                        <segue destination="GIN-vW-f6q" kind="presentation" identifier="RecFeed" id="qmB-dB-jqF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tUg-qf-3by" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -673,7 +673,7 @@
                         <outlet property="orView" destination="hJJ-LR-g5p" id="fPq-7D-n14"/>
                         <outlet property="passwordTextField" destination="tS8-mo-1yB" id="6aQ-H3-zQi"/>
                         <outlet property="passwordView" destination="OEg-DH-bAs" id="lHi-7s-gXI"/>
-                        <segue destination="GIN-vW-f6q" kind="show" identifier="RecFeed" id="BHr-wl-sQw"/>
+                        <segue destination="GIN-vW-f6q" kind="presentation" identifier="RecFeed" id="BHr-wl-sQw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t8y-2s-TS0" userLabel="First Responder" sceneMemberID="firstResponder"/>

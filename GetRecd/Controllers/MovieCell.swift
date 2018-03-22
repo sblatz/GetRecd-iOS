@@ -15,14 +15,15 @@ class MovieCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var releaseLabel: UILabel!
 
-
+    var basePosterPath = "https://image.tmdb.org/t/p/original/"
     var movie: Movie! {
         didSet {
             self.nameLabel.text = movie.name
             self.releaseLabel.text = movie.releaseDate
             self.artworkView.image = nil
 
-            downloadArtwork(url: movie.posterPath) { (image) in
+
+            downloadArtwork(url: (basePosterPath + movie.posterPath)) { (image) in
                 DispatchQueue.main.async {
                     self.artworkView.image = image
                 }

@@ -423,8 +423,6 @@ class MusicService: NSObject {
         
     }
     
-    
-    
     var spotifyAuth: SPTAuth!
     var spotifyPlayer: SPTAudioStreamingController!
     

@@ -12,8 +12,7 @@ class SearchViewController: UITableViewController {
     
     @IBOutlet weak var likeButton: UIButton!
 
-
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
+    var selectedScope = 0
     var searchController = UISearchController(searchResultsController: nil)
     var timerToQuery: Timer?
     var searchString = ""
@@ -43,38 +42,27 @@ class SearchViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = true
+
         definesPresentationContext = true
 
-        let searchBar = searchController.searchBar
-
-        headerView.addSubview(searchBar)
-        headerView.addSubview(segmentedControl)
-
-        searchBar.alpha = 0
-        searchBar.delegate = self
-
-        let constraint1 = NSLayoutConstraint(item: searchBar, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .top, multiplier: 1, constant: 0)
-        let constraint2 = NSLayoutConstraint(item: segmentedControl, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .top, multiplier: 1, constant: 0)
-        let constraint3 = NSLayoutConstraint(item: segmentedControl, attribute: .bottom, relatedBy: .equal, toItem: headerView, attribute: .bottom, multiplier: 1, constant: 0)
-
-        let constraint4 = NSLayoutConstraint(item: segmentedControl, attribute: .centerX, relatedBy: .equal, toItem: headerView, attribute: .centerX, multiplier: 1, constant: 0)
-
-        let constraint5 = NSLayoutConstraint(item: segmentedControl, attribute: .width, relatedBy: .equal, toItem: headerView, attribute: .width, multiplier: 1, constant: 0)
-
-        headerView.addConstraints([constraint1, constraint2, constraint3, constraint4, constraint5])
-
-        //tableView.tableHeaderView = searchController.searchBar
-        //tableView.tableHeaderView = segmentedControl
-
-        tableView.tableHeaderView = headerView
-
+        searchController.searchBar.scopeButtonTitles = ["Music", "Movies"]
+        searchController.searchBar.showsScopeBar = true
+        searchController.searchBar.delegate = self
+        self.definesPresentationContext = true
+        self.navigationItem.searchController = searchController
+        tableView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
         view.layoutIfNeeded()
     }
-    
+
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print("switched scope")
+        self.selectedScope = selectedScope
+    }
+
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -105,7 +93,7 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        switch segmentedControl.selectedSegmentIndex {
+        switch selectedScope {
             case 0:
                 return songs.count
             case 1:
@@ -152,8 +140,10 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        switch segmentedControl.selectedSegmentIndex {
+        switch selectedScope {
+
             case 0:
+                print("case zero!")
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
                 // Reset the cell from previous use:
@@ -206,7 +196,7 @@ extension SearchViewController: UISearchResultsUpdating {
 
 
     @objc func queryForSearch() {
-        switch segmentedControl.selectedSegmentIndex {
+        switch selectedScope {
         case 0:
             if searchString == "" {
                 self.setterQueue.sync {
@@ -255,7 +245,6 @@ extension SearchViewController: UISearchResultsUpdating {
         default:
             break
         }
-
     }
 }
 

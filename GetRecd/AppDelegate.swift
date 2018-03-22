@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         try? MusicService.sharedInstance.spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
 
+        
 
         /*
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
