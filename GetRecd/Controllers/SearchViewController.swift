@@ -193,26 +193,12 @@ extension SearchViewController: UISearchResultsUpdating {
                         return
                     }
 
-
-                })
-                MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
-                    guard error == nil else {
-                        print(error)
-                        self.songs = []
-                        return
-                    }
-                    MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
-                        guard error == nil else {
-                            self.songs = []
-                            return
-                        }
-                        var newResult = appleMusicSongs + spotifySongs
-                        newResult.sort(by: { (first, second) -> Bool in
+                    if let movieArray = movies {
+                        self.movies = movieArray.sorted(by: { (first, second) -> Bool in
                             return first.name < second.name
                         })
-                        self.songs = newResult
-                    })
-                }
+                    }
+                })
             }
         default:
             break
