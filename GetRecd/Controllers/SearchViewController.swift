@@ -28,6 +28,7 @@ class SearchViewController: UITableViewController {
             }
         }
     }
+
     var songs = [Song]() {
         didSet {
             DispatchQueue.main.async {
@@ -79,7 +80,14 @@ class SearchViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return songs.count
+        switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                return songs.count
+            case 1:
+                return movies.count
+            default:
+                return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -118,18 +126,37 @@ class SearchViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
-        // Reset the cell from previous use:
-        cell.artistLabel.text = ""
-        cell.artworkView.image = UIImage()
-        cell.nameLabel.text = ""
+        switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
-        cell.tag = indexPath.row
-        cell.artworkView.tag = indexPath.row
-        let song = songs[indexPath.row]
-        cell.song = song
-        return cell
+                // Reset the cell from previous use:
+                cell.artistLabel.text = ""
+                cell.artworkView.image = UIImage()
+                cell.nameLabel.text = ""
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let song = songs[indexPath.row]
+                cell.song = song
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+
+                // Reset the cell from previous use:
+                cell.releaseLabel.text = ""
+                cell.nameLabel.text = ""
+                cell.artworkView.image = UIImage()
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let movie = movies[indexPath.row]
+                cell.movie = movie
+                return cell
+            default:
+                break
+        }
     }
 }
 

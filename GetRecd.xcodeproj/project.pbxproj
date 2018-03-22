@@ -48,6 +48,7 @@
 		24687FB7202A371000CC990D /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24687FB6202A371000CC990D /* SignInViewController.swift */; };
 		24AEA6CA2064207F00B0C581 /* MovieService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6C92064207F00B0C581 /* MovieService.swift */; };
 		24AEA6CC2064309200B0C581 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6CB2064309200B0C581 /* Movie.swift */; };
+		24AEA6CE2064389500B0C581 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6CD2064389500B0C581 /* MovieCell.swift */; };
 		24D120A520406B720010BC8B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A420406B720010BC8B /* Song.swift */; };
 		24D120A720406BCB0010BC8B /* SerializationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A620406BCB0010BC8B /* SerializationError.swift */; };
 		24D120A920406BD30010BC8B /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A820406BD30010BC8B /* Helper.swift */; };
@@ -130,6 +131,7 @@
 		24687FB6202A371000CC990D /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		24AEA6C92064207F00B0C581 /* MovieService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieService.swift; sourceTree = "<group>"; };
 		24AEA6CB2064309200B0C581 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		24AEA6CD2064389500B0C581 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		24D120A420406B720010BC8B /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		24D120A620406BCB0010BC8B /* SerializationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializationError.swift; sourceTree = "<group>"; };
 		24D120A820406BD30010BC8B /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */,
 				24D120AC20406EA40010BC8B /* SearchViewController.swift */,
 				24D120B020406ED20010BC8B /* SongCell.swift */,
+				24AEA6CD2064389500B0C581 /* MovieCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -785,6 +788,7 @@
 				24D120AF20406EBB0010BC8B /* ProfileMusicViewController.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
 				FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */,
+				24AEA6CE2064389500B0C581 /* MovieCell.swift in Sources */,
 				FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
