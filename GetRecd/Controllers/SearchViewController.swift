@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UITableViewController, UISearchControllerDelegate {
+class SearchViewController: UITableViewController {
     
     @IBOutlet weak var likeButton: UIButton!
 
@@ -50,8 +50,6 @@ class SearchViewController: UITableViewController, UISearchControllerDelegate {
 
         definesPresentationContext = true
 
-        searchController.delegate = self
-        searchController.searchBar.setShowsCancelButton(false, animated: false)
         searchController.searchBar.scopeButtonTitles = ["Music", "Movies"]
         searchController.searchBar.showsScopeBar = true
         searchController.searchBar.delegate = self
@@ -61,9 +59,7 @@ class SearchViewController: UITableViewController, UISearchControllerDelegate {
         view.layoutIfNeeded()
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
-        searchController.searchBar.showsCancelButton = false
-    }
+
 
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         print("switched scope")
@@ -296,5 +292,6 @@ extension SearchViewController: UISearchResultsUpdating {
 extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.songs = []
+        self.movies = []
     }
 }
