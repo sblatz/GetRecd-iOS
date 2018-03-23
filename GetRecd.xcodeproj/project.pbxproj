@@ -52,6 +52,7 @@
 		24AEA6D02065610800B0C581 /* ProfileMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6CF2065610800B0C581 /* ProfileMovieViewController.swift */; };
 		24AEA6D2206567B700B0C581 /* TVService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6D1206567B700B0C581 /* TVService.swift */; };
 		24AEA6D4206567F400B0C581 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6D3206567F400B0C581 /* Show.swift */; };
+		24AEA6D620656DFA00B0C581 /* ProfileShowsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24AEA6D520656DFA00B0C581 /* ProfileShowsViewController.swift */; };
 		24D120A520406B720010BC8B /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A420406B720010BC8B /* Song.swift */; };
 		24D120A720406BCB0010BC8B /* SerializationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A620406BCB0010BC8B /* SerializationError.swift */; };
 		24D120A920406BD30010BC8B /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D120A820406BD30010BC8B /* Helper.swift */; };
@@ -138,6 +139,7 @@
 		24AEA6CF2065610800B0C581 /* ProfileMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMovieViewController.swift; sourceTree = "<group>"; };
 		24AEA6D1206567B700B0C581 /* TVService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVService.swift; sourceTree = "<group>"; };
 		24AEA6D3206567F400B0C581 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
+		24AEA6D520656DFA00B0C581 /* ProfileShowsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileShowsViewController.swift; sourceTree = "<group>"; };
 		24D120A420406B720010BC8B /* Song.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		24D120A620406BCB0010BC8B /* SerializationError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializationError.swift; sourceTree = "<group>"; };
 		24D120A820406BD30010BC8B /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -328,6 +330,7 @@
 				FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */,
 				24D120AE20406EBB0010BC8B /* ProfileMusicViewController.swift */,
 				24AEA6CF2065610800B0C581 /* ProfileMovieViewController.swift */,
+				24AEA6D520656DFA00B0C581 /* ProfileShowsViewController.swift */,
 				5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */,
 				24D120AC20406EA40010BC8B /* SearchViewController.swift */,
 				24D120B020406ED20010BC8B /* SongCell.swift */,
@@ -787,6 +790,7 @@
 				FC0AE6FF2026842300E15E0B /* User.swift in Sources */,
 				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
 				24D120B120406ED20010BC8B /* SongCell.swift in Sources */,
+				24AEA6D620656DFA00B0C581 /* ProfileShowsViewController.swift in Sources */,
 				FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */,
 				24AEA6CC2064309200B0C581 /* Movie.swift in Sources */,
 				FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */,
