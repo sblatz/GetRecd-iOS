@@ -14,6 +14,6 @@ extension UITextView {
             return 0
         }
         
-        return text.boundingRect(with: CGSize(width: self.frame.width, height: 0), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: self.font], context: nil).height
+        return text.boundingRect(with: CGSize(width: self.frame.width, height: 0), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: self.font as Any], context: nil).height
     }
 }

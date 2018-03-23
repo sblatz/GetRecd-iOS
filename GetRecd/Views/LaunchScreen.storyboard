@@ -34,7 +34,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" © Get Rec’d 2018" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wbY-h8-q0L">
-                                <rect key="frame" x="130" y="758" width="115" height="20"/>
+                                <rect key="frame" x="129" y="758" width="117.33333333333331" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="115" id="b2y-Gd-bCg"/>
                                     <constraint firstAttribute="height" constant="20" id="dOA-G0-cgA"/>
