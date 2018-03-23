@@ -24,7 +24,6 @@ class MovieService: NSObject {
                 if let tmdbMovieArray = movies {
                     var movies = [Movie]()
                     for tmdbMovie in tmdbMovieArray {
-
                         var movieDictionary = [String: Any]()
 
                         movieDictionary["id"] = tmdbMovie.id

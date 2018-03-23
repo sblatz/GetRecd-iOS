@@ -92,8 +92,7 @@ class DataService {
         print("DELETING USER: \(uid)")
         REF_USERS.child(uid).removeValue()
     }
-    
-    
+
     func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> ()) {
         let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
         let currUserAppleMusicLikesRef = currUserLikesRef.child("AppleMusic")
@@ -134,4 +133,16 @@ class DataService {
             sucesss(result)
         }
     }
+
+    func likeMovies(movies: Set<Int>, success: @escaping () -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        let currentUserMovieLikesRef = currUserLikesRef.child("Movies")
+
+        for movie in movies {
+            currentUserMovieLikesRef.child("\(movie)").setValue(true)
+        }
+
+        success()
+    }
+
 }

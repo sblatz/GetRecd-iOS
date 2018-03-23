@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchViewController: UITableViewController {
+class SearchViewController: UITableViewController, UISearchControllerDelegate {
     
     @IBOutlet weak var likeButton: UIButton!
 
@@ -38,16 +38,20 @@ class SearchViewController: UITableViewController {
     
     var likedAppleMusicSongs = Set<String>()
     var likedSpotifySongs = Set<String>()
+    var likedMovies = Set<Int>()
+    var likedTVShows = Set<String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = false
 
         definesPresentationContext = true
 
+        searchController.delegate = self
+        searchController.searchBar.setShowsCancelButton(false, animated: false)
         searchController.searchBar.scopeButtonTitles = ["Music", "Movies"]
         searchController.searchBar.showsScopeBar = true
         searchController.searchBar.delegate = self
@@ -57,11 +61,22 @@ class SearchViewController: UITableViewController {
         view.layoutIfNeeded()
     }
 
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print("switched scope")
-        self.selectedScope = selectedScope
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.showsCancelButton = false
     }
 
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print("switched scope")
+        searchController.searchBar.text = ""
+        likedSpotifySongs.removeAll()
+        likedAppleMusicSongs.removeAll()
+        likedMovies.removeAll()
+        likedTVShows.removeAll()
+        songs.removeAll()
+        movies.removeAll()
+
+        self.selectedScope = selectedScope
+    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -82,8 +97,17 @@ class SearchViewController: UITableViewController {
     }
     
     @IBAction func onAdd(_ sender: Any) {
-        DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
-        })
+        switch selectedScope {
+        case 0:
+            DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+            })
+        case 1:
+            DataService.instance.likeMovies(movies: likedMovies, success: {
+            })
+        default:
+            break
+        }
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -92,7 +116,6 @@ class SearchViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         switch selectedScope {
             case 0:
                 return songs.count
@@ -104,38 +127,61 @@ class SearchViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? SongCell {
+        switch selectedScope {
+            case 0:
+                if let cell = tableView.cellForRow(at: indexPath) as? SongCell {
 
-            if cell.accessoryType == .checkmark {
-                cell.accessoryType = .none
-                switch cell.song.type {
-                    case .AppleMusic:
-                        likedAppleMusicSongs.remove(cell.song.id)
-                    case .Spotify:
-                        likedSpotifySongs.remove(cell.song.id)
-                    default:
-                        break
+                    if cell.accessoryType == .checkmark {
+                        cell.accessoryType = .none
+                        switch cell.song.type {
+                        case .AppleMusic:
+                            likedAppleMusicSongs.remove(cell.song.id)
+                        case .Spotify:
+                            likedSpotifySongs.remove(cell.song.id)
+                        default:
+                            break
+                        }
+                    } else {
+                        cell.accessoryType = .checkmark
+                        switch cell.song.type {
+                        case .AppleMusic:
+                            likedAppleMusicSongs.insert(cell.song.id)
+                        case .Spotify:
+                            likedSpotifySongs.insert(cell.song.id)
+                        default:
+                            break
+                        }
+                    }
                 }
-            } else {
-                cell.accessoryType = .checkmark
-                switch cell.song.type {
-                    case .AppleMusic:
-                        likedAppleMusicSongs.insert(cell.song.id)
-                    case .Spotify:
-                        likedSpotifySongs.insert(cell.song.id)
-                    default:
-                        break
+
+                if likedAppleMusicSongs.count > 0 || likedSpotifySongs.count > 0 {
+                    likeButton.isHidden = false
+                } else {
+                    likeButton.isHidden = true
+                }
+                tableView.deselectRow(at: indexPath, animated: true)
+        case 1:
+            if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
+
+                if cell.accessoryType == .checkmark {
+                    cell.accessoryType = .none
+                    likedMovies.remove(cell.movie.id)
+                } else {
+                    cell.accessoryType = .checkmark
+                    likedMovies.insert(cell.movie.id)
                 }
             }
+
+            if likedMovies.count > 0 {
+                likeButton.isHidden = false
+            } else {
+                likeButton.isHidden = true
+            }
+
+            tableView.deselectRow(at: indexPath, animated: true)
+        default:
+            break
         }
-        
-        if likedAppleMusicSongs.count > 0 || likedSpotifySongs.count > 0 {
-            likeButton.isHidden = false
-        } else {
-            likeButton.isHidden = true
-        }
-        
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -143,7 +189,6 @@ class SearchViewController: UITableViewController {
         switch selectedScope {
 
             case 0:
-                print("case zero!")
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
                 // Reset the cell from previous use:
