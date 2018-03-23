@@ -50,6 +50,34 @@ class MovieService: NSObject {
         }
     }
 
+    func getMovie(with id: String, completion: @escaping (Movie) -> ()) {
+        MovieMDB.movie(movieID: Int(id)) { (apiReturn, movie) in
+            if let movie = movie {
+                var movieDictionary = [String: Any]()
+
+                movieDictionary["id"] = movie.id
+                movieDictionary["name"] = movie.title
+                movieDictionary["releaseDate"] = movie.release_date
+                movieDictionary["posterPath"] = movie.poster_path
+                movieDictionary["overview"] = movie.overview
+
+                print(movie.title)
+                print(movie.revenue)
+                print(movie.genres[0].name)
+                print(movie.production_companies?[0].name)
+                print(movie.popularity)
+
+                do {
+                    completion(try Movie(movieDict: movieDictionary))
+                } catch {
+                    fatalError("An error occurred: \(error.localizedDescription)")
+                }
+
+            }
+        }
+    }
+
+
     // Function to login to TMDB
     func loginToTMDB() {
     }

@@ -36,7 +36,7 @@ class ProfileViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 4
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -52,6 +52,9 @@ class ProfileViewController: UITableViewController {
             case 2:
                 // Segue to music
                 self.performSegue(withIdentifier: "showMusicLikes", sender: nil)
+                tableView.deselectRow(at: indexPath, animated: true)
+            case 3:
+                self.performSegue(withIdentifier: "showMovieLikes", sender: nil)
                 tableView.deselectRow(at: indexPath, animated: true)
             default:
                 break

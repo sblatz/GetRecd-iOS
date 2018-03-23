@@ -145,4 +145,22 @@ class DataService {
         success()
     }
 
+    func getLikedMovies(sucesss: @escaping ([(String)]) -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        currUserLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+
+            var result = [(String)]()
+
+            if let movies = data["Movies"] as? [String: Bool] {
+                for (key, _) in movies {
+                    result.append((key))
+                }
+            }
+
+            sucesss(result)
+        }
+    }
 }
