@@ -149,4 +149,14 @@ class AuthService: NSObject, GIDSignInDelegate {
             }
         })
     }
+    
+    func resetPassword(email: String, success: @escaping (Bool) -> (Void)) {
+        Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+            if error != nil {
+                return success(false)
+            } else {
+               return success(true)
+            }
+        }
+    }
 }

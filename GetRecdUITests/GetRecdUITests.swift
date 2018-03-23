@@ -191,7 +191,49 @@ class GetRecdUITests: XCTestCase {
         let confirmPasswordSecureTextField = app.secureTextFields["Confirm Password"]
         confirmPasswordSecureTextField.tap()
         confirmPasswordSecureTextField.typeText("password")
-
+        
         app.buttons["SIGN UP"].tap()
+    }
+    
+    // User Profile Settings/Profile Picture Test
+    func testEditProfile() {
+        let app = XCUIApplication()
+        let signInButton = app.buttons["SIGN IN"]
+        signInButton.tap()
+        
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("d@m.com")
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("123123")
+        signInButton.tap()
+        let tabBarsQuery = app.tabBars
+        tabBarsQuery.buttons["Profile"].tap()
+        let tablesQuery = app.tables
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["settings"]/*[[".cells.buttons[\"settings\"]",".buttons[\"settings\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["edit button"]/*[[".cells.buttons[\"edit button\"]",".buttons[\"edit button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+    }
+    
+    func testDeleteAccount() {
+        let app = XCUIApplication()
+        let signInButton = app.buttons["SIGN IN"]
+        signInButton.tap()
+        
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("d@m.com")
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("123123")
+        signInButton.tap()
+        let tabBarsQuery = app.tabBars
+        tabBarsQuery.buttons["Profile"].tap()
+        let tablesQuery = app.tables
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["settings"]/*[[".cells.buttons[\"settings\"]",".buttons[\"settings\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["edit button"]/*[[".cells.buttons[\"edit button\"]",".buttons[\"edit button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.swipeUp()
     }
 }

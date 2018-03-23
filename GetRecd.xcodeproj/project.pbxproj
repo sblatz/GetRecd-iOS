@@ -78,7 +78,8 @@
 		FC0AE6FF2026842300E15E0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0AE6FE2026842300E15E0B /* User.swift */; };
 		FC1229522036BA640080151B /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC1229512036BA640080151B /* Profile.storyboard */; };
 		FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1229532036BA7E0080151B /* ProfileViewController.swift */; };
-		FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */; };
+		FC31A5E6206460CE00D73A6A /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */; };
+		FC46DA7D203BF3840059BEC8 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA7C203BF3840059BEC8 /* RoundedView.swift */; };
 		FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */; };
 		FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */; };
 		FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */; };
@@ -174,7 +175,8 @@
 		FC0AE6FE2026842300E15E0B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FC1229512036BA640080151B /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		FC1229532036BA7E0080151B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImageView.swift; sourceTree = "<group>"; };
+		FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		FC46DA7C203BF3840059BEC8 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecFeed.storyboard; sourceTree = "<group>"; };
 		FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewController.swift; sourceTree = "<group>"; };
 		FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecFeedViewController.swift; sourceTree = "<group>"; };
@@ -311,7 +313,7 @@
 				245156C620238B1A000E8082 /* Main.storyboard */,
 				24065A2C202A6ABC00272A61 /* LaunchScreen.storyboard */,
 				FC1229512036BA640080151B /* Profile.storyboard */,
-				FC46DA7C203BF3840059BEC8 /* RoundedImageView.swift */,
+				FC46DA7C203BF3840059BEC8 /* RoundedView.swift */,
 				FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */,
 				24D120AA20406C5E0010BC8B /* Search.storyboard */,
 			);
@@ -332,6 +334,7 @@
 				24AEA6CF2065610800B0C581 /* ProfileMovieViewController.swift */,
 				24AEA6D520656DFA00B0C581 /* ProfileShowsViewController.swift */,
 				5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */,
+				FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */,
 				24D120AC20406EA40010BC8B /* SearchViewController.swift */,
 				24D120B020406ED20010BC8B /* SongCell.swift */,
 				24AEA6CD2064389500B0C581 /* MovieCell.swift */,
@@ -789,6 +792,7 @@
 				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
 				FC0AE6FF2026842300E15E0B /* User.swift in Sources */,
 				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
+				FC46DA7D203BF3840059BEC8 /* RoundedView.swift in Sources */,
 				24D120B120406ED20010BC8B /* SongCell.swift in Sources */,
 				24AEA6D620656DFA00B0C581 /* ProfileShowsViewController.swift in Sources */,
 				FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */,
@@ -799,6 +803,7 @@
 				24AEA6D4206567F400B0C581 /* Show.swift in Sources */,
 				FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */,
 				5B3B4067203F13FE00AF061E /* AuthenticationViewController.swift in Sources */,
+				FC31A5E6206460CE00D73A6A /* ForgotPasswordViewController.swift in Sources */,
 				24D120A520406B720010BC8B /* Song.swift in Sources */,
 				24D120AF20406EBB0010BC8B /* ProfileMusicViewController.swift in Sources */,
 				245156C320238B1A000E8082 /* AppDelegate.swift in Sources */,
