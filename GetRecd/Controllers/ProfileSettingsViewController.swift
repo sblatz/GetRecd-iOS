@@ -153,6 +153,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
                     alert.addAction(no)
                     self.present(alert, animated: true, completion: nil)
                 case 3:
+                    print("logging out")
                     logOut()
                 default:
                     break

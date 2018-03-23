@@ -92,8 +92,7 @@ class DataService {
         print("DELETING USER: \(uid)")
         REF_USERS.child(uid).removeValue()
     }
-    
-    
+
     func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> ()) {
         let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
         let currUserAppleMusicLikesRef = currUserLikesRef.child("AppleMusic")
@@ -131,6 +130,66 @@ class DataService {
                 }
             }
             
+            sucesss(result)
+        }
+    }
+
+    func likeMovies(movies: Set<Int>, success: @escaping () -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        let currentUserMovieLikesRef = currUserLikesRef.child("Movies")
+
+        for movie in movies {
+            currentUserMovieLikesRef.child("\(movie)").setValue(true)
+        }
+
+        success()
+    }
+
+    func getLikedMovies(sucesss: @escaping ([(String)]) -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        currUserLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+
+            var result = [(String)]()
+
+            if let movies = data["Movies"] as? [String: Bool] {
+                for (key, _) in movies {
+                    result.append((key))
+                }
+            }
+
+            sucesss(result)
+        }
+    }
+
+    func likeShows(shows: Set<Int>, success: @escaping () -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        let currentUserShowLikes = currUserLikesRef.child("Shows")
+
+        for show in shows {
+            currentUserShowLikes.child("\(show)").setValue(true)
+        }
+
+        success()
+    }
+
+    func getLikedShows(sucesss: @escaping ([(String)]) -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        currUserLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+
+            var result = [(String)]()
+
+            if let shows = data["Shows"] as? [String: Bool] {
+                for (key, _) in shows {
+                    result.append((key))
+                }
+            }
+
             sucesss(result)
         }
     }

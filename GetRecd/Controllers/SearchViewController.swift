@@ -11,14 +11,31 @@ import UIKit
 class SearchViewController: UITableViewController {
     
     @IBOutlet weak var likeButton: UIButton!
-    
+
+    var selectedScope = 0
     var searchController = UISearchController(searchResultsController: nil)
-    var timerToQueryMusic: Timer?
+    var timerToQuery: Timer?
     var searchString = ""
 
     /// A `DispatchQueue` used for synchornizing the setting of `mediaItems` to avoid threading issues with various `UITableView` delegate callbacks.
     var setterQueue = DispatchQueue(label: "SearchViewController")
-    
+
+    var movies = [Movie]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    var shows = [Show]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
     var songs = [Song]() {
         didSet {
             DispatchQueue.main.async {
@@ -29,23 +46,42 @@ class SearchViewController: UITableViewController {
     
     var likedAppleMusicSongs = Set<String>()
     var likedSpotifySongs = Set<String>()
+    var likedMovies = Set<Int>()
+    var likedTVShows = Set<Int>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
+
         definesPresentationContext = true
+
+        searchController.searchBar.scopeButtonTitles = ["Music", "Movies", "Shows"]
+        searchController.searchBar.showsScopeBar = true
         searchController.searchBar.delegate = self
-        tableView.tableHeaderView = searchController.searchBar
+        self.definesPresentationContext = true
+        self.navigationItem.searchController = searchController
+        tableView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
+        view.layoutIfNeeded()
     }
-    
+
+
+
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        searchController.searchBar.text = ""
+        likedSpotifySongs.removeAll()
+        likedAppleMusicSongs.removeAll()
+        likedMovies.removeAll()
+        likedTVShows.removeAll()
+        songs.removeAll()
+        movies.removeAll()
+        shows.removeAll()
+
+        self.selectedScope = selectedScope
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -65,8 +101,20 @@ class SearchViewController: UITableViewController {
     }
     
     @IBAction func onAdd(_ sender: Any) {
-        DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
-        })
+        switch selectedScope {
+        case 0:
+            DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+            })
+        case 1:
+            DataService.instance.likeMovies(movies: likedMovies, success: {
+            })
+        case 2:
+            DataService.instance.likeShows(shows: likedTVShows, success: {
+            })
+        default:
+            break
+        }
+
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -75,59 +123,141 @@ class SearchViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        print(songs.count)
-        return songs.count
+        switch selectedScope {
+            case 0:
+                return songs.count
+            case 1:
+                return movies.count
+            case 2:
+                return shows.count
+            default:
+                return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? SongCell {
+        switch selectedScope {
+            case 0:
+                if let cell = tableView.cellForRow(at: indexPath) as? SongCell {
 
-            if cell.accessoryType == .checkmark {
-                cell.accessoryType = .none
-                switch cell.song.type {
-                    case .AppleMusic:
-                        likedAppleMusicSongs.remove(cell.song.id)
-                    case .Spotify:
-                        likedSpotifySongs.remove(cell.song.id)
-                    default:
-                        break
+                    if cell.accessoryType == .checkmark {
+                        cell.accessoryType = .none
+                        switch cell.song.type {
+                        case .AppleMusic:
+                            likedAppleMusicSongs.remove(cell.song.id)
+                        case .Spotify:
+                            likedSpotifySongs.remove(cell.song.id)
+                        default:
+                            break
+                        }
+                    } else {
+                        cell.accessoryType = .checkmark
+                        switch cell.song.type {
+                        case .AppleMusic:
+                            likedAppleMusicSongs.insert(cell.song.id)
+                        case .Spotify:
+                            likedSpotifySongs.insert(cell.song.id)
+                        default:
+                            break
+                        }
+                    }
                 }
-            } else {
-                cell.accessoryType = .checkmark
-                switch cell.song.type {
-                    case .AppleMusic:
-                        likedAppleMusicSongs.insert(cell.song.id)
-                    case .Spotify:
-                        likedSpotifySongs.insert(cell.song.id)
-                    default:
-                        break
+
+                if likedAppleMusicSongs.count > 0 || likedSpotifySongs.count > 0 {
+                    likeButton.isHidden = false
+                } else {
+                    likeButton.isHidden = true
+                }
+                tableView.deselectRow(at: indexPath, animated: true)
+        case 1:
+            if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
+
+                if cell.accessoryType == .checkmark {
+                    cell.accessoryType = .none
+                    likedMovies.remove(cell.movie.id)
+                } else {
+                    cell.accessoryType = .checkmark
+                    likedMovies.insert(cell.movie.id)
                 }
             }
+
+            if likedMovies.count > 0 {
+                likeButton.isHidden = false
+            } else {
+                likeButton.isHidden = true
+            }
+
+            tableView.deselectRow(at: indexPath, animated: true)
+        case 2:
+            if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
+
+                if cell.accessoryType == .checkmark {
+                    cell.accessoryType = .none
+                    likedTVShows.remove(cell.show.id)
+                } else {
+                    cell.accessoryType = .checkmark
+                    likedTVShows.insert(cell.show.id)
+                }
+            }
+
+            if likedTVShows.count > 0 {
+                likeButton.isHidden = false
+            } else {
+                likeButton.isHidden = true
+            }
+
+            tableView.deselectRow(at: indexPath, animated: true)
+        default:
+            break
         }
-        
-        if likedAppleMusicSongs.count > 0 || likedSpotifySongs.count > 0 {
-            likeButton.isHidden = false
-        } else {
-            likeButton.isHidden = true
-        }
-        
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
-        // Reset the cell from previous use:
-        cell.artistLabel.text = ""
-        cell.artworkView.image = UIImage()
-        cell.nameLabel.text = ""
+        switch selectedScope {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
-        cell.tag = indexPath.row
-        cell.artworkView.tag = indexPath.row
-        let song = songs[indexPath.row]
-        cell.song = song
-        return cell
+                // Reset the cell from previous use:
+                cell.artistLabel.text = ""
+                cell.artworkView.image = UIImage()
+                cell.nameLabel.text = ""
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let song = songs[indexPath.row]
+                cell.song = song
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+
+                // Reset the cell from previous use:
+                cell.releaseLabel.text = ""
+                cell.nameLabel.text = ""
+                cell.artworkView.image = UIImage()
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let movie = movies[indexPath.row]
+                cell.movie = movie
+                return cell
+            case 2:
+                // Note: we're using a movie cell as a tv show cell as well for efficiency 😄
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+
+                // Reset the cell from previous use:
+                cell.releaseLabel.text = ""
+                cell.nameLabel.text = ""
+                cell.artworkView.image = UIImage()
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let show = shows[indexPath.row]
+                cell.show = show
+                return cell
+            default:
+                return UITableViewCell()
+        }
     }
 }
 
@@ -141,38 +271,85 @@ extension SearchViewController: UISearchResultsUpdating {
         self.searchString = searchString
 
         // Check if user is still actively typing... if so, delay the call by one second:
-        if let timer = timerToQueryMusic {
+        if let timer = timerToQuery {
             timer.invalidate()
         }
 
-        timerToQueryMusic = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(queryForMusic), userInfo: nil, repeats: false)
+        timerToQuery = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.queryForSearch), userInfo: nil, repeats: false)
     }
 
-    // Function called after 1 second delay of user typing
-    @objc func queryForMusic() {
-        if searchString == "" {
-            self.setterQueue.sync {
-                self.songs = []
-            }
-        } else {
-            MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
-                guard error == nil else {
-                    print(error)
+    // The following functions are called after 1 second delay of user typing
+
+
+    @objc func queryForSearch() {
+        switch selectedScope {
+        case 0:
+            if searchString == "" {
+                self.setterQueue.sync {
                     self.songs = []
-                    return
                 }
-                MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+            } else {
+                MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
                     guard error == nil else {
+                        print(error)
                         self.songs = []
                         return
                     }
-                    var newResult = appleMusicSongs + spotifySongs
-                    newResult.sort(by: { (first, second) -> Bool in
-                        return first.name < second.name
+                    MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+                        guard error == nil else {
+                            self.songs = []
+                            return
+                        }
+                        var newResult = appleMusicSongs + spotifySongs
+                        newResult.sort(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                        self.songs = newResult
                     })
-                    self.songs = newResult
+                }
+            }
+        case 1:
+            if searchString == "" {
+                self.setterQueue.sync {
+                    self.songs = []
+                }
+            } else {
+                MovieService.sharedInstance.searchTMDB(forMovie: searchString, completion: { (movies, error) in
+                    guard error == nil else {
+                        print(error)
+                        self.shows = []
+                        return
+                    }
+
+                    if let movieArray = movies {
+                        self.movies = movieArray.sorted(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                    }
                 })
             }
+        case 2:
+            if searchString == "" {
+                self.setterQueue.sync {
+                    self.songs = []
+                }
+            } else {
+                TVService.sharedInstance.searchTMDB(forShow: searchString, completion: { (shows, error) in
+                    guard error == nil else {
+                        print(error)
+                        self.shows = []
+                        return
+                    }
+
+                    if let showArray = shows {
+                        self.shows = showArray.sorted(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                    }
+                })
+            }
+        default:
+            break
         }
     }
 }
@@ -180,5 +357,8 @@ extension SearchViewController: UISearchResultsUpdating {
 extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.songs = []
+        self.movies = []
+        self.shows = []
+        self.likeButton.isHidden = true
     }
 }

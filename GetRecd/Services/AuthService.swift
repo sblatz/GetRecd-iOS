@@ -20,6 +20,7 @@ class AuthService: NSObject, GIDSignInDelegate {
 
     private override init() {
         super.init()
+
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
     }
