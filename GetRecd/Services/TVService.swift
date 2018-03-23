@@ -11,7 +11,7 @@ import TMDBSwift
 
 class TVService: NSObject {
 
-    static var sharedInstance = MovieService()
+    static var sharedInstance = TVService()
 
     override init() {
         super.init()
@@ -37,7 +37,6 @@ class TVService: NSObject {
                         }
                         catch {
                             print(error)
-                            return
                         }
                     }
 

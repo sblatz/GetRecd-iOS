@@ -37,7 +37,6 @@ class MovieService: NSObject {
                         }
                         catch {
                             print(error)
-                            return
                         }
                     }
 

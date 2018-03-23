@@ -163,4 +163,34 @@ class DataService {
             sucesss(result)
         }
     }
+
+    func likeShows(shows: Set<Int>, success: @escaping () -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        let currentUserShowLikes = currUserLikesRef.child("Shows")
+
+        for show in shows {
+            currentUserShowLikes.child("\(show)").setValue(true)
+        }
+
+        success()
+    }
+
+    func getLikedShows(sucesss: @escaping ([(String)]) -> ()) {
+        let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
+        currUserLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+
+            var result = [(String)]()
+
+            if let shows = data["Shows"] as? [String: Bool] {
+                for (key, _) in shows {
+                    result.append((key))
+                }
+            }
+
+            sucesss(result)
+        }
+    }
 }

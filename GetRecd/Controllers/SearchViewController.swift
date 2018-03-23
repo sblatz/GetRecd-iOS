@@ -28,6 +28,14 @@ class SearchViewController: UITableViewController {
         }
     }
 
+    var shows = [Show]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
     var songs = [Song]() {
         didSet {
             DispatchQueue.main.async {
@@ -39,7 +47,7 @@ class SearchViewController: UITableViewController {
     var likedAppleMusicSongs = Set<String>()
     var likedSpotifySongs = Set<String>()
     var likedMovies = Set<Int>()
-    var likedTVShows = Set<String>()
+    var likedTVShows = Set<Int>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +58,7 @@ class SearchViewController: UITableViewController {
 
         definesPresentationContext = true
 
-        searchController.searchBar.scopeButtonTitles = ["Music", "Movies"]
+        searchController.searchBar.scopeButtonTitles = ["Music", "Movies", "Shows"]
         searchController.searchBar.showsScopeBar = true
         searchController.searchBar.delegate = self
         self.definesPresentationContext = true
@@ -62,7 +70,6 @@ class SearchViewController: UITableViewController {
 
 
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print("switched scope")
         searchController.searchBar.text = ""
         likedSpotifySongs.removeAll()
         likedAppleMusicSongs.removeAll()
@@ -70,6 +77,7 @@ class SearchViewController: UITableViewController {
         likedTVShows.removeAll()
         songs.removeAll()
         movies.removeAll()
+        shows.removeAll()
 
         self.selectedScope = selectedScope
     }
@@ -100,6 +108,9 @@ class SearchViewController: UITableViewController {
         case 1:
             DataService.instance.likeMovies(movies: likedMovies, success: {
             })
+        case 2:
+            DataService.instance.likeShows(shows: likedTVShows, success: {
+            })
         default:
             break
         }
@@ -117,6 +128,8 @@ class SearchViewController: UITableViewController {
                 return songs.count
             case 1:
                 return movies.count
+            case 2:
+                return shows.count
             default:
                 return 0
         }
@@ -175,6 +188,25 @@ class SearchViewController: UITableViewController {
             }
 
             tableView.deselectRow(at: indexPath, animated: true)
+        case 2:
+            if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
+
+                if cell.accessoryType == .checkmark {
+                    cell.accessoryType = .none
+                    likedTVShows.remove(cell.show.id)
+                } else {
+                    cell.accessoryType = .checkmark
+                    likedTVShows.insert(cell.show.id)
+                }
+            }
+
+            if likedTVShows.count > 0 {
+                likeButton.isHidden = false
+            } else {
+                likeButton.isHidden = true
+            }
+
+            tableView.deselectRow(at: indexPath, animated: true)
         default:
             break
         }
@@ -183,7 +215,6 @@ class SearchViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         switch selectedScope {
-
             case 0:
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
@@ -209,6 +240,20 @@ class SearchViewController: UITableViewController {
                 cell.artworkView.tag = indexPath.row
                 let movie = movies[indexPath.row]
                 cell.movie = movie
+                return cell
+            case 2:
+                // Note: we're using a movie cell as a tv show cell as well for efficiency 😄
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+
+                // Reset the cell from previous use:
+                cell.releaseLabel.text = ""
+                cell.nameLabel.text = ""
+                cell.artworkView.image = UIImage()
+
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let show = shows[indexPath.row]
+                cell.show = show
                 return cell
             default:
                 return UITableViewCell()
@@ -272,12 +317,32 @@ extension SearchViewController: UISearchResultsUpdating {
                 MovieService.sharedInstance.searchTMDB(forMovie: searchString, completion: { (movies, error) in
                     guard error == nil else {
                         print(error)
-                        self.movies = []
+                        self.shows = []
                         return
                     }
 
                     if let movieArray = movies {
                         self.movies = movieArray.sorted(by: { (first, second) -> Bool in
+                            return first.name < second.name
+                        })
+                    }
+                })
+            }
+        case 2:
+            if searchString == "" {
+                self.setterQueue.sync {
+                    self.songs = []
+                }
+            } else {
+                TVService.sharedInstance.searchTMDB(forShow: searchString, completion: { (shows, error) in
+                    guard error == nil else {
+                        print(error)
+                        self.shows = []
+                        return
+                    }
+
+                    if let showArray = shows {
+                        self.shows = showArray.sorted(by: { (first, second) -> Bool in
                             return first.name < second.name
                         })
                     }
@@ -293,5 +358,7 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.songs = []
         self.movies = []
+        self.shows = []
+        self.likeButton.isHidden = true
     }
 }

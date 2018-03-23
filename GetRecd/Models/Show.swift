@@ -34,6 +34,15 @@ class Show: NSObject {
             throw SerializationError.missing("releaseDate")
         }
 
+        /*
+        if let posterPath = showDict["posterPath"] as? String {
+            self.posterPath = posterPath
+        } else {
+            self.posterPath = ""
+        }
+ */
+
+
         guard let posterPath = showDict["posterPath"] as? String else {
             throw SerializationError.missing("posterPath")
         }

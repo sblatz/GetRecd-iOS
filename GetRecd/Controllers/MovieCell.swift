@@ -30,6 +30,21 @@ class MovieCell: UITableViewCell {
             }
         }
     }
+
+    var show: Show! {
+        didSet {
+            self.nameLabel.text = show.name
+            self.releaseLabel.text = show.releaseDate
+            self.artworkView.image = nil
+
+            downloadArtwork(url: (basePosterPath + show.posterPath)) { (image) in
+                DispatchQueue.main.async {
+                    self.artworkView.image = image
+                }
+            }
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
