@@ -80,6 +80,10 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func searchSpotify(with term: String, completion: @escaping CatalogSearchCompletionHandler) {
+        if spotifyAuth.session == nil {
+            completion([], nil)
+            return
+        }
         let request = try? SPTSearch.createRequestForSearch(withQuery: term, queryType: .queryTypeTrack, accessToken: spotifyAuth.session.accessToken)
         
         let task = URLSession.shared.dataTask(with: request!) { (data, response, error) in

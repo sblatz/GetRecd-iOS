@@ -24,13 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 
-        if Auth.auth().currentUser != nil {
-            // Reauthenticate!
-            print(Auth.auth().currentUser?.email)
-
-            window?.rootViewController = storyboard.instantiateInitialViewController()
-        }
-    
+//        if Auth.auth().currentUser != nil {
+//            // Reauthenticate!
+//            print(Auth.auth().currentUser?.email)
+//
+//            window?.rootViewController = storyboard.instantiateInitialViewController()
+//        }
+//    
 
 
         return true

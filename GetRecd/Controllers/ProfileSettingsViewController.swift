@@ -120,10 +120,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
                 switch indexPath.row {
                     case 0:
                         if (MusicService.sharedInstance.spotifyAuth.session != nil) {
-                            MusicService.sharedInstance.spotifyPlayer.login(withAccessToken: MusicService.sharedInstance.spotifyAuth.session.accessToken)
-                            MusicService.sharedInstance.searchSpotify(with: "Drake") { (songs, error) in
-                                print(songs[0].name)
-                            }
+                            MusicService.sharedInstance.setupSpotify()
                         } else {
                             let authURL = MusicService.sharedInstance.spotifyAuth.spotifyAppAuthenticationURL()
                             UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)
