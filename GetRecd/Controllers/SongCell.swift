@@ -42,7 +42,7 @@ class SongCell: UITableViewCell {
 
     @IBAction func onArtTap(_ sender: Any) {
         print("sdasd")
-        //MusicService.sharedInstance.playPreview(url: song.preview)
+        MusicService.sharedInstance.testSpotify(id: song.id)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

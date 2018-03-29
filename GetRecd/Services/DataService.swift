@@ -20,7 +20,8 @@ class DataService {
 
     // Firebase Storage reference (TODO: Need to create storage)
     private var _REF_PROFILE_PICS = Storage.storage().reference().child("profile-pics")
-    
+    private var userSpotifyPlaylistsRef = Database.database().reference().child("userSpotfyPlaylists")
+
     var REF_USERS: DatabaseReference {
         return _REF_USERS
     }
@@ -93,20 +94,59 @@ class DataService {
         REF_USERS.child(uid).removeValue()
     }
 
-    func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> ()) {
+    func setUserSpotifyPlaylist(uid: String, uri: String, success: @escaping () -> (), failure: @escaping (Error)->()) {
+        userSpotifyPlaylistsRef.child(uid).child("uri").setValue(uri) { (error, ref) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
+            }
+        }
+    }
+    
+    func getUserSpotifyPlaylist(uid: String, success: @escaping (String) -> (), failure: @escaping (Error)->()) {
+        userSpotifyPlaylistsRef.child(uid).child("uri").observe(.value) { (snapshot) in
+            let uri = snapshot.value as! String
+            success(uri)
+        }
+    }
+    
+    func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
         let currUserAppleMusicLikesRef = currUserLikesRef.child("AppleMusic")
         let currUserSpotifyLikesRef = currUserLikesRef.child("Spotify")
         
+        let songGroup = DispatchGroup()
+        
         for song in appleMusicSongs {
-            currUserAppleMusicLikesRef.child(song).setValue(true)
+            songGroup.enter()
+            currUserAppleMusicLikesRef.child(song).setValue(true) { (error, reference) in
+                if let error = error {
+                    failure(error)
+                } else {
+                    songGroup.leave()
+                }
+            }
         }
         
         for song in spotifySongs {
-            currUserSpotifyLikesRef.child(song).setValue(true)
+            songGroup.enter()
+            currUserSpotifyLikesRef.child(song).setValue(true) { (error, reference) in
+                if let error = error {
+                    failure(error)
+                } else {
+                    songGroup.leave()
+                }
+            }
         }
         
-        success()
+        songGroup.notify(queue: DispatchQueue .global()) {
+            MusicService.sharedInstance.addToSpotifyPlaylist(songs: spotifySongs, success: {
+                success()
+            }, failure: { (error) in
+                failure(error)
+            })
+        }
     }
     
     func getLikedSongs(sucesss: @escaping ([(String, Song.SongType)]) -> ()) {
@@ -134,6 +174,24 @@ class DataService {
         }
     }
 
+    func getLikedSpotifySongs(sucesss: @escaping ([String]) -> ()) {
+        let currUserSpotfyLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid).child("Spotify")
+        
+        currUserSpotfyLikesRef.observe(.value) { (snapshot) in
+            guard let data = snapshot.value as? [String: Any] else {
+                return
+            }
+            
+            var result: [String] = []
+            
+            for (key, _) in data {
+                result.append(key)
+            }
+            
+            sucesss(result)
+        }
+    }
+    
     func likeMovies(movies: Set<Int>, success: @escaping () -> ()) {
         let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
         let currentUserMovieLikesRef = currUserLikesRef.child("Movies")

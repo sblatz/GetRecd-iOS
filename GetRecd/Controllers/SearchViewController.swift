@@ -51,11 +51,9 @@ class SearchViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
-
         definesPresentationContext = true
 
         searchController.searchBar.scopeButtonTitles = ["Music", "Movies", "Shows"]
@@ -104,7 +102,10 @@ class SearchViewController: UITableViewController {
         switch selectedScope {
         case 0:
             DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
-            })
+                print("Yay")
+            }) { (error) in
+                print(error.localizedDescription)
+            }
         case 1:
             DataService.instance.likeMovies(movies: likedMovies, success: {
             })
@@ -289,23 +290,38 @@ extension SearchViewController: UISearchResultsUpdating {
                     self.songs = []
                 }
             } else {
+                let songSearchGroup = DispatchGroup()
+                var newSongs: [Song] = []
+                songSearchGroup.enter()
                 MusicService.sharedInstance.searchSpotify(with: searchString) { (spotifySongs, error) in
-                    guard error == nil else {
-                        print(error)
+                    if error != nil {
                         self.songs = []
                         return
+                    } else {
+                        newSongs.append(contentsOf: spotifySongs)
+                        songSearchGroup.leave()
                     }
-                    MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
-                        guard error == nil else {
-                            self.songs = []
-                            return
-                        }
-                        var newResult = appleMusicSongs + spotifySongs
-                        newResult.sort(by: { (first, second) -> Bool in
-                            return first.name < second.name
-                        })
-                        self.songs = newResult
+                }
+                
+                songSearchGroup.enter()
+                
+                MusicService.sharedInstance.performAppleMusicCatalogSearch(with: self.searchString, countryCode: MusicService.sharedInstance.cloudServiceStorefrontCountryCode, completion: {(appleMusicSongs, error) in
+                    if error != nil {
+                        self.songs = []
+                        return
+                    } else {
+                        newSongs.append(contentsOf: appleMusicSongs)
+                        songSearchGroup.leave()
+                    }
+                    
+                })
+                
+                songSearchGroup.notify(queue: DispatchQueue.global()) {
+                    newSongs.sort(by: { (first, second) -> Bool in
+                        return first.name < second.name
                     })
+                    
+                    self.songs = newSongs
                 }
             }
         case 1:

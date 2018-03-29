@@ -19,28 +19,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
-        MusicService.sharedInstance.spotifyAuth = SPTAuth.defaultInstance()
-        MusicService.sharedInstance.spotifyPlayer = SPTAudioStreamingController.sharedInstance()
-        MusicService.sharedInstance.spotifyAuth.clientID = "ee396a63623f4066a6d5be5d094ffa94"
-        MusicService.sharedInstance.spotifyAuth.redirectURL = URL(string: "GetRecd://spotify")!
-        MusicService.sharedInstance.spotifyAuth.sessionUserDefaultsKey = "spotify_session"
-        MusicService.sharedInstance.spotifyAuth.requestedScopes = [SPTAuthStreamingScope]
+        MusicService.sharedInstance.setupSpotify()
         
-        try? MusicService.sharedInstance.spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
-
-        
-
-        /*
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 
         if Auth.auth().currentUser != nil {
             // Reauthenticate!
-            Auth.auth().currentUser?.reauthenticate(with: <#T##AuthCredential#>, completion: <#T##UserProfileChangeCallback?##UserProfileChangeCallback?##(Error?) -> Void#>)
             print(Auth.auth().currentUser?.email)
 
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
-    */
+    
 
 
         return true
@@ -77,7 +66,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print(error.localizedDescription)
                 } else if session != nil {
                     MusicService.sharedInstance.spotifyPlayer.login(withAccessToken: MusicService.sharedInstance.spotifyAuth.session.accessToken)
-                    MusicService.sharedInstance.audioTest()
+                    
+                    MusicService.sharedInstance.checkIfSpotifyPlaylistExists { (exists) in
+                        if !exists {
+                            MusicService.sharedInstance.createSpotifyPlaylist(success: {
+                                print("Hello")
+                            }, failure: { (error) in
+                                print(error.localizedDescription)
+                            })
+                        }
+                    }
                 }
             }
             

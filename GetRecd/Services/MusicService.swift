@@ -10,10 +10,252 @@ import Foundation
 import StoreKit
 import MediaPlayer
 import SafariServices
+import FirebaseAuth
 
-class MusicService: NSObject {
+class MusicService: NSObject, SPTAudioStreamingDelegate {
     
     static var sharedInstance = MusicService()
+    
+    var spotifyAuth: SPTAuth!
+    var spotifyPlayer: SPTAudioStreamingController!
+    
+    func setupSpotify() {
+        spotifyAuth = SPTAuth.defaultInstance()
+        spotifyPlayer = SPTAudioStreamingController.sharedInstance()
+        spotifyAuth.clientID = "ee396a63623f4066a6d5be5d094ffa94"
+        spotifyAuth.redirectURL = URL(string: "GetRecd://spotify")!
+        spotifyAuth.sessionUserDefaultsKey = "spotify_session"
+        spotifyAuth.tokenSwapURL = URL(string: "https://getrecdspotifyrefresher.herokuapp.com/swap")
+        spotifyAuth.tokenRefreshURL = URL(string: "https://getrecdspotifyrefresher.herokuapp.com/refresh")
+        spotifyAuth.requestedScopes = [SPTAuthStreamingScope, SPTAuthPlaylistModifyPrivateScope, SPTAuthPlaylistModifyPublicScope, SPTAuthPlaylistReadPrivateScope]
+        spotifyPlayer.delegate = self
+        
+        do {
+            try spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
+        } catch let error {
+            assert(false, "There was a problem starting the Spotify SDK: \(error.localizedDescription)")
+        }
+        
+        if let sessionObj = UserDefaults.standard.object(forKey: "spotify_session") {
+            let sessionDataObj = sessionObj as! Data
+            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionDataObj) as! SPTSession
+            spotifyAuth.session = session
+            
+            if !spotifyAuth.session.isValid() {
+                spotifyAuth.renewSession(spotifyAuth.session) { (error, session) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else if let session = session {
+                        self.spotifyAuth.session = session
+                        self.spotifyPlayer.login(withAccessToken: self.spotifyAuth.session.accessToken)
+                    }
+                }
+            } else {
+                spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
+                print(self.spotifyAuth.session.accessToken)
+            }
+        }
+        
+    }
+    
+    func isSpotifyLoggedIn() -> Bool {
+        return (spotifyAuth.session != nil && spotifyAuth.session.isValid())
+    }
+    
+    func authenticateSpotify() {
+        if !isSpotifyLoggedIn() {
+            var authURL: URL!
+            if UIApplication.shared.canOpenURL(NSURL(string:"spotify:")! as URL) {
+                authURL = spotifyAuth.spotifyAppAuthenticationURL()
+            } else {
+                authURL = spotifyAuth.spotifyWebAuthenticationURL()
+            }
+            UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)
+        } else {
+            spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
+        }
+    }
+    
+    func searchSpotify(with term: String, completion: @escaping CatalogSearchCompletionHandler) {
+        let request = try? SPTSearch.createRequestForSearch(withQuery: term, queryType: .queryTypeTrack, accessToken: spotifyAuth.session.accessToken)
+        
+        let task = URLSession.shared.dataTask(with: request!) { (data, response, error) in
+            
+            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
+                completion([], error)
+                return
+            }
+            
+            do {
+                let results = try! SPTSearch.searchResults(from: data!, with: response!, queryType: .queryTypeTrack)
+                let tracks = results.items as! [SPTPartialTrack]
+                
+                var songResult = [Song]()
+                for track in tracks {
+                    songResult.append(try Song(spotifyData: track))
+                }
+                completion(songResult, nil)
+            } catch {
+                fatalError("An error occurred: \(error.localizedDescription)")
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
+    func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
+        SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else if let data = data {
+                let track = data as! SPTTrack
+                let song = try! Song(spotifyData: track)
+                
+                completion(song)
+            }
+        })
+    }
+    
+    func checkIfSpotifyPlaylistExists(exists: @escaping (Bool)->()) {
+        SPTPlaylistList.playlists(forUser: spotifyAuth.session.canonicalUsername, withAccessToken: spotifyAuth.session.accessToken) { (error, playlistsObject) in
+            if let error = error {
+                print(error.localizedDescription)
+            } else if var playlistsPage = playlistsObject as? SPTPlaylistList {
+                for item in playlistsPage.items {
+                    let playlist = item as! SPTPartialPlaylist
+                    if playlist.name == "GetRec'd" {
+                        exists(true)
+                        return
+                    }
+                }
+                
+                let semaphore = DispatchSemaphore(value: 1)
+                while playlistsPage.hasNextPage {
+                    semaphore.wait()
+                    
+                    playlistsPage.requestNextPage(withAccessToken: self.spotifyAuth.session.accessToken, callback: { (error, newPlaylistsObject) in
+                        if newPlaylistsObject != nil {
+                            playlistsPage = newPlaylistsObject as! SPTPlaylistList
+                            for item in playlistsPage.items {
+                                let playlist = item as! SPTPartialPlaylist
+                                if playlist.name == "GetRec'd" {
+                                    exists(true)
+                                    return
+                                } else {
+                                    semaphore.signal()
+                                }
+                            }
+                        }
+                    })
+                }
+                
+                exists(false)
+            }
+        }
+    }
+    
+    func createSpotifyPlaylist(success: @escaping ()->(), failure: @escaping (Error)->()) {
+        SPTPlaylistList.createPlaylist(withName: "GetRec'd", forUser: spotifyAuth.session.canonicalUsername, publicFlag: false, accessToken: spotifyAuth.session.accessToken) { (error, playlistSnapshot) in
+            if let error = error {
+                failure(error)
+            } else if let playlistSnapshot = playlistSnapshot {
+                DataService.instance.setUserSpotifyPlaylist(uid: Auth.auth().currentUser!.uid, uri: playlistSnapshot.uri.absoluteString, success: {
+                    success()
+                }, failure: { (error) in
+                    failure(error)
+                })
+            }
+        }
+    }
+    
+    func addToSpotifyPlaylist(songs: Set<String>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        var tracks = [SPTTrack]()
+        let trackgroup = DispatchGroup()
+        for song in songs {
+            trackgroup.enter()
+            SPTTrack.track(withURI: URL(string: "spotify:track:\(song)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
+                if let error = error {
+                    failure(error)
+                    return
+                } else if let data = data {
+                    let track = data as! SPTTrack
+                    tracks.append(track)
+                    trackgroup.leave()
+                }
+            })
+        }
+        
+        
+        trackgroup.notify(queue: DispatchQueue .global()) {
+            DataService.instance.getUserSpotifyPlaylist(uid: Auth.auth().currentUser!.uid, success: { (uri) in
+                let request = try? SPTPlaylistSnapshot.createRequest(forAddingTracks: tracks, toPlaylist: URL(string: uri)!, withAccessToken: self.spotifyAuth.session.accessToken)
+                let session = URLSession(configuration: .default)
+                let task = session.dataTask(with: request!, completionHandler: { (data, response, error) in
+                    if let error = error {
+                        failure(error)
+                    } else {
+                        success()
+                    }
+                })
+                
+                task.resume()
+            }, failure: { (error) in
+                failure(error)
+            })
+        }
+    }
+    
+    func testSpotify(id: String) {
+        spotifyPlayer.playSpotifyURI("spotify:track:\(id)" , startingWith: 0, startingWithPosition: 0) { (error) in
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+    
+    func getSpotifyRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
+        DataService.instance.getLikedSpotifySongs { (songs) in
+            var recommendURLComponents = URLComponents(string: "https://api.spotify.com/v1/recommendations")
+            var tracksString = ""
+            if songs.count > 5 {
+                
+            } else {
+                for song in songs {
+                    if (tracksString == "") {
+                        tracksString.append(song)
+                    } else {
+                        tracksString.append(",\(song)")
+                    }
+                }
+            }
+            recommendURLComponents?.queryItems = [URLQueryItem(name: "seed_tracks", value: tracksString)]
+            let recommendURL = recommendURLComponents!.url!
+            var recommendRequest = URLRequest(url: recommendURL)
+            print(self.spotifyAuth.session.accessToken!)
+            recommendRequest.addValue("Bearer \(self.spotifyAuth.session.accessToken!)", forHTTPHeaderField: "Authorization")
+            print(recommendRequest)
+            let recommendSession = URLSession(configuration: .default)
+            let task = recommendSession.dataTask(with: recommendRequest, completionHandler: { (data, response, error) in
+                var trackResults = [Song]()
+                if let error = error {
+                    completion(trackResults, error)
+                } else if let data = data {
+                    if let trackJSON = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        let tracks = trackJSON["tracks"] as! [[String: Any]]
+                        for track in tracks {
+                            let newTrack = try! SPTPartialTrack(fromDecodedJSON: track)
+                            trackResults.append(try! Song(spotifyData: newTrack))
+                        }
+                        
+                        completion(trackResults, nil)
+                    }
+                }
+            })
+            
+            task.resume()
+        }
+    }
     
     // Apple Music stuff
     /// The base URL for all Apple Music API network calls.
@@ -419,75 +661,7 @@ class MusicService: NSObject {
         
         task.resume()
     }
-    func playPreview(url: String) {
-        
-    }
-    
-    var spotifyAuth: SPTAuth!
-    var spotifyPlayer: SPTAudioStreamingController!
-    
-    func audioTest() {
-        spotifyPlayer?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp" , startingWith: 0, startingWithPosition: 0, callback: { (error) in
-            print(error?.localizedDescription)
-        })
-    }
-    
-    func searchSpotify(with term: String, completion: @escaping CatalogSearchCompletionHandler) {
-        let request = try? SPTSearch.createRequestForSearch(withQuery: term, queryType: .queryTypeTrack, accessToken: spotifyAuth.session.accessToken)
-    
-        let task = URLSession.shared.dataTask(with: request!) { (data, response, error) in
-            
-            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
-                completion([], error)
-                return
-            }
-            
-            do {
-                let results = try! SPTSearch.searchResults(from: data!, with: response!, queryType: .queryTypeTrack)
-                let tracks = results.items as! [SPTPartialTrack]
-                
-                var songResult = [Song]()
-                for track in tracks {
-                    songResult.append(try Song(spotifyData: track))
-                }
-                completion(songResult, nil)
-            } catch {
-                fatalError("An error occurred: \(error.localizedDescription)")
-            }
-            
-        }
-        
-        task.resume()
-    }
-    
-    func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
-        try? SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else if let data = data {
-                let track = data as! SPTTrack
-                let song = try! Song(spotifyData: track)
-//                var downloadTask:URLSessionDownloadTask
-//                downloadTask = URLSession.shared.downloadTask(with: URL(string: song.preview!)!, completionHandler: { (URL, response, error) -> Void in
-//                    do {
-//                        var player = try AVAudioPlayer(contentsOf: URL!)
-//                        player.prepareToPlay()
-//                        player.volume = 1.0
-//                        player.play()
-//                    } catch let error as NSError {
-//                        //self.player = nil
-//                        print(error.localizedDescription)
-//                    } catch {
-//                        print("AVAudioPlayer init failed")
-//                    }
-//                })
-//                
-//                downloadTask.resume()
-                
-                
-                completion(song)
-            }
-        })
-    }
+   
+
 }
 
