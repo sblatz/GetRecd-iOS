@@ -19,6 +19,11 @@ class ProfileViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let adjustForTabbarInsets: UIEdgeInsets = UIEdgeInsetsMake(0, 0, self.tabBarController!.tabBar.frame.height, 0)
+        self.tableView.contentInset = adjustForTabbarInsets
+        self.tableView.scrollIndicatorInsets = adjustForTabbarInsets
+        
         self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
     }
     

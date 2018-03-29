@@ -75,7 +75,41 @@ class MovieService: NSObject {
             }
         }
     }
-
+    
+    func getRecommendedMovies(id: String, success: @escaping ([Movie]) -> ()) {
+        let urlString = "https://api.themoviedb.org/3/movie/\(id)/recommendations"
+        var movies:[Movie] = []
+        var urlComp = URLComponents(string: urlString)
+        let qItems = [URLQueryItem(name: "api_key", value: TMDBConfig.apikey)]
+        urlComp?.queryItems = qItems
+        let url = urlComp!.url!
+        let urlSession = URLSession(configuration: .default)
+        let task = urlSession.dataTask(with: url, completionHandler: { (data, response, error) in
+            if error == nil, let data = data {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? Dictionary<String, Any> {
+                    let recommendations = responseDictionary["results"] as! [Dictionary<String, Any>]
+                    
+                    for rec in recommendations {
+                        var movieDictionary = [String: Any]()
+                        movieDictionary["id"] = rec["id"]
+                        movieDictionary["name"] = rec["title"]
+                        movieDictionary["releaseDate"] = rec["release_date"]
+                        movieDictionary["posterPath"] = rec["poster_path"]
+                        movieDictionary["overview"] = rec["overview"]
+                        
+                        do {
+                            try movies.append(Movie(movieDict: movieDictionary))
+                        } catch {
+                            fatalError("An error occurred: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    success(movies)
+                }
+            }
+        })
+        task.resume()
+    }
 
     // Function to login to TMDB
     func loginToTMDB() {

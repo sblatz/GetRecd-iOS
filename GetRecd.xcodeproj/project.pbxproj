@@ -79,11 +79,11 @@
 		FC1229522036BA640080151B /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC1229512036BA640080151B /* Profile.storyboard */; };
 		FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1229532036BA7E0080151B /* ProfileViewController.swift */; };
 		FC31A5E6206460CE00D73A6A /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */; };
-		FC46DA7D203BF3840059BEC8 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA7C203BF3840059BEC8 /* RoundedView.swift */; };
 		FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */; };
 		FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */; };
-		FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */; };
 		FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBAF911203E112000DFC323 /* UITextView+Extension.swift */; };
+		FCFCD1172069D367008CC2B7 /* RecFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFCD1162069D367008CC2B7 /* RecFeedViewController.swift */; };
+		FCFCD119206A0762008CC2B7 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFCD118206A0762008CC2B7 /* RoundedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,11 +176,11 @@
 		FC1229512036BA640080151B /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		FC1229532036BA7E0080151B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
-		FC46DA7C203BF3840059BEC8 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecFeed.storyboard; sourceTree = "<group>"; };
 		FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewController.swift; sourceTree = "<group>"; };
-		FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecFeedViewController.swift; sourceTree = "<group>"; };
 		FCBAF911203E112000DFC323 /* UITextView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Extension.swift"; sourceTree = "<group>"; };
+		FCFCD1162069D367008CC2B7 /* RecFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecFeedViewController.swift; sourceTree = "<group>"; };
+		FCFCD118206A0762008CC2B7 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,9 +313,9 @@
 				245156C620238B1A000E8082 /* Main.storyboard */,
 				24065A2C202A6ABC00272A61 /* LaunchScreen.storyboard */,
 				FC1229512036BA640080151B /* Profile.storyboard */,
-				FC46DA7C203BF3840059BEC8 /* RoundedView.swift */,
 				FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */,
 				24D120AA20406C5E0010BC8B /* Search.storyboard */,
+				FCFCD118206A0762008CC2B7 /* RoundedView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -329,7 +329,6 @@
 				24687FB6202A371000CC990D /* SignInViewController.swift */,
 				FC1229532036BA7E0080151B /* ProfileViewController.swift */,
 				FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */,
-				FC46DA84203C029E0059BEC8 /* RecFeedViewController.swift */,
 				24D120AE20406EBB0010BC8B /* ProfileMusicViewController.swift */,
 				24AEA6CF2065610800B0C581 /* ProfileMovieViewController.swift */,
 				24AEA6D520656DFA00B0C581 /* ProfileShowsViewController.swift */,
@@ -338,6 +337,7 @@
 				24D120AC20406EA40010BC8B /* SearchViewController.swift */,
 				24D120B020406ED20010BC8B /* SongCell.swift */,
 				24AEA6CD2064389500B0C581 /* MovieCell.swift */,
+				FCFCD1162069D367008CC2B7 /* RecFeedViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -788,14 +788,14 @@
 				24D120AD20406EA40010BC8B /* SearchViewController.swift in Sources */,
 				C7EB9489204A404A00A99106 /* BridgeViewController.m in Sources */,
 				245156F320238BC7000E8082 /* IntroViewController.swift in Sources */,
+				FCFCD119206A0762008CC2B7 /* RoundedView.swift in Sources */,
 				24D120A920406BD30010BC8B /* Helper.swift in Sources */,
 				24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */,
 				FC0AE6FF2026842300E15E0B /* User.swift in Sources */,
 				FC0AE6FD202681C100E15E0B /* AuthService.swift in Sources */,
-				FC46DA7D203BF3840059BEC8 /* RoundedView.swift in Sources */,
 				24D120B120406ED20010BC8B /* SongCell.swift in Sources */,
 				24AEA6D620656DFA00B0C581 /* ProfileShowsViewController.swift in Sources */,
-				FC46DA7D203BF3840059BEC8 /* RoundedImageView.swift in Sources */,
+				FCFCD1172069D367008CC2B7 /* RecFeedViewController.swift in Sources */,
 				24AEA6CC2064309200B0C581 /* Movie.swift in Sources */,
 				FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */,
 				24AEA6D2206567B700B0C581 /* TVService.swift in Sources */,
@@ -810,7 +810,6 @@
 				FC0AE6FB202681BA00E15E0B /* DataService.swift in Sources */,
 				24AEA6CE2064389500B0C581 /* MovieCell.swift in Sources */,
 				24AEA6D02065610800B0C581 /* ProfileMovieViewController.swift in Sources */,
-				FC46DA85203C029E0059BEC8 /* RecFeedViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

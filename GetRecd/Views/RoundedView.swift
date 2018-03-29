@@ -1,8 +1,8 @@
 //
-//  RoundedImageView.swift
+//  RoundedView.swift
 //  GetRecd
 //
-//  Created by Dhruv Upadhyay on 2/20/18.
+//  Created by Dhruv Upadhyay on 3/27/18.
 //  Copyright © 2018 CS 407. All rights reserved.
 //
 

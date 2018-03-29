@@ -103,7 +103,7 @@ class SignInViewController: AuthenticationViewController, UITextFieldDelegate {
         }
     }
 
-    @IBAction func googleSignInButtonPressed(_ sender: Any) {
+    @IBAction override func googleSignInButtonPressed(_ sender: Any) {
         AuthService.instance.googleAuthenticate(forViewController: self)
     }
     

@@ -147,7 +147,7 @@ class DataService {
 
     func getLikedMovies(sucesss: @escaping ([(String)]) -> ()) {
         let currUserLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid)
-        currUserLikesRef.observe(.value) { (snapshot) in
+        currUserLikesRef.observeSingleEvent(of: .value, with: { (snapshot) in
             guard let data = snapshot.value as? [String: Any] else {
                 return
             }
@@ -161,7 +161,7 @@ class DataService {
             }
 
             sucesss(result)
-        }
+        })
     }
 
     func likeShows(shows: Set<Int>, success: @escaping () -> ()) {
