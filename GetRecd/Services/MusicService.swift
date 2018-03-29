@@ -55,10 +55,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
                 print(self.spotifyAuth.session.accessToken)
             }
-        } else {
-            authenticateSpotify()
-        }
-        
+        } 
     }
     
     func isSpotifyLoggedIn() -> Bool {
@@ -131,12 +128,18 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
             } else if var playlistsPage = playlistsObject as? SPTPlaylistList {
                 for item in playlistsPage.items {
                     let playlist = item as! SPTPartialPlaylist
+                    print(playlist.name)
                     if playlist.name == "GetRec'd" {
                         exists(true)
                         return
+                    } else {
+                        print("not get recd first!")
                     }
                 }
-                
+
+                exists(false)
+
+                /*
                 let semaphore = DispatchSemaphore(value: 1)
                 while playlistsPage.hasNextPage {
                     semaphore.wait()
@@ -146,17 +149,21 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                             playlistsPage = newPlaylistsObject as! SPTPlaylistList
                             for item in playlistsPage.items {
                                 let playlist = item as! SPTPartialPlaylist
+                                print(playlist.name)
                                 if playlist.name == "GetRec'd" {
                                     exists(true)
                                     return
                                 } else {
-                                    semaphore.signal()
+                                    print("name is not get recd")
                                 }
                             }
                         }
+                        semaphore.signal()
+
                     })
                 }
-                
+
+                     */
                 exists(false)
             }
         }

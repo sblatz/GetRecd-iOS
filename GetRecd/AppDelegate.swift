@@ -21,7 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         MusicService.sharedInstance.setupSpotify()
         MusicService.sharedInstance.setupAppleMusic()
-        
+
+
+       
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 
 //        if Auth.auth().currentUser != nil {
