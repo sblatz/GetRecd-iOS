@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         MusicService.sharedInstance.setupSpotify()
+        MusicService.sharedInstance.setupAppleMusic()
         
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 

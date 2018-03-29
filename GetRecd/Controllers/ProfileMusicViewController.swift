@@ -81,4 +81,8 @@ class ProfileMusicViewController: UITableViewController {
         }
         return cell
     }
+    
+    @IBAction func onPlayAll(_ sender: Any) {
+        MusicService.sharedInstance.playListOfSong(songIds: songIds)
+    }
 }

@@ -29,6 +29,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         spotifyAuth.tokenRefreshURL = URL(string: "https://getrecdspotifyrefresher.herokuapp.com/refresh")
         spotifyAuth.requestedScopes = [SPTAuthStreamingScope, SPTAuthPlaylistModifyPrivateScope, SPTAuthPlaylistModifyPublicScope, SPTAuthPlaylistReadPrivateScope]
         spotifyPlayer.delegate = self
+        spotifyPlayer.playbackDelegate = self
         
         do {
             try spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
@@ -54,6 +55,8 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
                 print(self.spotifyAuth.session.accessToken)
             }
+        } else {
+            authenticateSpotify()
         }
         
     }
@@ -207,6 +210,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func testSpotify(id: String) {
+        appleMusicPlayer.stop()
         spotifyPlayer.playSpotifyURI("spotify:track:\(id)" , startingWith: 0, startingWithPosition: 0) { (error) in
             if let error = error {
                 print(error)
@@ -215,11 +219,28 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func getSpotifyRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
+        if self.spotifyAuth.session == nil {
+            completion([], nil)
+            return
+        }
         DataService.instance.getLikedSpotifySongs { (songs) in
             var recommendURLComponents = URLComponents(string: "https://api.spotify.com/v1/recommendations")
             var tracksString = ""
+            if songs.count == 0 {}
             if songs.count > 5 {
-                
+                var used = Set<Int>()
+                for _ in 0...4 {
+                    var index = Int(arc4random_uniform(UInt32(songs.count)))
+                    while used.contains(index) {
+                        index = Int(arc4random_uniform(UInt32(songs.count)))
+                    }
+                    if (tracksString == "") {
+                        tracksString.append(songs[index])
+                    } else {
+                        tracksString.append(",\(songs[index])")
+                    }
+                    
+                }
             } else {
                 for song in songs {
                     if (tracksString == "") {
@@ -232,7 +253,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
             recommendURLComponents?.queryItems = [URLQueryItem(name: "seed_tracks", value: tracksString)]
             let recommendURL = recommendURLComponents!.url!
             var recommendRequest = URLRequest(url: recommendURL)
-            print(self.spotifyAuth.session.accessToken!)
             recommendRequest.addValue("Bearer \(self.spotifyAuth.session.accessToken!)", forHTTPHeaderField: "Authorization")
             print(recommendRequest)
             let recommendSession = URLSession(configuration: .default)
@@ -242,10 +262,15 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                     completion(trackResults, error)
                 } else if let data = data {
                     if let trackJSON = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        let tracks = trackJSON["tracks"] as! [[String: Any]]
-                        for track in tracks {
-                            let newTrack = try! SPTPartialTrack(fromDecodedJSON: track)
-                            trackResults.append(try! Song(spotifyData: newTrack))
+                        if let tracks = trackJSON["tracks"] as? [[String: Any]] {
+                            
+                            for track in tracks {
+                                let newTrack = try! SPTPartialTrack(fromDecodedJSON: track)
+                                trackResults.append(try! Song(spotifyData: newTrack))
+                            }
+                            
+                            completion(trackResults, nil)
+                            return
                         }
                         
                         completion(trackResults, nil)
@@ -274,7 +299,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     var cloudServiceCapabilities = SKCloudServiceCapability()
     
     /// The current set of two letter country code associated with the currently authenticated iTunes Store account.
-    var cloudServiceStorefrontCountryCode = "us"
+    var cloudServiceStorefrontCountryCode = ""
     
     /// The Music User Token associated with the currently signed in iTunes Store account.
     var userToken = ""
@@ -288,6 +313,8 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     /// The completion handler that is called when an Apple Music Get User Storefront API call completes.
     typealias GetUserStorefrontCompletionHandler = (_ storefront: String?, _ error: Error?) -> Void
     
+    let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer
+    
     /// The instance of `URLSession` that is going to be used for making network calls.
     lazy var urlSession: URLSession = {
         // Configure the `URLSession` instance that is going to be used for making network calls.
@@ -296,252 +323,98 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         return URLSession(configuration: urlSessionConfiguration)
     }()
     
-    override init() {
-        super.init()
-        /*
-         If the application has already been authorized in a previous run or manually by the user then it can request
-         the current set of `SKCloudServiceCapability` and Storefront Identifier.
-         */
-        if SKCloudServiceController.authorizationStatus() == .authorized {
-            requestAppleCloudServiceCapabilities()
-            
-            /// Retrieve the Music User Token for use in the application if it was stored from a previous run.
-            if let token = UserDefaults.standard.string(forKey: MusicService.userTokenUserDefaultsKey) {
-                userToken = token
-            } else {
-                /// The token was not stored previously then request one.
-                requestAppleUserToken()
-            }
-        }
-    }
-    
-    func fetchAppleMusicDeveloperToken() -> String? {
+    func fetchAppleMusicDeveloperToken() -> String {
         return "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjJXOVhNOUREWEgifQ.eyJpYXQiOjE1MTkzNTMwMjUsImV4cCI6MTUzNDkwNTAyNSwiaXNzIjoiM1lDOUs0OTUyWSJ9.5ZimoR8HAqGeMbEucflL1_y6VXIGPKjNaf8VTDpfUTnwE7Ds-5dNYen46FwO4fOAYP4XJrbQCTNnPMbXZR3ZAQ"
     }
     
-    func requestAppleCloudServiceAuthorization() {
-        /*
-         An application should only ever call `SKCloudServiceController.requestAuthorization(_:)` when their
-         current authorization is `SKCloudServiceAuthorizationStatusNotDetermined`
-         */
-        guard SKCloudServiceController.authorizationStatus() == .notDetermined else { return }
+    func setupAppleMusic() {
         
-        /*
-         `SKCloudServiceController.requestAuthorization(_:)` triggers a prompt for the user asking if they wish to allow the application
-         that requested authorization access to the device's cloud services information.  This allows the application to query information
-         such as the what capabilities the currently authenticated iTunes Store account has and if the account is eligible for an Apple Music
-         Subscription Trial.
-         
-         This prompt will also include the value provided in the application's Info.plist for the `NSAppleMusicUsageDescription` key.
-         This usage description should reflect what the application intends to use this access for.
-         */
-        
-        SKCloudServiceController.requestAuthorization { [weak self] (authorizationStatus) in
-            switch authorizationStatus {
-            case .authorized:
-                self?.requestAppleCloudServiceCapabilities()
-                self?.requestAppleUserToken()
-            default:
-                break
-            }
-            
-            //NotificationCenter.default.post(name: AuthorizationManager.authorizationDidUpdateNotification, object: nil)
-        }
-    }
-    
-    func requestAppleCloudServiceCapabilities() {
-        cloudServiceController.requestCapabilities(completionHandler: { [weak self] (cloudServiceCapability, error) in
-            guard error == nil else {
-                fatalError("An error occurred when requesting capabilities: \(error!.localizedDescription)")
-            }
-            
-            self?.cloudServiceCapabilities = cloudServiceCapability
-            
-            //NotificationCenter.default.post(name: AuthorizationManager.cloudServiceDidUpdateNotification, object: nil)
-        })
-    }
-    
-    func requestAppleUserToken() {
-        guard let developerToken = fetchAppleMusicDeveloperToken() else {
-            return
-        }
-        
+        appleMusicPlayer.beginGeneratingPlaybackNotifications()
         if SKCloudServiceController.authorizationStatus() == .authorized {
-            
-            let completionHandler: (String?, Error?) -> Void = { [weak self] (token, error) in
-                guard error == nil else {
-                    print("An error occurred when requesting user token: \(error!.localizedDescription)")
-                    return
+            if let token = UserDefaults.standard.string(forKey: MusicService.userTokenUserDefaultsKey) {
+                userToken = token
+                if self.cloudServiceStorefrontCountryCode == "" {
+                    self.requestAppleStorefrontCountryCode(success: {
+                        print("Yay")
+                    }, failure: { (error) in
+                        print(error.localizedDescription)
+                    })
                 }
-                
-                guard let token = token else {
-                    print("Unexpected value from SKCloudServiceController for user token.")
-                    return
+            } else {
+                /// The token was not stored previously then request one.
+                self.requestAppleUserToken(success: {
+                    print("Yay")
+                }) { (error) in
+                    print(error.localizedDescription)
                 }
+            }
+        }
+    }
+    
+    
+    func requestAppleUserToken(success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let developerToken = fetchAppleMusicDeveloperToken()
+        cloudServiceController.requestUserToken(forDeveloperToken: developerToken) { (userToken, error) in
+            if let error = error {
+                failure(error)
+            } else if let userToken = userToken {
+                self.userToken = userToken
                 
-                self?.userToken = token
-                
-                /// Store the Music User Token for future use in your application.
                 let userDefaults = UserDefaults.standard
                 
-                userDefaults.set(token, forKey: MusicService.userTokenUserDefaultsKey)
+                userDefaults.set(userToken, forKey: MusicService.userTokenUserDefaultsKey)
                 userDefaults.synchronize()
                 
-                if self?.cloudServiceStorefrontCountryCode == "" {
-                    self?.requestAppleStorefrontCountryCode()
+                if self.cloudServiceStorefrontCountryCode == "" {
+                    self.requestAppleStorefrontCountryCode(success: {
+                        success()
+                    }, failure: { (error) in
+                        failure(error)
+                    })
                 }
-                
-                //NotificationCenter.default.post(name: AuthorizationManager.cloudServiceDidUpdateNotification, object: nil)
             }
-            
-            if #available(iOS 11.0, *) {
-                cloudServiceController.requestUserToken(forDeveloperToken: developerToken, completionHandler: completionHandler)
+        }
+    }
+    
+    func requestAppleStorefrontCountryCode(success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        cloudServiceController.requestStorefrontCountryCode { (countryCode, error) in
+            if let error = error {
+                failure(error)
+            } else if let countryCode = countryCode {
+                self.cloudServiceStorefrontCountryCode = countryCode
             } else {
-                cloudServiceController.requestPersonalizationToken(forClientToken: developerToken, withCompletionHandler: completionHandler)
+                self.cloudServiceStorefrontCountryCode = "us"
             }
         }
     }
     
-    func requestAppleStorefrontCountryCode() {
-        let completionHandler: (String?, Error?) -> Void = { [weak self] (countryCode, error) in
-            guard error == nil else {
-                print("An error occurred when requesting storefront country code: \(error!.localizedDescription)")
-                return
-            }
-            
-            guard let countryCode = countryCode else {
-                print("Unexpected value from SKCloudServiceController for storefront country code.")
-                return
-            }
-            
-            self?.cloudServiceStorefrontCountryCode = countryCode
-            
-            //NotificationCenter.default.post(name: AuthorizationManager.cloudServiceDidUpdateNotification, object: nil)
-        }
-        
-        if SKCloudServiceController.authorizationStatus() == .authorized {
-            if #available(iOS 11.0, *) {
-                /*
-                 On iOS 11.0 or later, if the `SKCloudServiceController.authorizationStatus()` is `.authorized` then you can request the storefront
-                 country code.
-                 */
-                cloudServiceController.requestStorefrontCountryCode(completionHandler: completionHandler)
-            } else {
-                performAppleMusicGetUserStorefront(userToken: userToken, completion: completionHandler)
-            }
-        } else {
-            determineAppleRegionWithDeviceLocale(completion: completionHandler)
-        }
-    }
-    
-    func determineAppleRegionWithDeviceLocale(completion: @escaping (String?, Error?) -> Void) {
-        /*
-         On other versions of iOS or when `SKCloudServiceController.authorizationStatus()` is not `.authorized`, your application should use a
-         combination of the device's `Locale.current.regionCode` and the Apple Music API to make an approximation of the storefront to use.
-         */
-        
-        let currentRegionCode = Locale.current.regionCode?.lowercased() ?? "us"
-        
-        performAppleMusicStorefrontsLookup(regionCode: currentRegionCode, completion: completion)
-    }
-    
-    func performAppleMusicGetUserStorefront(userToken: String, completion: @escaping GetUserStorefrontCompletionHandler) {
-        guard let developerToken = fetchAppleMusicDeveloperToken() else {
-            fatalError("Developer Token not configured.  See README for more details.")
-        }
-        
-        let urlRequest = createAppleGetUserStorefrontRequest(developerToken: developerToken, userToken: userToken)
-        
-        let task = urlSession.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
-                let error = NSError(domain: "AppleMusicManagerErrorDomain", code: -9000, userInfo: [NSUnderlyingErrorKey: error!])
-                
-                completion(nil, error)
-                
-                return
-            }
-            
-            do {
-                
-                let identifier = try self?.processAppleStorefront(from: data!)
-                
-                completion(identifier, nil)
-            } catch {
-                fatalError("An error occurred: \(error.localizedDescription)")
+    func requestAppleCloudServiceAuthorization() {
+        SKCloudServiceController.requestAuthorization { (status: SKCloudServiceAuthorizationStatus) in
+            switch status {
+            case .notDetermined:
+                break
+            case .denied:
+                break
+            case .restricted:
+                break
+            case .authorized:
+                self.cloudServiceController.requestCapabilities(completionHandler: { (cloudServiceCapability, error) in
+                    guard error == nil else {
+                        fatalError("An error occurred when requesting capabilities: \(error!.localizedDescription)")
+                    }
+                    let canPlay = cloudServiceCapability.contains(.musicCatalogPlayback)
+                    let canAdd = cloudServiceCapability.contains(.addToCloudMusicLibrary)
+                    let canSubscribe = cloudServiceCapability.contains(.musicCatalogSubscriptionEligible)
+                    print(canPlay)
+                    print(canAdd)
+                    print(canSubscribe)
+                    self.cloudServiceCapabilities = cloudServiceCapability
+                    
+                    self.setupAppleMusic()
+                })
             }
         }
         
-        task.resume()
-    }
-    
-    func performAppleMusicStorefrontsLookup(regionCode: String, completion: @escaping GetUserStorefrontCompletionHandler) {
-        guard let developerToken = fetchAppleMusicDeveloperToken() else {
-            fatalError("Developer Token not configured. See README for more details.")
-        }
-        
-        let urlRequest = MusicService.createAppleStorefrontsRequest(regionCode: regionCode, developerToken: developerToken)
-        
-        let task = urlSession.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
-                completion(nil, error)
-                return
-            }
-            
-            do {
-                let identifier = try self?.processAppleStorefront(from: data!)
-                completion(identifier, nil)
-            } catch {
-                fatalError("An error occurred: \(error.localizedDescription)")
-            }
-        }
-        
-        task.resume()
-    }
-    
-    func createAppleGetUserStorefrontRequest(developerToken: String, userToken: String) -> URLRequest {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = MusicService.appleMusicAPIBaseURLString
-        urlComponents.path = userAppleStorefrontPathURLString
-        
-        // Create and configure the `URLRequest`.
-        
-        var urlRequest = URLRequest(url: urlComponents.url!)
-        urlRequest.httpMethod = "GET"
-        
-        urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
-        
-        return urlRequest
-    }
-    
-    static func createAppleStorefrontsRequest(regionCode: String, developerToken: String) -> URLRequest {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = MusicService.appleMusicAPIBaseURLString
-        urlComponents.path = "/v1/storefronts/\(regionCode)"
-        
-        // Create and configure the `URLRequest`.
-        
-        var urlRequest = URLRequest(url: urlComponents.url!)
-        urlRequest.httpMethod = "GET"
-        
-        urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
-        
-        return urlRequest
-    }
-    
-    func processAppleStorefront(from json: Data) throws -> String {
-        guard let jsonDictionary = try JSONSerialization.jsonObject(with: json, options: []) as? [String: Any],
-            let data = jsonDictionary["data"] as? [[String: Any]] else {
-                throw SerializationError.missing("data")
-        }
-        
-        guard let identifier = data.first?["id"] as? String else {
-            throw SerializationError.missing("id")
-        }
-        
-        return identifier
     }
     
     func requestAppleMediaLibraryAuthorization() {
@@ -588,18 +461,14 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        
         urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
-        
         return urlRequest
     }
     
     func performAppleMusicCatalogSearch(with term: String, countryCode: String, completion: @escaping CatalogSearchCompletionHandler) {
         
-        guard let developerToken = fetchAppleMusicDeveloperToken() else {
-            fatalError("Developer Token not configured. See README for more details.")
-        }
-        
+        let developerToken = fetchAppleMusicDeveloperToken()
+        print(developerToken)
         let urlRequest = createAppleSearchRequest(with: term, countryCode: countryCode, developerToken: developerToken)
         let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
@@ -612,7 +481,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 let results = json["results"] as! [String: Any]
                 let songs = results["songs"] as! [String: Any]
                 let data = songs["data"] as! [[String: Any]]
-                
+                print(data)
                 var songResult = [Song]()
                 for songData in data {
                     songResult.append(try Song(appleMusicData: songData))
@@ -629,10 +498,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     
     func getAppleMusicTrack(with id: String, completion: @escaping (Song) -> ()) {
         
-        guard let developerToken = fetchAppleMusicDeveloperToken() else {
-            fatalError("Developer Token not configured. See README for more details.")
-        }
-        
+        let developerToken = fetchAppleMusicDeveloperToken()
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = MusicService.appleMusicAPIBaseURLString
@@ -661,7 +527,103 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         
         task.resume()
     }
+    
+    func getAppleMusicRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
+        
+        let developerToken = fetchAppleMusicDeveloperToken()
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = MusicService.appleMusicAPIBaseURLString
+        urlComponents.path = "/v1/me/recommendations"
+        
+        // Create and configure the `URLRequest`.
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = "GET"
+        
+        urlRequest.addValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        
+        let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
+            guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
+                return
+            }
+            
+            do {
+                let json = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+                let data = json["data"] as! [[String: Any]]
+                let newReleases = data[4]
+                let relationships = newReleases["relationships"] as! [String: Any]
+                let contents = relationships["contents"] as! [String: Any]
+                let insideData = contents["data"] as! [[String: Any]]
+                 var songResult = [Song]()
+                for songData in insideData {
+                    print(songData["attributes"])
+                    songResult.append(try Song(appleMusicData: songData))
+                }
+                completion(songResult, nil)
+            } catch {
+                fatalError("An error occurred: \(error.localizedDescription)")
+            }
+        }
+        
+        task.resume()
+    }
+    
    
-
+    func testAppleMusic(id: String) {
+        
+        let catalogQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: [id])
+        
+        
+        appleMusicPlayer.setQueue(with: catalogQueueDescriptor)
+        appleMusicPlayer.play()
+        self.appleMusicPlayer.beginGeneratingPlaybackNotifications()
+    }
+    
+    var spotifySongs: [(id: String, type: Song.SongType)] = []
+    var csp = 0
+    var currId: UInt64?
+    func playListOfSong(songIds: [(id: String, type: Song.SongType)]) {
+        let appleMusicSongs = songIds.filter { (song) -> Bool in
+            return song.type == .AppleMusic
+        }
+        
+        spotifySongs = songIds.filter { (song) -> Bool in
+            return song.type == .Spotify
+        }
+        
+        csp = 0
+        
+        let catalogQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: [])
+        
+        for song in appleMusicSongs {
+            catalogQueueDescriptor.storeIDs?.append(song.id)
+        }
+        
+        appleMusicPlayer.setQueue(with: catalogQueueDescriptor)
+        appleMusicPlayer.play()
+        currId = appleMusicPlayer.nowPlayingItem?.persistentID
+        NotificationCenter.default.addObserver(self, selector: #selector(switchToSpotify), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        
+    }
+    
+    @objc func switchToSpotify() {
+        if appleMusicPlayer.nowPlayingItem?.persistentID != currId {
+            appleMusicPlayer.stop()
+            if (csp < spotifySongs.count) {
+                spotifyPlayer.playSpotifyURI("spotify:track:\(spotifySongs[csp].id)" , startingWith: 0, startingWithPosition: 0, callback: nil)
+                csp += 1
+            } else {
+                appleMusicPlayer.play()
+            }
+        }
+    }
 }
 
+extension MusicService: SPTAudioStreamingPlaybackDelegate {
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+        appleMusicPlayer.play()
+        currId = appleMusicPlayer.nowPlayingItem?.persistentID
+    }
+}

@@ -42,7 +42,13 @@ class SongCell: UITableViewCell {
 
     @IBAction func onArtTap(_ sender: Any) {
         print("sdasd")
-        MusicService.sharedInstance.testSpotify(id: song.id)
+        if song.type == .Spotify {
+            MusicService.sharedInstance.testSpotify(id: song.id)
+        } else {
+            
+            MusicService.sharedInstance.testAppleMusic(id: song.id)
+        }
+        
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

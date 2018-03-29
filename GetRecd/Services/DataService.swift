@@ -177,7 +177,7 @@ class DataService {
     func getLikedSpotifySongs(sucesss: @escaping ([String]) -> ()) {
         let currUserSpotfyLikesRef = _REF_USERLIKES.child(Auth.auth().currentUser!.uid).child("Spotify")
         
-        currUserSpotfyLikesRef.observe(.value) { (snapshot) in
+        currUserSpotfyLikesRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let data = snapshot.value as? [String: Any] else {
                 return
             }

@@ -58,6 +58,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         getCurrentUser()
         
+        getSongs()
         getMovies()
         
         recFeedTableView.delegate = self
@@ -95,18 +96,18 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch segmentedControl.selectedSegmentIndex {
             case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-            
-            // Reset the cell from previous use:
-            cell.artistLabel.text = ""
-            cell.artworkView.image = UIImage()
-            cell.nameLabel.text = ""
-            
-            cell.tag = indexPath.row
-            cell.artworkView.tag = indexPath.row
-            let song = songs[indexPath.row]
-            cell.song = song
-            return cell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
+                
+                // Reset the cell from previous use:
+                cell.artistLabel.text = ""
+                cell.artworkView.image = UIImage()
+                cell.nameLabel.text = ""
+                
+                cell.tag = indexPath.row
+                cell.artworkView.tag = indexPath.row
+                let song = songs[indexPath.row]
+                cell.song = song
+                return cell
             case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
             
@@ -223,13 +224,15 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            refresher.addTarget(self, action: #selector(self.getSongs), for: UIControlEvents.valueChanged)
+            refresher.addTarget(self, action: #selector(getSongs), for: UIControlEvents.valueChanged)
         case 1:
-            refresher.addTarget(self, action: #selector(self.getMovies), for: UIControlEvents.valueChanged)
+            refresher.addTarget(self, action: #selector(getMovies), for: UIControlEvents.valueChanged)
         case 2:
-            refresher.addTarget(self, action: #selector(self.getShows), for: UIControlEvents.valueChanged)
+            refresher.addTarget(self, action: #selector(getShows), for: UIControlEvents.valueChanged)
         default:
-            recFeedTableView.reloadData()
+            DispatchQueue.main.async {
+                self.recFeedTableView.reloadData()
+            }
         }
     }
     
@@ -237,7 +240,10 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
-            })
+                print("Yay")
+            }) { (error) in
+                print(error.localizedDescription)
+            }
         case 1:
             DataService.instance.likeMovies(movies: likedMovies, success: {
             })
@@ -299,7 +305,44 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // TODO
     @objc func getSongs() {
+        print("triggering")
+        let songSearchGroup = DispatchGroup()
+        var newSongs: [Song] = []
+        songSearchGroup.enter()
+        MusicService.sharedInstance.getSpotifyRecommendations { (spotifySongs, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                self.songs = []
+                self.refresher.endRefreshing()
+                return
+            } else {
+                newSongs.append(contentsOf: spotifySongs)
+                songSearchGroup.leave()
+            }
+        }
         
+        songSearchGroup.enter()
+        MusicService.sharedInstance.getAppleMusicRecommendations { (appleMusicSongs, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                self.songs = []
+                self.refresher.endRefreshing()
+                return
+            } else {
+                newSongs.append(contentsOf: appleMusicSongs)
+                songSearchGroup.leave()
+            }
+        }
+        
+        songSearchGroup.notify(queue: DispatchQueue.global()) {
+            newSongs.sort(by: { (first, second) -> Bool in
+                return first.name < second.name
+            })
+            DispatchQueue.main.async {
+                self.refresher.endRefreshing()
+            }
+            self.songs = newSongs
+        }
     }
     
     // TODO
