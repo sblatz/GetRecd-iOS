@@ -113,14 +113,14 @@ class DataService {
      * supplied to the callback handler.
      *
      * - parameter nameSubstring: A substring of a user's name to match.
-     * - parameter handler: The callback handler that will be invoked with the matching users.
+     * - parameter handler: The callback handler that will be invoked with the matching user IDs.
      */
-    func findUsersByName(nameSubstring: String, handler: @escaping (_ matchingUsers: [User]) -> ()) {
+    func findUsersByName(nameSubstring: String, handler: @escaping (_ matchingUsers: [String]) -> ()) {
         _REF_USERS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
-            var matchingUsers = [User]()
+            var matchingUsers = [String]()
             if let userEntries = snapshot.value as? Dictionary<String, AnyObject> {
-                for (uid, userDictionary) in userEntries {
-                    matchingUsers.append(User(userDict: userDictionary as! [String : Any], userID: uid))
+                for uid in userEntries.keys {
+                    matchingUsers.append(uid)
                 }
                 handler(matchingUsers)
             }
@@ -158,9 +158,9 @@ class DataService {
      * Returns an array of `User` objects corresponding to users that have requested to be
      * friends with the current user. The users are supplied to the callback handler.
      *
-     * - parameter handler: The callback handler that will be invoked with the incoming friends.
+     * - parameter handler: The callback handler that will be invoked with the incoming friend IDs.
      */
-    func getIncomingFriendRequests(handler: @escaping (_ incomingFriends: [User]) -> ()) {
+    func getIncomingFriendRequests(handler: @escaping (_ incomingFriends: [String]) -> ()) {
         if let currentUid = Auth.auth().currentUser?.uid {
             if currentUid == "" {
                 return
@@ -169,15 +169,13 @@ class DataService {
                 if let requestEntries = snapshot.value as? Dictionary<String, AnyObject> {
                     for (uid, friendUids) in requestEntries {
                         if let friendUidsArray = friendUids as? [String] {
-                            var incomingFriends = [User]()
+                            var incomingFriends = [String]()
                             for friendUid in friendUidsArray {
                                 if currentUid == friendUid {
-                                    self.getUser(uid: uid, handler: { (user) in
-                                        incomingFriends.append(user)
-                                        handler(incomingFriends)
-                                    })
+                                    incomingFriends.append(uid)
                                 }
                             }
+                            handler(incomingFriends)
                         }
                     }
                 }
@@ -189,9 +187,9 @@ class DataService {
      * Returns an array of `User` objects corresponding to users that the current user has
      * requested to be friends with. The users are supplied to the callback handler.
      *
-     * - parameter handler: The callback handler that will be invoked with the outgoing friends.
+     * - parameter handler: The callback handler that will be invoked with the outgoing friend IDs.
      */
-    func getOutgoingFriendRequests(handler: @escaping (_ outgoingFriends: [User]) -> ()) {
+    func getOutgoingFriendRequests(handler: @escaping (_ outgoingFriends: [String]) -> ()) {
         if let currentUid = Auth.auth().currentUser?.uid {
             if currentUid == "" {
                 return
@@ -199,13 +197,7 @@ class DataService {
             _REF_USERS_PENDING_FRIENDS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
                 if let requestEntries = snapshot.value as? Dictionary<String, AnyObject> {
                     if let friendUids = requestEntries[currentUid] as? [String] {
-                        var outgoingFriends = [User]()
-                        for friendUid in friendUids {
-                            self.getUser(uid: friendUid, handler: { (user) in
-                                outgoingFriends.append(user)
-                                handler(outgoingFriends)
-                            })
-                        }
+                        handler(friendUids)
                     }
                 }
             })
@@ -218,20 +210,14 @@ class DataService {
      *
      * - parameter handler: The callback handler that will be invoked with the user's friends.
      */
-    func getFriends(handler: @escaping (_ friends: [User]) -> ()) {
+    func getFriends(handler: @escaping (_ friends: [String]) -> ()) {
         if let currentUid = Auth.auth().currentUser?.uid {
             if currentUid == "" {
                 return
             }
             _REF_USERS_FRIENDS.child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
                 if let friendUids = snapshot.value as? [String] {
-                    var friends = [User]()
-                    for friendUid in friendUids {
-                        self.getUser(uid: friendUid, handler: { (user) in
-                            friends.append(user)
-                            handler(friends)
-                        })
-                    }
+                    handler(friendUids)
                 }
             })
         }
