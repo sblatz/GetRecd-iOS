@@ -86,8 +86,8 @@ class TVService: NSObject {
                     for rec in recommendations {
                         var showDictionary = [String: Any]()
                         showDictionary["id"] = rec["id"]
-                        showDictionary["name"] = rec["title"]
-                        showDictionary["releaseDate"] = rec["release_date"]
+                        showDictionary["name"] = rec["name"]
+                        showDictionary["releaseDate"] = rec["first_air_date"]
                         showDictionary["posterPath"] = rec["poster_path"]
                         showDictionary["overview"] = rec["overview"]
 
