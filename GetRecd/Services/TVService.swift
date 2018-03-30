@@ -69,4 +69,40 @@ class TVService: NSObject {
             }
         }
     }
+
+    func getRecommendedTV(id: String, success: @escaping ([Show]) -> ()) {
+        let urlString = "https://api.themoviedb.org/3/tv/\(id)/recommendations"
+        var shows:[Show] = []
+        var urlComp = URLComponents(string: urlString)
+        let qItems = [URLQueryItem(name: "api_key", value: TMDBConfig.apikey)]
+        urlComp?.queryItems = qItems
+        let url = urlComp!.url!
+        let urlSession = URLSession(configuration: .default)
+        let task = urlSession.dataTask(with: url, completionHandler: { (data, response, error) in
+            if error == nil, let data = data {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? Dictionary<String, Any> {
+                    let recommendations = responseDictionary["results"] as! [Dictionary<String, Any>]
+
+                    for rec in recommendations {
+                        var showDictionary = [String: Any]()
+                        showDictionary["id"] = rec["id"]
+                        showDictionary["name"] = rec["name"]
+                        showDictionary["releaseDate"] = rec["first_air_date"]
+                        showDictionary["posterPath"] = rec["poster_path"]
+                        showDictionary["overview"] = rec["overview"]
+
+                        do {
+                            try shows.append(Show(showDict: showDictionary))
+
+                        } catch {
+                            fatalError("An error occurred: \(error.localizedDescription)")
+                        }
+                    }
+
+                    success(shows)
+                }
+            }
+        })
+        task.resume()
+    }
 }

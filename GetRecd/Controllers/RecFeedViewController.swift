@@ -96,16 +96,20 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch segmentedControl.selectedSegmentIndex {
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-                
-                // Reset the cell from previous use:
-                cell.tag = indexPath.row
-                
-                let song = songs[indexPath.row]
-                cell.song = song
-                return cell
-            case 1:
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
+
+            // Reset the cell from previous use:
+            cell.artistLabel.text = ""
+            cell.artworkView.image = UIImage()
+            cell.nameLabel.text = ""
+
+            cell.tag = indexPath.row
+            cell.artworkView.tag = indexPath.row
+            let song = songs[indexPath.row]
+            cell.song = song
+            return cell
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
             
             // Reset the cell from previous use:
@@ -118,7 +122,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             let movie = movies[indexPath.row]
             cell.movie = movie
             return cell
-            case 2:
+        case 2:
             // Note: we're using a movie cell as a tv show cell as well for efficiency 😄
             let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
             
@@ -132,7 +136,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             let show = shows[indexPath.row]
             cell.show = show
             return cell
-            default:
+        default:
             return UITableViewCell()
         }
     }
@@ -286,9 +290,9 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                         }
                         
                         if likedMovies.count < 5, self.movies.count == 5 {
-                                break
+                            break
                         } else if likedMovies.count < 10, self.movies.count == 2 {
-                                break
+                            break
                         } else if self.movies.count == 1 {
                             break
                         }
@@ -300,7 +304,6 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // TODO
     @objc func getSongs() {
         print("triggering")
         let songSearchGroup = DispatchGroup()
@@ -342,8 +345,46 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    // TODO
     @objc func getShows() {
-        
+        DataService.instance.getLikedShows { (likedShows) in
+            self.shows = []
+
+            for cell in self.recFeedTableView.visibleCells {
+                cell.accessoryType = .none
+                self.likeButton.isHidden = true
+            }
+
+            // add top 5 recommended shows if they have less than 5 saved movies, else add top 2 if less than 10, else top 1
+            // Checks to make sure that reccomended shows aren't shown more than once and that user has not already liked them
+
+            for id in likedShows {
+                TVService.sharedInstance.getRecommendedTV(id: id, success: { (shows) in
+                    for i in 0...shows.count-1 {
+
+                        let showArrcontains = self.shows.contains(where: { (show) -> Bool in
+                            return show.id == shows[i].id
+                        })
+
+                        let likedArrContains = likedShows.contains(where: { (id) -> Bool in
+                            return Int(id) == shows[i].id
+                        })
+
+                        if !showArrcontains && !likedArrContains {
+                            self.shows.append(shows[i])
+                        }
+
+                        if likedShows.count < 5, self.shows.count == 5 {
+                            break
+                        } else if likedShows.count < 10, self.shows.count == 2 {
+                            break
+                        } else if self.shows.count == 1 {
+                            break
+                        }
+                    }
+                })
+
+                self.refresher.endRefreshing()
+            }
+        }
     }
 }
