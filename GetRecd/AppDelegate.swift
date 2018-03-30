@@ -26,13 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 
-//        if Auth.auth().currentUser != nil {
-//            // Reauthenticate!
-//            print(Auth.auth().currentUser?.email)
-//
-//            window?.rootViewController = storyboard.instantiateInitialViewController()
-//        }
-//    
+        if Auth.auth().currentUser != nil {
+            // Reauthenticate!
+            print(Auth.auth().currentUser?.email)
+
+            window?.rootViewController = storyboard.instantiateInitialViewController()
+        }
+    
 
 
         return true
@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print(error.localizedDescription)
                 } else if session != nil {
                     MusicService.sharedInstance.spotifyPlayer.login(withAccessToken: MusicService.sharedInstance.spotifyAuth.session.accessToken)
-                    
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SpotifyLoggedIn"), object: nil)
                     MusicService.sharedInstance.checkIfSpotifyPlaylistExists { (exists) in
                         if !exists {
                             MusicService.sharedInstance.createSpotifyPlaylist(success: {

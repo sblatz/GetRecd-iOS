@@ -80,22 +80,18 @@ class SearchViewController: UITableViewController {
         self.selectedScope = selectedScope
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        SongCell.currPlaying = -1
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         searchController.becomeFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func onArtTap(_ sender: Any) {
-        let gesture = sender as! UITapGestureRecognizer
-        let cell = gesture.view!.superview!.superview as! SongCell
-        
-        //MusicService.sharedInstance.playPreview(url: cell.song.preview)
     }
     
     @IBAction func onAdd(_ sender: Any) {
@@ -220,12 +216,8 @@ class SearchViewController: UITableViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
 
                 // Reset the cell from previous use:
-                cell.artistLabel.text = ""
-                cell.artworkView.image = UIImage()
-                cell.nameLabel.text = ""
-
                 cell.tag = indexPath.row
-                cell.artworkView.tag = indexPath.row
+                
                 let song = songs[indexPath.row]
                 cell.song = song
                 return cell

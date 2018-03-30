@@ -55,10 +55,8 @@
                                         <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gf4-ix-Rtk">
                                             <rect key="frame" x="16" y="16" width="25" height="25"/>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dcM-50-LYm">
-                                            <rect key="frame" x="269" y="76" width="46" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Button"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dcM-50-LYm">
+                                            <rect key="frame" x="16" y="16" width="75" height="75"/>
                                             <connections>
                                                 <action selector="onArtTap:" destination="YyF-cG-7bn" eventType="touchUpInside" id="9jw-Z3-ebI"/>
                                             </connections>
@@ -67,10 +65,14 @@
                                     <constraints>
                                         <constraint firstItem="gf4-ix-Rtk" firstAttribute="height" secondItem="Jpb-uG-Ncs" secondAttribute="height" multiplier="1:3" id="8Gq-Ct-5xA"/>
                                         <constraint firstItem="Jpb-uG-Ncs" firstAttribute="top" secondItem="0yE-Gp-XNJ" secondAttribute="top" constant="16" id="9iy-gS-beb"/>
+                                        <constraint firstItem="dcM-50-LYm" firstAttribute="centerY" secondItem="Jpb-uG-Ncs" secondAttribute="centerY" id="CGp-1m-j65"/>
                                         <constraint firstAttribute="bottom" secondItem="Jpb-uG-Ncs" secondAttribute="bottom" constant="16" id="QFs-vj-Pxs"/>
                                         <constraint firstItem="Ojg-Xi-AFR" firstAttribute="centerY" secondItem="Jpb-uG-Ncs" secondAttribute="centerY" id="THE-Pi-UBW"/>
                                         <constraint firstAttribute="trailing" secondItem="Ojg-Xi-AFR" secondAttribute="trailing" constant="8" id="Vmv-G6-EP4"/>
+                                        <constraint firstItem="dcM-50-LYm" firstAttribute="width" secondItem="Jpb-uG-Ncs" secondAttribute="width" id="W7I-KM-7cE"/>
+                                        <constraint firstItem="dcM-50-LYm" firstAttribute="centerX" secondItem="Jpb-uG-Ncs" secondAttribute="centerX" id="Y7W-PL-rMM"/>
                                         <constraint firstItem="gf4-ix-Rtk" firstAttribute="top" secondItem="Jpb-uG-Ncs" secondAttribute="top" id="iwA-ls-e7A"/>
+                                        <constraint firstItem="dcM-50-LYm" firstAttribute="height" secondItem="Jpb-uG-Ncs" secondAttribute="height" id="jhv-0P-KTx"/>
                                         <constraint firstItem="Ojg-Xi-AFR" firstAttribute="leading" secondItem="Jpb-uG-Ncs" secondAttribute="trailing" constant="16" id="mzW-dc-U25"/>
                                         <constraint firstItem="gf4-ix-Rtk" firstAttribute="leading" secondItem="Jpb-uG-Ncs" secondAttribute="leading" id="pzf-AM-xou"/>
                                         <constraint firstItem="gf4-ix-Rtk" firstAttribute="width" secondItem="Jpb-uG-Ncs" secondAttribute="width" multiplier="1:3" id="te9-eo-3du"/>
@@ -81,6 +83,7 @@
                                     <outlet property="artistLabel" destination="uet-Rl-zOM" id="x7M-W7-mPk"/>
                                     <outlet property="artworkView" destination="Jpb-uG-Ncs" id="Xrd-At-anD"/>
                                     <outlet property="nameLabel" destination="rkQ-cK-k3a" id="hkB-nZ-Fo9"/>
+                                    <outlet property="playButton" destination="dcM-50-LYm" id="fx4-GO-tPa"/>
                                     <outlet property="typeView" destination="gf4-ix-Rtk" id="gsp-0P-R8k"/>
                                 </connections>
                             </tableViewCell>

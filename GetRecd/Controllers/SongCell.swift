@@ -14,9 +14,18 @@ class SongCell: UITableViewCell {
     @IBOutlet weak var typeView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
+    @IBOutlet weak var playButton: UIButton!
+    
+    static var currPlaying = -1
     
     var song: Song! {
         didSet {
+            self.artistLabel.text = ""
+            self.artworkView.image = UIImage()
+            self.nameLabel.text = ""
+            
+            self.playButton.setImage(nil, for: .normal)
+            
             self.nameLabel.text = song.name
             self.artistLabel.text = song.artist
             
@@ -24,6 +33,10 @@ class SongCell: UITableViewCell {
                 typeView.image = UIImage(named: "AppleMusicIcon")
             } else {
                 typeView.image = UIImage(named: "SpotifyIcon")
+            }
+            
+            if SongCell.currPlaying == self.tag {
+                playButton.setImage(UIImage(named: "playIcon"), for: .normal)
             }
             
             self.artworkView.image = nil
@@ -35,18 +48,29 @@ class SongCell: UITableViewCell {
             }
         }
     }
+    
+ 
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
     @IBAction func onArtTap(_ sender: Any) {
-        print("sdasd")
         if song.type == .Spotify {
-            MusicService.sharedInstance.testSpotify(id: song.id)
+            MusicService.sharedInstance.playSpotify(id: song.id)
         } else {
             
-            MusicService.sharedInstance.testAppleMusic(id: song.id)
+            MusicService.sharedInstance.playAppleMusic(id: song.id)
+        }
+        
+        playButton.setImage(UIImage(named: "playIcon"), for: .normal)
+        SongCell.currPlaying = self.tag
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "MusicChange"), object: nil)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "MusicChange"), object: nil, queue: OperationQueue.main) { (notification) in
+            self.playButton.setImage(nil, for: .normal)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "MusicChange"), object: nil)
         }
         
     }

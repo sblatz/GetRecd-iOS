@@ -70,6 +70,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        SongCell.currPlaying = -1
         getCurrentUser()
     }
     
@@ -99,12 +100,8 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
                 
                 // Reset the cell from previous use:
-                cell.artistLabel.text = ""
-                cell.artworkView.image = UIImage()
-                cell.nameLabel.text = ""
-                
                 cell.tag = indexPath.row
-                cell.artworkView.tag = indexPath.row
+                
                 let song = songs[indexPath.row]
                 cell.song = song
                 return cell

@@ -23,6 +23,11 @@ class ProfileMusicViewController: UITableViewController {
 
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        SongCell.currPlaying = -1
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -60,9 +65,10 @@ class ProfileMusicViewController: UITableViewController {
         if indexPath.section == 0 {
             return tableView.dequeueReusableCell(withIdentifier: "BarCell", for: indexPath)
         }
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-
+        cell.tag = indexPath.row
+        
         let song = songIds[indexPath.row]
         
         if song.1 == .Spotify {
