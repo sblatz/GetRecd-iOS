@@ -347,6 +347,45 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // TODO
     @objc func getShows() {
-        
+        DataService.instance.getLikedShows { (likedShows) in
+            self.shows = []
+
+            for cell in self.recFeedTableView.visibleCells {
+                cell.accessoryType = .none
+                self.likeButton.isHidden = true
+            }
+
+            // add top 5 recommended movies if they have less than 5 saved movies, else add top 2 if less than 10, else top 1
+            // Checks to make sure that reccomended movies aren't shown more than once and that user has not already liked them
+
+            for id in likedShows {
+                TVService.sharedInstance.getRecommendedTV(id: id, success: { (shows) in
+                    for i in 0...shows.count-1 {
+
+                        let showArrcontains = self.shows.contains(where: { (show) -> Bool in
+                            return show.id == shows[i].id
+                        })
+
+                        let likedArrContains = likedShows.contains(where: { (id) -> Bool in
+                            return Int(id) == shows[i].id
+                        })
+
+                        if !showArrcontains && !likedArrContains {
+                            self.shows.append(shows[i])
+                        }
+
+                        if likedShows.count < 5, self.shows.count == 5 {
+                            break
+                        } else if likedShows.count < 10, self.shows.count == 2 {
+                            break
+                        } else if self.shows.count == 1 {
+                            break
+                        }
+                    }
+                })
+
+            self.refresher.endRefreshing()
+        }
+        }
     }
 }
