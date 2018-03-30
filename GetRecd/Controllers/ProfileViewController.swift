@@ -75,7 +75,7 @@ class ProfileViewController: UITableViewController {
     
     func getCurrentUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        DataService.instance.getUser(userID: uid) { (user) in
+        DataService.instance.getUser(uid: uid) { (user) in
             self.currentUser = user
             
             print("GETTING USER ON PROFILE")
