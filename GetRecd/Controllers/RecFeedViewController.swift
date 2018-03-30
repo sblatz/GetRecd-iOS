@@ -98,12 +98,11 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
-
+            
             // Reset the cell from previous use:
             cell.artistLabel.text = ""
             cell.artworkView.image = UIImage()
             cell.nameLabel.text = ""
-
             cell.tag = indexPath.row
             cell.artworkView.tag = indexPath.row
             let song = songs[indexPath.row]
@@ -275,7 +274,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             for id in likedMovies {
                 MovieService.sharedInstance.getRecommendedMovies(id: id, success: { (movies) in
-                    for i in 0...movies.count-1 {
+                    for i in 0..<movies.count {
                         
                         let movieArrcontains = self.movies.contains(where: { (movie) -> Bool in
                             return movie.id == movies[i].id
@@ -298,9 +297,11 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                         }
                     }
                 })
+                
+                DispatchQueue.main.async {
+                    self.refresher.endRefreshing()
+                }
             }
-            
-            self.refresher.endRefreshing()
         }
     }
     
@@ -359,7 +360,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
 
             for id in likedShows {
                 TVService.sharedInstance.getRecommendedTV(id: id, success: { (shows) in
-                    for i in 0...shows.count-1 {
+                    for i in 0..<shows.count {
 
                         let showArrcontains = self.shows.contains(where: { (show) -> Bool in
                             return show.id == shows[i].id
@@ -382,8 +383,10 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                         }
                     }
                 })
-
-                self.refresher.endRefreshing()
+                
+                DispatchQueue.main.async {
+                    self.refresher.endRefreshing()
+                }
             }
         }
     }

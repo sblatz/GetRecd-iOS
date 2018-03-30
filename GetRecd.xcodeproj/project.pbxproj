@@ -79,6 +79,9 @@
 		FC1229522036BA640080151B /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC1229512036BA640080151B /* Profile.storyboard */; };
 		FC1229542036BA7E0080151B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1229532036BA7E0080151B /* ProfileViewController.swift */; };
 		FC31A5E6206460CE00D73A6A /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */; };
+		FC3A70E8206D8D21005532A6 /* Friends.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC3A70E7206D8D21005532A6 /* Friends.storyboard */; };
+		FC3A70EA206D8FAC005532A6 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3A70E9206D8FAC005532A6 /* FriendCell.swift */; };
+		FC3A70EC206D8FDE005532A6 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3A70EB206D8FDE005532A6 /* FriendsViewController.swift */; };
 		FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */; };
 		FC46DA83203BFE210059BEC8 /* ProfileSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */; };
 		FCBAF912203E112000DFC323 /* UITextView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBAF911203E112000DFC323 /* UITextView+Extension.swift */; };
@@ -176,6 +179,9 @@
 		FC1229512036BA640080151B /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		FC1229532036BA7E0080151B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		FC31A5E5206460CE00D73A6A /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		FC3A70E7206D8D21005532A6 /* Friends.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Friends.storyboard; sourceTree = "<group>"; };
+		FC3A70E9206D8FAC005532A6 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
+		FC3A70EB206D8FDE005532A6 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RecFeed.storyboard; sourceTree = "<group>"; };
 		FC46DA82203BFE210059BEC8 /* ProfileSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsViewController.swift; sourceTree = "<group>"; };
 		FCBAF911203E112000DFC323 /* UITextView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+Extension.swift"; sourceTree = "<group>"; };
@@ -316,6 +322,7 @@
 				FC46DA80203BF3A00059BEC8 /* RecFeed.storyboard */,
 				24D120AA20406C5E0010BC8B /* Search.storyboard */,
 				FCFCD118206A0762008CC2B7 /* RoundedView.swift */,
+				FC3A70E7206D8D21005532A6 /* Friends.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -338,6 +345,8 @@
 				24D120B020406ED20010BC8B /* SongCell.swift */,
 				24AEA6CD2064389500B0C581 /* MovieCell.swift */,
 				FCFCD1162069D367008CC2B7 /* RecFeedViewController.swift */,
+				FC3A70E9206D8FAC005532A6 /* FriendCell.swift */,
+				FC3A70EB206D8FDE005532A6 /* FriendsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -521,6 +530,7 @@
 				245105802023DAE8001AC6F6 /* OpenSans-BoldItalic.ttf in Resources */,
 				FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */,
 				24065A2D202A6ABC00272A61 /* LaunchScreen.storyboard in Resources */,
+				FC3A70E8206D8D21005532A6 /* Friends.storyboard in Resources */,
 				245105862023DAE8001AC6F6 /* OpenSans-ExtraBold.ttf in Resources */,
 				24E476E020238D9A00D65361 /* Assets.xcassets in Resources */,
 				2451057D2023DAE8001AC6F6 /* OpenSans-Light.ttf in Resources */,
@@ -780,10 +790,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC3A70EC206D8FDE005532A6 /* FriendsViewController.swift in Sources */,
 				24687FB7202A371000CC990D /* SignInViewController.swift in Sources */,
 				24D120A720406BCB0010BC8B /* SerializationError.swift in Sources */,
 				C77C4A52203CD3A50001839E /* MusicService.swift in Sources */,
 				24AEA6CA2064207F00B0C581 /* MovieService.swift in Sources */,
+				FC3A70EA206D8FAC005532A6 /* FriendCell.swift in Sources */,
 				245156F520238BDB000E8082 /* CreateAccountViewController.swift in Sources */,
 				24D120AD20406EA40010BC8B /* SearchViewController.swift in Sources */,
 				C7EB9489204A404A00A99106 /* BridgeViewController.m in Sources */,
