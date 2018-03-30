@@ -29,7 +29,11 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         spotifyAuth.tokenRefreshURL = URL(string: "https://getrecdspotifyrefresher.herokuapp.com/refresh")
         spotifyAuth.requestedScopes = [SPTAuthStreamingScope, SPTAuthPlaylistModifyPrivateScope, SPTAuthPlaylistModifyPublicScope, SPTAuthPlaylistReadPrivateScope]
         spotifyPlayer.delegate = self
-        spotifyPlayer.playbackDelegate = self
+        //spotifyPlayer.playbackDelegate = self
+        
+        if spotifyPlayer.initialized {
+            try? spotifyPlayer.stop()
+        }
         
         do {
             try spotifyPlayer.start(withClientId: MusicService.sharedInstance.spotifyAuth.clientID)
@@ -74,6 +78,13 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         } else {
             spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
         }
+    }
+    
+    func deAuthenticateSpotify() {
+        spotifyAuth.session = nil
+        UserDefaults.standard.removeObject(forKey: "spotify_session")
+        UserDefaults.standard.synchronize()
+        
     }
     
     func searchSpotify(with term: String, completion: @escaping CatalogSearchCompletionHandler) {
@@ -220,13 +231,20 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         }
     }
     
-    func testSpotify(id: String) {
+    func playSpotify(id: String) {
+//        spotifyPlayer.skipNext { (error) in
+//            if let error = error {
+//                print(error.localizedDescription)
+//            }
+//        }
         appleMusicPlayer.stop()
+        
         spotifyPlayer.playSpotifyURI("spotify:track:\(id)" , startingWith: 0, startingWithPosition: 0) { (error) in
             if let error = error {
-                print(error)
+                print(error.localizedDescription)
             }
         }
+       
     }
     
     func getSpotifyRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
@@ -310,7 +328,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     var cloudServiceCapabilities = SKCloudServiceCapability()
     
     /// The current set of two letter country code associated with the currently authenticated iTunes Store account.
-    var cloudServiceStorefrontCountryCode = ""
+    var cloudServiceStorefrontCountryCode = "us"
     
     /// The Music User Token associated with the currently signed in iTunes Store account.
     var userToken = ""
@@ -351,17 +369,13 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                         print(error.localizedDescription)
                     })
                 }
-            } else {
-                /// The token was not stored previously then request one.
-                self.requestAppleUserToken(success: {
-                    print("Yay")
-                }) { (error) in
-                    print(error.localizedDescription)
-                }
             }
         }
     }
     
+    func isAppleMusicLoggedIn() -> Bool {
+        return userToken != ""
+    }
     
     func requestAppleUserToken(success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let developerToken = fetchAppleMusicDeveloperToken()
@@ -387,6 +401,12 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         }
     }
     
+    func deAuthenticateAppleMusic() {
+        userToken = ""
+        UserDefaults.standard.removeObject(forKey: MusicService.userTokenUserDefaultsKey)
+        UserDefaults.standard.synchronize()
+        
+    }
     func requestAppleStorefrontCountryCode(success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         cloudServiceController.requestStorefrontCountryCode { (countryCode, error) in
             if let error = error {
@@ -399,53 +419,35 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         }
     }
     
-    func requestAppleCloudServiceAuthorization() {
+    func requestAppleCloudServiceAuthorization(success: @escaping (Bool) -> (), failure: @escaping (Error) -> ()) {
         SKCloudServiceController.requestAuthorization { (status: SKCloudServiceAuthorizationStatus) in
             switch status {
             case .notDetermined:
+                success(false)
                 break
             case .denied:
+                success(false)
                 break
             case .restricted:
+                success(false)
                 break
             case .authorized:
                 self.cloudServiceController.requestCapabilities(completionHandler: { (cloudServiceCapability, error) in
                     guard error == nil else {
                         fatalError("An error occurred when requesting capabilities: \(error!.localizedDescription)")
                     }
-                    let canPlay = cloudServiceCapability.contains(.musicCatalogPlayback)
-                    let canAdd = cloudServiceCapability.contains(.addToCloudMusicLibrary)
-                    let canSubscribe = cloudServiceCapability.contains(.musicCatalogSubscriptionEligible)
-                    print(canPlay)
-                    print(canAdd)
-                    print(canSubscribe)
+                    
                     self.cloudServiceCapabilities = cloudServiceCapability
                     
-                    self.setupAppleMusic()
+                    self.requestAppleUserToken(success: {
+                        success(true)
+                    }, failure: { (error) in
+                        failure(error)
+                    })
                 })
             }
         }
         
-    }
-    
-    func requestAppleMediaLibraryAuthorization() {
-        /*
-         An application should only ever call `MPMediaLibrary.requestAuthorization(_:)` when their
-         current authorization is `MPMediaLibraryAuthorizationStatusNotDetermined`
-         */
-        guard MPMediaLibrary.authorizationStatus() == .notDetermined else { return }
-        
-        /*
-         `MPMediaLibrary.requestAuthorization(_:)` triggers a prompt for the user asking if they wish to allow the application
-         that requested authorization access to the device's media library.
-         
-         This prompt will also include the value provided in the application's Info.plist for the `NSAppleMusicUsageDescription` key.
-         This usage description should reflect what the application intends to use this access for.
-         */
-        
-        MPMediaLibrary.requestAuthorization { (_) in
-            //NotificationCenter.default.post(name: AuthorizationManager.cloudServiceDidUpdateNotification, object: nil)
-        }
     }
     
     func createAppleSearchRequest(with term: String, countryCode: String, developerToken: String) -> URLRequest {
@@ -477,9 +479,11 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func performAppleMusicCatalogSearch(with term: String, countryCode: String, completion: @escaping CatalogSearchCompletionHandler) {
-        
+        if userToken == "" {
+            completion([], nil)
+            return
+        }
         let developerToken = fetchAppleMusicDeveloperToken()
-        print(developerToken)
         let urlRequest = createAppleSearchRequest(with: term, countryCode: countryCode, developerToken: developerToken)
         let task = urlSession.dataTask(with: urlRequest) { (data, response, error) in
             guard error == nil, let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode == 200 else {
@@ -540,7 +544,10 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func getAppleMusicRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
-        
+        if userToken == "" {
+            completion([], nil)
+            return
+        }
         let developerToken = fetchAppleMusicDeveloperToken()
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
@@ -582,11 +589,8 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
    
-    func testAppleMusic(id: String) {
-        
+    func playAppleMusic(id: String) {
         let catalogQueueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: [id])
-        
-        
         appleMusicPlayer.setQueue(with: catalogQueueDescriptor)
         appleMusicPlayer.play()
         self.appleMusicPlayer.beginGeneratingPlaybackNotifications()

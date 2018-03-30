@@ -13,7 +13,9 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
 
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var bioTextView: UITextView!
-
+    @IBOutlet weak var spotifyAuthCell: UITableViewCell!
+    @IBOutlet weak var appleMusicAuthCell: UITableViewCell!
+    
     var imagePicker: UIImagePickerController!
     var currentUser: User!
     var profilePictureImage: UIImage? = #imageLiteral(resourceName: "profile-pic")
@@ -22,12 +24,20 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-            bioTextView.delegate = self
+        bioTextView.delegate = self
 
         //let button = SpotifyLoginButton(viewController: self, scopes: [.streaming, .userLibraryRead])
         //var cell = linkSpotifyButton.superview?.superview!
         //cell?.addSubview(button)
         //button.frame = linkSpotifyButton.frame
+        
+        if MusicService.sharedInstance.isSpotifyLoggedIn() {
+            spotifyAuthCell.textLabel?.text = "Unlink Spotify"
+        }
+        
+        if MusicService.sharedInstance.isAppleMusicLoggedIn() {
+            appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,12 +49,27 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             self.bioTextView.text = self.currentUser.bio
         }
 
-
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("in view will appear")
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "SpotifyLoggedIn"), object: nil, queue: OperationQueue.main) { (notification) in
+            self.spotifyAuthCell.textLabel?.text = "Unlink Spotify"
+        }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "AppleMusicLoggedIn"), object: nil, queue: OperationQueue.main) { (notification) in
+            self.appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "SpotifyLoggedIn"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "AppleMusicLoggedIn"), object: nil)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -119,17 +144,32 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             case 2:
                 switch indexPath.row {
                     case 0:
-                        if (MusicService.sharedInstance.spotifyAuth.session != nil) {
-                            MusicService.sharedInstance.setupSpotify()
+                        if MusicService.sharedInstance.isSpotifyLoggedIn() {
+                            MusicService.sharedInstance.deAuthenticateSpotify()
+                            spotifyAuthCell.textLabel?.text = "Link Spotify"
                         } else {
-                            let authURL = MusicService.sharedInstance.spotifyAuth.spotifyAppAuthenticationURL()
-                            UIApplication.shared.open(authURL!, options: [:], completionHandler: nil)
+                            if MusicService.sharedInstance.spotifyAuth.session != nil {
+                                MusicService.sharedInstance.setupSpotify()
+                            } else {
+                                MusicService.sharedInstance.authenticateSpotify()
+                            }
                         }
-                
                     case 1:
-                        print("Authenticate with Apple music")
-                        MusicService.sharedInstance.requestAppleCloudServiceAuthorization()
-                        MusicService.sharedInstance.requestAppleMediaLibraryAuthorization()
+                        if MusicService.sharedInstance.isAppleMusicLoggedIn() {
+                            MusicService.sharedInstance.deAuthenticateAppleMusic()
+                            appleMusicAuthCell.textLabel?.text = "Link Apple Music"
+                        } else {
+                            MusicService.sharedInstance.requestAppleCloudServiceAuthorization(success: { (success) in
+                                print("Apple music authorized \(success)")
+                                if success {
+                                    DispatchQueue.main.async {
+                                        self.appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
+                                    }
+                                }
+                            }) { (error) in
+                                print(error.localizedDescription)
+                            }
+                        }
                     default:
                         break
                     }

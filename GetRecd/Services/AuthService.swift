@@ -124,13 +124,15 @@ class AuthService: NSObject, GIDSignInDelegate {
     }
 
     func signOut(success: @escaping (Bool) -> (Void)) {
-        if authInstance != nil {
+        if Auth.auth().currentUser != nil {
             do {
-                try authInstance!.signOut()
+                try Auth.auth().signOut()
+                success(true)
             } catch let signOutError as NSError {
                 success(false)
                 print("Error signing out: %@", signOutError)
             }
+        } else {
             success(true)
         }
     }

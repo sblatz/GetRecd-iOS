@@ -70,6 +70,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        SongCell.currPlaying = -1
         getCurrentUser()
     }
     
