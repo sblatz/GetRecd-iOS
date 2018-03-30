@@ -18,9 +18,18 @@ target 'GetRecd' do
   pod "TMDBSwift"
 
   target 'GetRecdTests' do
-    use_frameworks!
-    inherit! :complete
+    inherit! :search_paths
     # Pods for testing
+    pod "Pastel"
+    pod "LTMorphingLabel"
+    pod "Firebase/Core"
+    pod "Firebase/Database"
+    pod "Firebase/Auth"
+    pod "Firebase/Storage"
+    pod "FacebookCore"
+    pod "FacebookLogin"
+    pod "GoogleSignIn"
+    pod "TMDBSwift"
   end
 
   target 'GetRecdUITests' do
