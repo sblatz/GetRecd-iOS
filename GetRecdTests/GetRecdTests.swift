@@ -24,9 +24,47 @@ class GetRecdTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testSpotifyRecommendations() {
+        let expectation = XCTestExpectation(description: "Spotify Recommendations")
+        expectation.expectedFulfillmentCount = 1
+        AuthService.instance.signInWithEmail(email: "tester@tester.com", password: "123456") { (info) -> (Void) in
+           
+            MusicService.sharedInstance.getSpotifyRecommendations { (songs, error) in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                } else {
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        XCTWaiter().wait(for: [expectation], timeout: 10)
+    }
+    
+    func testMovieRecommendations() {
+        let expectation = XCTestExpectation(description: "Movie Recommendations")
+        expectation.expectedFulfillmentCount = 1
+        AuthService.instance.signInWithEmail(email: "tester@tester.com", password: "123456") { (info) -> (Void) in
+            
+            MovieService.sharedInstance.getRecommendedMovies(id: "12", success: { (movies) in
+                expectation.fulfill()
+            })
+        }
+        
+        XCTWaiter().wait(for: [expectation], timeout: 10)
+    }
+    
+    func testShowRecommendations() {
+        let expectation = XCTestExpectation(description: "Show Recommendations")
+        expectation.expectedFulfillmentCount = 1
+        AuthService.instance.signInWithEmail(email: "tester@tester.com", password: "123456") { (info) -> (Void) in
+            
+            TVService.sharedInstance.getRecommendedTV(id: "2316", success: { (shows) in
+                expectation.fulfill()
+            })
+        }
+        
+        XCTWaiter().wait(for: [expectation], timeout: 10)
     }
     
 }
