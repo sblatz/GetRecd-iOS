@@ -88,18 +88,15 @@ class SignInViewController: AuthenticationViewController, UITextFieldDelegate {
             errorLabel.text = "Please enter a password with at least six characters."
             errorLabel.isHidden = false
         } else {
-            AuthService.instance.signInWithEmail(email: emailText, password: passwordText, responseHandler: { (authenticationResponse) in
-                if authenticationResponse.isEmpty {
-                    self.errorLabel.isHidden = true
-                    DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email" : emailText])
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "RecFeed", sender: self)
-                    }
-                } else {
-                    self.errorLabel.text = authenticationResponse
-                    self.errorLabel.isHidden = false
+            AuthService.sharedInstance.signInWithEmail(email: emailText, password: passwordText, success: {
+                self.errorLabel.isHidden = true
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "RecFeed", sender: self)
                 }
-            })
+            }) { (error) in
+                self.errorLabel.text = error.localizedDescription
+                self.errorLabel.isHidden = false
+            }
         }
     }
 

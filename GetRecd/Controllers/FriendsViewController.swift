@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -24,7 +25,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     /// A `DispatchQueue` used for synchornizing the setting of `friends` to avoid threading issues with various `UITableView` delegate callbacks.
     var setterQueue = DispatchQueue(label: "SearchViewController")
     
-    var friends = [User]() {
+    var friends = [String]() {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -32,7 +33,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    var findFriends = [User]() {
+    var findFriends = [String]() {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -40,7 +41,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    var requests = [User]() {
+    var requests = [String]() {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -71,7 +72,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         view.layoutIfNeeded()
         
         getFriends()
-        getRequests()
         
         refresher = UIRefreshControl()
         tableView.addSubview(refresher)
@@ -110,7 +110,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as? FriendCell else { return FriendCell() }
         
-        var arr:[User] = []
+        var arr: [String] = []
         
         cell.accessoryType = .none
         
@@ -126,7 +126,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             arr = []
         }
         
-        cell.configureCell(user: arr[indexPath.row])
+        let user = arr[indexPath.row]
+        cell.user = user
         
         return cell
     }
@@ -138,10 +139,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if cell.accessoryType == .checkmark {
                     cell.accessoryType = .none
-                    selectedFriends.remove(cell.user.userID)
+                    selectedFriends.remove(cell.user)
                 } else {
                     cell.accessoryType = .checkmark
-                    selectedFriends.insert(cell.user.userID)
+                    selectedFriends.insert(cell.user)
                 }
             }
             
@@ -157,10 +158,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if cell.accessoryType == .checkmark {
                     cell.accessoryType = .none
-                    selectedFriends.remove(cell.user.userID)
+                    selectedFriends.remove(cell.user)
                 } else {
                     cell.accessoryType = .checkmark
-                    selectedFriends.insert(cell.user.userID)
+                    selectedFriends.insert(cell.user)
                 }
             }
             
@@ -177,26 +178,33 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func didChangeSegment(_ sender: Any) {
-        
+        friends = []
+        requests = []
+        findFriends = []
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
         
         switch segmentedControl.selectedSegmentIndex {
         case 0:
+            getFriends()
             addButton.isHidden = true
             denyButton.isHidden = true
             searchController.searchBar.isHidden = false
             refresher.isHidden = false
+            refresher = UIRefreshControl()
             refresher.addTarget(self, action: #selector(getFriends), for: UIControlEvents.valueChanged)
+            
         case 1:
             addButton.isHidden = false
             searchController.searchBar.isHidden = false
             refresher.isHidden = true
             denyButton.isHidden = true
         case 2:
+            getRequests()
             searchController.searchBar.isHidden = true
             refresher.isHidden = false
+            refresher = UIRefreshControl()
             refresher.addTarget(self, action: #selector(getRequests), for: UIControlEvents.valueChanged)
         default:
             addButton.isHidden = true
@@ -207,30 +215,42 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func getFriends() {
-        DataService.instance.getFriends { (friends) in
-            for uid in friends {
-                DataService.instance.getUser(uid: uid, handler: { (user) in
-                    self.friends.append(user)
-                })
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        DataService.sharedInstance.getFriends(uid: uid, success: { (friends) in
+            self.friends = friends
+            DispatchQueue.main.async {
+                self.refresher.endRefreshing()
             }
+
+        }) { (error) in
+            // TODO: Show error in getting friends
+            print(error.localizedDescription)
+            DispatchQueue.main.async {
+                self.refresher.endRefreshing()
+            }
+
         }
         
-        DispatchQueue.main.async {
-            self.refresher.endRefreshing()
-        }
     }
     
     @objc func getRequests() {
-        DataService.instance.getIncomingFriendRequests { (requests) in
-            for uid in requests {
-                DataService.instance.getUser(uid: uid, handler: { (user) in
-                    self.requests.append(user)
-                })
-            }
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
         }
-        
-        DispatchQueue.main.async {
-            self.refresher.endRefreshing()
+        DataService.sharedInstance.getIncomingFriendRequests(uid: uid, success: { (requests) in
+            self.requests = requests
+            DispatchQueue.main.async {
+                self.refresher.endRefreshing()
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+            DispatchQueue.main.async {
+                self.refresher.endRefreshing()
+            }
         }
     }
     
@@ -239,15 +259,31 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func addFriends() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
         switch segmentedControl.selectedSegmentIndex {
         case 1:
-            for uid in selectedFriends {
-                DataService.instance.requestFriend(friendUid: uid)
+            for fuid in selectedFriends {
+                DataService.sharedInstance.requestFriend(uid: uid, friendUid: fuid, success: {
+                    // TODO: Show successful add
+                    self.queryForSearch()
+                }) { (error) in
+                    // TODO: Show error adding friend
+                    print(error.localizedDescription)
+                }
             }
             
         case 2:
-            for uid in selectedFriends {
-                DataService.instance.respondFriendRequest(requesterUid: uid, accept: true)
+            for puid in selectedFriends {
+                DataService.sharedInstance.respondFriendRequest(uid: uid, friendUid: puid, accept: true, success: {
+                     // TODO: Show successful accept
+                    self.getRequests()
+                }) { (error) in
+                    // TODO: Show error accepting friend
+                    print(error.localizedDescription)
+                }
             }
             
             /*for cell in tableView.visibleCells {
@@ -261,12 +297,18 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func denyPressed(_ sender: Any) {
-        for uid in selectedFriends {
-            DataService.instance.respondFriendRequest(requesterUid: uid, accept: false)
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
         }
-        
-        DispatchQueue.main.async {
-            self.refresher.endRefreshing()
+        for duid in selectedFriends {
+            DataService.sharedInstance.respondFriendRequest(uid: uid, friendUid: duid, accept: false, success: {
+                // TODO: Show successful reject
+                self.getRequests()
+            }) { (error) in
+                // TODO: Show error rejecting friend
+                print(error.localizedDescription)
+            }
         }
         
         /*for cell in tableView.visibleCells {
@@ -300,6 +342,11 @@ extension FriendsViewController: UISearchResultsUpdating {
     
     
     @objc func queryForSearch() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        
         switch segmentedControl.selectedSegmentIndex {
         case 0:
             if searchString == "" {
@@ -308,12 +355,8 @@ extension FriendsViewController: UISearchResultsUpdating {
                 }
             } else {
                 // Get friends from DataService and set friends array to results using searchString
-                self.friends = []
-                for friend in self.friends {
-                    if friend.name.lowercased().hasPrefix(searchString.lowercased()) {
-                        self.friends.append(friend)
-                    }
-                }
+                //self.friends = []
+                
             }
         case 1:
             if searchString == "" {
@@ -323,15 +366,12 @@ extension FriendsViewController: UISearchResultsUpdating {
             } else {
                 self.findFriends = []
                // Search all users using searchString and set searchResults array
-                DataService.instance.getAllUsers(handler: { (users) in
-                    for uid in users {
-                        DataService.instance.getUser(uid: uid, handler: { (user) in
-                            if user.name.lowercased().hasPrefix(self.searchString.lowercased()) {
-                                self.findFriends.append(user)
-                            }
-                        })
-                    }
-                })
+                DataService.sharedInstance.searchForUsers(uid: uid, name: searchString, success: { (users) in
+                    self.findFriends = users
+                }) { (error) in
+                    // TODO: Show error searching
+                    print(error.localizedDescription)
+                }
             }
         default:
             break

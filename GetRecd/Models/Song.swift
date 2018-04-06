@@ -35,7 +35,7 @@ class Song: NSObject {
         }
         
         let artist = attributes["artistName"] as? String ?? " "
-        print(attributes["artwork"])
+        
         guard let artworkData = attributes["artwork"] as? [String: Any] else {
             throw SerializationError.missing("artwork")
         }
@@ -80,8 +80,9 @@ class Song: NSObject {
     
     init(spotifyData: SPTPartialTrack) throws {
         
-        
+        print(spotifyData)
         guard let artists = spotifyData.artists as? [SPTPartialArtist] else {
+            print(spotifyData.artists)
             throw SerializationError.missing("artists")
         }
         

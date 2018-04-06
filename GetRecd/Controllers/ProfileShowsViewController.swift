@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileShowsViewController: UITableViewController {
-    var showIds = [(String)]()
+    var showIds = [(String)]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,12 +25,13 @@ class ProfileShowsViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        DataService.instance.getLikedShows { (showIds) in
+        DataService.sharedInstance.getLikedShows(uid: Auth.auth().currentUser!.uid, sucesss: { (showIds) in
             self.showIds = showIds
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+        }) { (error) in
+            // TODO: Show error that liked shows not appearing
+            print(error.localizedDescription)
         }
+        
     }
 
     @IBAction func onCheck(_ sender: Any) {

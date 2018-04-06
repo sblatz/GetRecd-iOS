@@ -11,7 +11,6 @@ import FirebaseAuth
 
 class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var currentUser: User?
     var refresher: UIRefreshControl!
     
     @IBOutlet weak var recFeedTableView: UITableView!
@@ -55,9 +54,6 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Do any additional setup after loading the view.
         
         likeButton.isHidden = true
-        
-        getCurrentUser()
-        
         getSongs()
         getMovies()
         
@@ -71,15 +67,8 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         SongCell.currPlaying = -1
-        getCurrentUser()
     }
     
-    func getCurrentUser() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        DataService.instance.getUser(uid: uid) { (user) in
-            self.currentUser = user
-        }
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch  segmentedControl.selectedSegmentIndex {
@@ -237,19 +226,35 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func onAdd(_ sender: Any) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        
         switch segmentedControl.selectedSegmentIndex {
         case 0:
-            DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+            DataService.sharedInstance.likeSongs(uid: uid, appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+                // TODO: Show successful add
                 print("Yay")
             }) { (error) in
                 print(error.localizedDescription)
             }
         case 1:
-            DataService.instance.likeMovies(movies: likedMovies, success: {
-            })
+            DataService.sharedInstance.likeMovies(uid: uid, movies: likedMovies, success: {
+                // TODO: Show successful add
+                print("Yay")
+            }) { (error) in
+                // TODO: Show error on like movies
+                print(error.localizedDescription)
+            }
         case 2:
-            DataService.instance.likeShows(shows: likedTVShows, success: {
-            })
+            DataService.sharedInstance.likeShows(uid: uid, shows: likedTVShows, success: {
+                // TODO: Show successful add
+                print("Yay")
+            }) { (error) in
+                // TODO: Show error on like movies
+                print(error.localizedDescription)
+            }
         default:
             break
         }
@@ -261,7 +266,12 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
 
     @objc func getMovies() {
-        DataService.instance.getLikedMovies { (likedMovies) in
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        
+        DataService.sharedInstance.getLikedMovies(uid: uid, sucesss: { (likedMovies) in
             self.movies = []
             
             for cell in self.recFeedTableView.visibleCells {
@@ -302,15 +312,21 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.refresher.endRefreshing()
                 }
             }
+        }) { (error) in
+            // TODO: Show error
+            print(error.localizedDescription)
         }
     }
     
     @objc func getSongs() {
-        print("triggering")
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
         let songSearchGroup = DispatchGroup()
         var newSongs: [Song] = []
         songSearchGroup.enter()
-        MusicService.sharedInstance.getSpotifyRecommendations { (spotifySongs, error) in
+        MusicService.sharedInstance.getSpotifyRecommendations(uid: uid) { (spotifySongs, error) in
             if let error = error {
                 print(error.localizedDescription)
                 self.songs = []
@@ -347,33 +363,37 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func getShows() {
-        DataService.instance.getLikedShows { (likedShows) in
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        DataService.sharedInstance.getLikedShows(uid: uid, sucesss: { (likedShows) in
             self.shows = []
-
+            
             for cell in self.recFeedTableView.visibleCells {
                 cell.accessoryType = .none
                 self.likeButton.isHidden = true
             }
-
+            
             // add top 5 recommended shows if they have less than 5 saved movies, else add top 2 if less than 10, else top 1
             // Checks to make sure that reccomended shows aren't shown more than once and that user has not already liked them
-
+            
             for id in likedShows {
                 TVService.sharedInstance.getRecommendedTV(id: id, success: { (shows) in
                     for i in 0..<shows.count {
-
+                        
                         let showArrcontains = self.shows.contains(where: { (show) -> Bool in
                             return show.id == shows[i].id
                         })
-
+                        
                         let likedArrContains = likedShows.contains(where: { (id) -> Bool in
                             return Int(id) == shows[i].id
                         })
-
+                        
                         if !showArrcontains && !likedArrContains {
                             self.shows.append(shows[i])
                         }
-
+                        
                         if likedShows.count < 5, self.shows.count == 5 {
                             break
                         } else if likedShows.count < 10, self.shows.count == 2 {
@@ -388,6 +408,9 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.refresher.endRefreshing()
                 }
             }
+        }) { (error) in
+            // TODO: Show error
+            print(error.localizedDescription)
         }
     }
 }

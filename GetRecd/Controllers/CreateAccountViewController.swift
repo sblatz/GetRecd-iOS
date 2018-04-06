@@ -124,18 +124,16 @@ class CreateAccountViewController: AuthenticationViewController, UITextFieldDele
             errorLabel.text = "Please ensure passwords match."
             errorLabel.isHidden = false
         } else {
-            AuthService.instance.createAccountWithEmail(email: emailText, password: passwordText, responseHandler: { (creationResponse) in
-                if creationResponse.isEmpty {
-                    self.errorLabel.isHidden = true
-                    DataService.instance.createOrUpdateUser(uid: AuthService.instance.getUserUid(), userData: ["email": emailText, "name": nameText])
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "RecFeed", sender: self)
-                    }
-                } else {
-                    self.errorLabel.text = creationResponse
-                    self.errorLabel.isHidden = false
+            let userData = ["name": nameText, "email": emailText, "password": passwordText]
+            AuthService.sharedInstance.createAccountWithEmail(userInfo: userData, success: { (user) in
+                self.errorLabel.isHidden = true
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "RecFeed", sender: self)
                 }
-            })
+            }) { (error) in
+                self.errorLabel.text = error.localizedDescription
+                self.errorLabel.isHidden = false
+            }
         }
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SearchViewController: UITableViewController {
     
@@ -95,19 +96,35 @@ class SearchViewController: UITableViewController {
     }
     
     @IBAction func onAdd(_ sender: Any) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        
         switch selectedScope {
         case 0:
-            DataService.instance.likeSongs(appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+            DataService.sharedInstance.likeSongs(uid: uid, appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
+                // TODO: Show successful add
                 print("Yay")
             }) { (error) in
                 print(error.localizedDescription)
             }
         case 1:
-            DataService.instance.likeMovies(movies: likedMovies, success: {
-            })
+            DataService.sharedInstance.likeMovies(uid: uid, movies: likedMovies, success: {
+                // TODO: Show successful add
+                print("Yay")
+            }) { (error) in
+                // TODO: Show error on like movies
+                print(error.localizedDescription)
+            }
         case 2:
-            DataService.instance.likeShows(shows: likedTVShows, success: {
-            })
+            DataService.sharedInstance.likeShows(uid: uid, shows: likedTVShows, success: {
+                // TODO: Show successful add
+                print("Yay")
+            }) { (error) in
+                // TODO: Show error on like movies
+                print(error.localizedDescription)
+            }
         default:
             break
         }

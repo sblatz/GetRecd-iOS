@@ -15,7 +15,6 @@ class ProfileViewController: UITableViewController {
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var bioTextView: UITextView!
     
-    var currentUser: User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +24,18 @@ class ProfileViewController: UITableViewController {
         self.tableView.scrollIndicatorInsets = adjustForTabbarInsets
         
         self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
+        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        getCurrentUser()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getCurrentUser()
-        
         // Hide the navigation bar on the this view controller
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -43,13 +47,7 @@ class ProfileViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Settings", let settingsVC = segue.destination as? ProfileSettingsViewController {
-            settingsVC.currentUser = currentUser
-            settingsVC.profilePictureImage = profilePicture.image
-        }
-    }
+
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
@@ -75,20 +73,24 @@ class ProfileViewController: UITableViewController {
     
     func getCurrentUser() {
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        DataService.instance.getUser(uid: uid) { (user) in
-            self.currentUser = user
-            
-            print("GETTING USER ON PROFILE")
+        DataService.sharedInstance.getUser(uid: uid, success: { (user) in
             DispatchQueue.main.async {
-                self.nameLabel.text = self.currentUser.name
-                self.bioTextView.text = self.currentUser.bio.isEmpty ? "No Bio": self.currentUser?.bio
+                self.nameLabel.text = user.name
+                self.bioTextView.text = user.bio ?? "No Bio"
             }
             
-            DataService.instance.getProfilePicture(user: self.currentUser, handler: { (image) in
-                DispatchQueue.main.async {
+        }) { (error) in
+            // TODO: Show error in retrieivng user
+            print(error.localizedDescription)
+        }
+        
+        DataService.sharedInstance.getProfilePicture(uid: uid, success: { (exists, image) in
+            DispatchQueue.main.async {
                 self.profilePicture.image = image
-                }
-            })
+            }
+        }) { (error) in
+            // TODO: Show error in retrieivng user picture
+            print(error.localizedDescription)
         }
     }
 }

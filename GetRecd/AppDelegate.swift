@@ -19,10 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         FirebaseApp.configure()
         
+        AuthService.sharedInstance.setupGoogle()
+        
         MusicService.sharedInstance.setupSpotify()
         MusicService.sharedInstance.setupAppleMusic()
 
-
+    
        
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 

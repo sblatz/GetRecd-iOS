@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileMusicViewController: UITableViewController {
 
@@ -30,12 +31,18 @@ class ProfileMusicViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        DataService.instance.getLikedSongs { (songIds) in
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        DataService.sharedInstance.getLikedSongs(uid: uid, sucesss: { (songIds) in
             self.songIds = songIds
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
+        }) { (error) in
+            // TODO: Show error on get liked songs
+            print(error.localizedDescription)
         }
     }
     @IBAction func onCheck(_ sender: Any) {

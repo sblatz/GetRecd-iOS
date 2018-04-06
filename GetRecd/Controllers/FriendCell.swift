@@ -13,7 +13,28 @@ class FriendCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var profilePic: UIImageView!
     
-    var user: User!
+    var user: String! {
+        didSet {
+            
+            DataService.sharedInstance.getUser(uid: user, success: { (user) in
+                DispatchQueue.main.async {
+                    self.nameLabel.text = user.name
+                }
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+            
+            DataService.sharedInstance.getProfilePicture(uid: user, success: { (exists, image) in
+                if exists {
+                    DispatchQueue.main.async {
+                        self.profilePic.image = image
+                    }
+                }
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,23 +45,6 @@ class FriendCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-    
-    func configureCell(user: User) {
-        
-        self.user = user
-        
-        DataService.instance.getUser(uid: user.userID) { (user) in
-            DispatchQueue.main.async {
-                self.nameLabel.text = user.name
-            }
-        }
-        
-        DataService.instance.getProfilePicture(user: user) { (image) in
-            DispatchQueue.main.async {
-                self.profilePic.image = image
-            }
-        }
     }
 
 }

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseStorage
+import FirebaseAuth
 
 class ProfileSettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
 
@@ -38,16 +38,18 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
         if MusicService.sharedInstance.isAppleMusicLoggedIn() {
             appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
         }
+        
+        getCurrentUser()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        DispatchQueue.main.async {
-            self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
-            self.profilePicture.image = self.profilePictureImage
-            self.bioTextView.text = self.currentUser.bio
-        }
+//        
+//        DispatchQueue.main.async {
+//            self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
+//            self.profilePicture.image = self.profilePictureImage
+//            self.bioTextView.text = self.currentUser.bio
+//        }
 
         
     }
@@ -98,27 +100,51 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     
     
     func deleteAccount() {
-        AuthService.instance.deleteAccount { (success) -> (Void) in
-            if success {
-                print("SUCCESS DELETE ACCOUNT")
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "SignIn", sender: self)
-                }
-            } else {
-                print("DELETE ACCOUNT FAILED")
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Tell user account not signed in
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "SignIn", sender: self)
             }
+            return
+        }
+        DataService.sharedInstance.deleteUser(uid: uid, success: {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "SignIn", sender: self)
+            }
+        }) { (error) in
+            // TODO: Show error deleting user
+            print(error.localizedDescription)
         }
     }
     
     func saveUserInfo() {
-        var userData = currentUser.userDict
-        userData["bio"] = bioTextView.text
-        
-        if profilePictureURL != nil {
-            userData["profilePictureURL"] = profilePictureURL
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Tell user account not signed in
+            return
         }
         
-        DataService.instance.createOrUpdateUser(uid: currentUser.userID, userData: userData)
+        var newUserData = [String: Any]()
+        
+        if let bio = bioTextView.text {
+            newUserData["bio"] = bioTextView.text
+        }
+        
+        DataService.sharedInstance.updateUser(uid: uid, userData: newUserData, success: { (user) in
+            // TODO: Notify user that ccount is updated
+            print("Updated")
+        }) { (error) in
+            
+            // TODO: Show error in updating user
+            print(error.localizedDescription)
+        }
+        
+        if let image = profilePicture.image {
+            DataService.sharedInstance.setProfilePicture(uid: uid, image: image, success: { (url) in
+                print(url)
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+        }
         
     }
     
@@ -220,31 +246,6 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             self.profilePicture.image = selectedImage
         }
         
-        profilePictureImage = selectedImage
-        guard let profileImage = profilePictureImage, let imageData = UIImageJPEGRepresentation(profileImage, 0.2) else {
-            return
-        }
-        
-        let imageUID = NSUUID().uuidString
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpeg"
-        
-        DataService.instance.REF_PROFILE_PICS.child(imageUID).putData(imageData, metadata: metaData) { (metaData, error) in
-            
-            if error != nil {
-                print("IMAGE UPLOAD ERROR: Image wasn't uploaded to Firebase")
-            } else {
-                print("IMAGE UPLOAD SUCCESS: Image was uploaded to Firebase")
-                guard let imageURL = metaData?.downloadURL()?.absoluteString else {
-                    return
-                }
-                
-                self.profilePictureURL = imageURL
-                print("IMAGE URL: \(String(describing: self.profilePictureURL))")
-                
-            }
-        }
-        
         DispatchQueue.main.async {
             self.imagePicker.dismiss(animated: true, completion: nil)
         }
@@ -268,5 +269,30 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    func getCurrentUser() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        DataService.sharedInstance.getUser(uid: uid, success: { (user) in
+            DispatchQueue.main.async {
+                self.bioTextView.text = user.bio ?? "No Bio"
+            }
+            
+        }) { (error) in
+            // TODO: Show error in retrieivng user
+            print(error.localizedDescription)
+        }
+        
+        DataService.sharedInstance.getProfilePicture(uid: uid, success: { (exists, image) in
+            DispatchQueue.main.async {
+                self.profilePicture.image = image
+            }
+        }) { (error) in
+            // TODO: Show error in retrieivng user picture
+            print(error.localizedDescription)
+        }
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ProfileMovieViewController: UITableViewController {
 
@@ -18,13 +19,19 @@ class ProfileMovieViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        DataService.instance.getLikedMovies(sucesss: { (movieIds) in
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        DataService.sharedInstance.getLikedMovies(uid: uid, sucesss: { (movieIds) in
             self.movieIds = movieIds
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-        })
+        }) { (error) in
+            // TODO: Show error
+            print(error.localizedDescription)
+        }
     }
     @IBAction func onCheck(_ sender: Any) {
         dismiss(animated: true, completion: nil)

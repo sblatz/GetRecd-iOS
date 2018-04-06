@@ -1,6 +1,0 @@
-framework module Pods_GetRecd_GetRecdTests {
-  umbrella header "Pods-GetRecd-GetRecdTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

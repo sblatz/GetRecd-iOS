@@ -120,11 +120,12 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
+        print(id)
         SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
             if let error = error {
                 print(error.localizedDescription)
             } else if let data = data {
-                let track = data as! SPTTrack
+                let track = data as! SPTPartialTrack
                 let song = try! Song(spotifyData: track)
                 
                 completion(song)
@@ -181,11 +182,16 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func createSpotifyPlaylist(success: @escaping ()->(), failure: @escaping (Error)->()) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            // TODO: Show error in getting current user's uid
+            return
+        }
+        
         SPTPlaylistList.createPlaylist(withName: "GetRec'd", forUser: spotifyAuth.session.canonicalUsername, publicFlag: false, accessToken: spotifyAuth.session.accessToken) { (error, playlistSnapshot) in
             if let error = error {
                 failure(error)
             } else if let playlistSnapshot = playlistSnapshot {
-                DataService.instance.setUserSpotifyPlaylist(uid: Auth.auth().currentUser!.uid, uri: playlistSnapshot.uri.absoluteString, success: {
+                DataService.sharedInstance.setUserSpotifyPlaylist(uid: uid, uri: playlistSnapshot.uri.absoluteString, success: {
                     success()
                 }, failure: { (error) in
                     failure(error)
@@ -213,7 +219,12 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         
         
         trackgroup.notify(queue: DispatchQueue .global()) {
-            DataService.instance.getUserSpotifyPlaylist(uid: Auth.auth().currentUser!.uid, success: { (uri) in
+            guard let uid = Auth.auth().currentUser?.uid else {
+                // TODO: Show error in getting current user's uid
+                return
+            }
+            
+            DataService.sharedInstance.getUserSpotifyPlaylist(uid: uid, success: { (uri) in
                 let request = try? SPTPlaylistSnapshot.createRequest(forAddingTracks: tracks, toPlaylist: URL(string: uri)!, withAccessToken: self.spotifyAuth.session.accessToken)
                 let session = URLSession(configuration: .default)
                 let task = session.dataTask(with: request!, completionHandler: { (data, response, error) in
@@ -247,12 +258,12 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
        
     }
     
-    func getSpotifyRecommendations(completion: @escaping CatalogSearchCompletionHandler) {
+    func getSpotifyRecommendations(uid: String, completion: @escaping CatalogSearchCompletionHandler) {
         if self.spotifyAuth.session == nil {
             completion([], nil)
             return
         }
-        DataService.instance.getLikedSpotifySongs { (songs) in
+        DataService.sharedInstance.getLikedSpotifySongs(uid: uid, sucesss: { (songs) in
             var recommendURLComponents = URLComponents(string: "https://api.spotify.com/v1/recommendations")
             var tracksString = ""
             if songs.count == 0 {}
@@ -308,6 +319,8 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
             })
             
             task.resume()
+        }) { (error) in
+            completion([], error)
         }
     }
     

@@ -8,27 +8,23 @@
 
 import Foundation
 import UIKit
-import FirebaseDatabase
-import FirebaseStorage
-import FirebaseAuth
+import Firebase
 
 class DataService {
     /** The `DataService` singleton. */
-    static let instance = DataService()
+    static let sharedInstance = DataService()
 
     // Firebase Database references.
-    private var _REF_USERS = Database.database().reference().child("Users")
-    private var _REF_USERS_LIKES = Database.database().reference().child("UsersLikes")
-    private var _REF_USERS_FRIENDS = Database.database().reference().child("UsersFriends")
-    private var _REF_USERS_PENDING_FRIENDS = Database.database().reference().child("UsersPendingFriends")
-    private var _REF_USERS_SPOTIFY_PLAYLISTS = Database.database().reference().child("UsersSpotifyPlaylists")
-
-    // Firebase Storage references.
-    private var _REF_PROFILE_PICS = Storage.storage().reference().child("profile-pics")
-    
-    var REF_PROFILE_PICS: StorageReference {
-        return _REF_PROFILE_PICS
-    }
+    private var db = Firestore.firestore()
+    private var userCollection = Firestore.firestore().collection("Users")
+    private var userSpotifyLikesCollection = Firestore.firestore().collection("UsersSpotifyLikes")
+    private var userAppleMusicLikesCollection = Firestore.firestore().collection("UsersAppleMusicLikes")
+    private var userMovieLikesCollection = Firestore.firestore().collection("UsersMovieLikes")
+    private var userShowLikesCollection = Firestore.firestore().collection("UsersShowLikes")
+    private var userFriendsCollection = Firestore.firestore().collection("UsersFriends")
+    private var pendingFriendsCollection = Firestore.firestore().collection("UsersPendingFriends")
+    private var spotifyPlaylistsCollection = Firestore.firestore().collection("UsersSpotifyPlaylists")
+    private var profilePictureRef = Storage.storage().reference().child("userPictures")
 
     /**
      * Updates a user's entry in the Firebase database, creating one if absent.
@@ -36,28 +32,54 @@ class DataService {
      * - parameter uid: The user's unique ID.
      * - parameter userData: A dictionary of user data.
      */
-    func createOrUpdateUser(uid: String, userData: [String:Any]) {
-        _REF_USERS.child(uid).updateChildValues(userData)
+    func createUser(uid: String, userData: [String: Any], success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
+        userCollection.document(uid).setData(userData) { (error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success(User(userDict: userData))
+            }
+        }
     }
     
+    func updateUser(uid: String, userData: [String: Any], success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
+        userCollection.document(uid).updateData(userData) { (error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success(User(userDict: userData))
+            }
+        }
+    }
     /**
      * Retrieves a user entry matching the given user ID.
      *
      * - parameter uid: The (unique) user ID.
      * - parameter handler: The handler that will be invoked upon a successful `User` retrieval.
      */
-    func getUser(uid: String,  handler: @escaping (_ user: User) -> ()) {
-        _REF_USERS.child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let userDict = snapshot.value as? [String:Any] else {
-                print("Failed retrieving a user.")
-                return
+    func getUser(uid: String, success: @escaping (User) -> (), failure: @escaping (Error) -> ()) {
+        userCollection.document(uid).getDocument { (document, error) in
+            if let error = error {
+                failure(error)
+            } else if let userDoc = document {
+                // TODO Check to make sure userinfo exists
+                if let userInfo = userDoc.data() {
+                    
+                    success(User(userDict: userInfo))
+                }
             }
-            
-            handler(User(userDict: userDict, userID: snapshot.key))
-            return
-        }) { (error) in
-            print("Failure retrieving a user: \(error.localizedDescription)")
-            return
+        }
+    }
+    
+    // Get user's profile photos
+    func setProfilePicture(uid: String, image: UIImage, success: @escaping (String) -> (), failure: @escaping (Error) -> ()) {
+        let imageData = UIImageJPEGRepresentation(image, 0.2)!
+        profilePictureRef.child(uid).putData(imageData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                failure(error)
+            } else if let metadata = metadata {
+                success(metadata.downloadURL()!.absoluteString)
+            }
         }
     }
     
@@ -67,35 +89,31 @@ class DataService {
      * - parameter user: The user whose photo is to be retrieved.
      * - parameter handler: The handler that will be invoked upon a successful `UIImage` retrieval.
      */
-    func getProfilePicture(user: User, handler: @escaping (_ image: UIImage) -> ()) {
-        guard let url = URL(string: user.profilePictureURL) else {
-            return
-        }
-        
-        let session = URLSession(configuration: .default)
-        let getImageFromUrl = session.dataTask(with: url) { (data, response, error) in
-            if error != nil {
-                print("Error downloading image: \(String(describing: error))")
-            } else {
-                guard let _ = response as? HTTPURLResponse else {
-                    print("No response from server.")
-                    return
+    func getProfilePicture(uid: String, success: @escaping (Bool, UIImage?) -> (), failure: @escaping (Error) -> ()) {
+        profilePictureRef.child(uid).downloadURL { (url, error) in
+            if let error = error {
+                failure(error)
+            } else if let imageUrl = url {
+                let session = URLSession(configuration: .default)
+                let getImageFromUrl = session.dataTask(with: imageUrl) { (data, response, error) in
+                    if let error = error {
+                        failure(error)
+                    } else if let imageData = data {
+                        guard let image = UIImage(data: imageData) else {
+                            // TODO: Send back error if data is not picture
+                            return
+                        }
+                        
+                        success(true, image)
+                    } else {
+                        // TODO: Send back error if no picture
+                    }
                 }
                 
-                if let imageData = data {
-                    guard let image = UIImage(data: imageData) else {
-                        return
-                    }
-                    
-                    handler(image)
-                    return
-                } else {
-                    print("The image file is corrupted.")
-                }
+                getImageFromUrl.resume()
             }
         }
         
-        getImageFromUrl.resume()
     }
     
     /**
@@ -103,26 +121,78 @@ class DataService {
      *
      * - parameter uid: The (unique) user ID.
      */
-    func deleteUser(uid: String) {
-        print("Deleting user with UID: \(uid)")
-        _REF_USERS.child(uid).removeValue()
+    func deleteUser(uid: String, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        if Auth.auth().currentUser == nil {
+            // TODO: Send back error that no user is logged in
+            return
+        }
+        
+        userCollection.document(uid).delete { (error) in
+            if let error = error {
+                failure(error)
+            } else {
+                Auth.auth().currentUser?.delete(completion: { (error) in
+                    if let error = error {
+                        failure(error)
+                    } else {
+                        success()
+                    }
+                })
+            }
+        }
     }
     
+    // Return users with names starting with name not including self
+    func searchForUsers(uid: String, name: String, success: @escaping ([String]) -> (), failure: @escaping (Error) -> ()) {
+        userFriendsCollection.document(uid).getDocument { (documentSnapshot, error) in
+            if let error = error {
+                failure(error)
+            } else  {
+                let userFriends = documentSnapshot?.data() ?? [String: Any]()
+                
+                self.userCollection.whereField("name", isGreaterThanOrEqualTo: name).getDocuments { (documentSnapshot, error) in
+                    if let error = error {
+                        failure(error)
+                    } else if let documentSnapshot = documentSnapshot {
+                        var users = [String]()
+                        let userDocs = documentSnapshot.documents
+                        for userDoc in userDocs {
+                            let newUser = User(userDict: userDoc.data())
+                            if newUser.userID != uid && userFriends[newUser.userID] == nil{
+                                users.append(newUser.userID)
+                            }
+                        }
+                        
+                        success(users)
+                    } else {
+                        success([])
+                    }
+                }
+            }
+        }
+    }
     /**
+     
      * Returns an array of all `User` objects. The users are
      * supplied to the callback handler.
      *
      *
      * - parameter handler: The callback handler that will be invoked with all the user IDs.
      */
-    func getAllUsers(handler: @escaping (_ matchingUsers: [String]) -> ()) {
-        _REF_USERS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
-            var matchingUsers = [String]()
-            if let userEntries = snapshot.value as? Dictionary<String, AnyObject> {
-                for uid in userEntries.keys {
-                    matchingUsers.append(uid)
+    func getAllUsers(success: @escaping ([User]) -> (), failure: @escaping (Error) -> ()) {
+        userCollection.getDocuments(completion: { (documentSnapshot, error) in
+            if let error = error {
+                failure(error)
+            } else if let documentSnapshot = documentSnapshot {
+                var users = [User]()
+                let userDocs = documentSnapshot.documents
+                for userDoc in userDocs {
+                    users.append(User(userDict: userDoc.data()))
                 }
-                handler(matchingUsers)
+                
+                success(users)
+            } else {
+                success([])
             }
         })
     }
@@ -133,24 +203,13 @@ class DataService {
      *
      * - parameter friendUid: The user ID of the friend the current user requested to add.
      */
-    func requestFriend(friendUid: String) {
-        if let currentUid = Auth.auth().currentUser?.uid {
-            if currentUid == "" || friendUid == "" {
-                return
-            } else if friendUid == currentUid {
-                print("Attempting to friend request oneself.")
-                return
+    func requestFriend(uid: String, friendUid: String, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        pendingFriendsCollection.document(friendUid).setData([uid: true]) { (error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
             }
-            _REF_USERS_PENDING_FRIENDS.child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                var pendingUids = [String]()
-                if snapshot.exists() {
-                    if let friendUids = snapshot.value as? [String] {
-                        pendingUids += friendUids
-                    }
-                }
-                pendingUids.append(friendUid)
-                self._REF_USERS_PENDING_FRIENDS.child(currentUid).setValue(pendingUids)
-            })
         }
     }
     
@@ -160,26 +219,19 @@ class DataService {
      *
      * - parameter handler: The callback handler that will be invoked with the incoming friend IDs.
      */
-    func getIncomingFriendRequests(handler: @escaping (_ incomingFriends: [String]) -> ()) {
-        if let currentUid = Auth.auth().currentUser?.uid {
-            if currentUid == "" {
-                return
-            }
-            _REF_USERS_PENDING_FRIENDS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
-                if let requestEntries = snapshot.value as? Dictionary<String, AnyObject> {
-                    for (uid, friendUids) in requestEntries {
-                        if let friendUidsArray = friendUids as? [String] {
-                            var incomingFriends = [String]()
-                            for friendUid in friendUidsArray {
-                                if currentUid == friendUid {
-                                    incomingFriends.append(uid)
-                                }
-                            }
-                            handler(incomingFriends)
-                        }
-                    }
+    func getIncomingFriendRequests(uid: String, success: @escaping ([String]) -> (), failure: @escaping (Error) -> ()) {
+        pendingFriendsCollection.document(uid).getDocument  { (documentSnapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                var friendRequestIds = [String]()
+                let friendRequests = documentSnapshot?.data() ?? [String: Any]()
+                for (uid, _) in friendRequests {
+                    friendRequestIds.append(uid)
                 }
-            })
+                
+                success(friendRequestIds)
+            }
         }
     }
     
@@ -189,20 +241,20 @@ class DataService {
      *
      * - parameter handler: The callback handler that will be invoked with the outgoing friend IDs.
      */
-    func getOutgoingFriendRequests(handler: @escaping (_ outgoingFriends: [String]) -> ()) {
-        if let currentUid = Auth.auth().currentUser?.uid {
-            if currentUid == "" {
-                return
-            }
-            _REF_USERS_PENDING_FRIENDS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
-                if let requestEntries = snapshot.value as? Dictionary<String, AnyObject> {
-                    if let friendUids = requestEntries[currentUid] as? [String] {
-                        handler(friendUids)
-                    }
-                }
-            })
-        }
-    }
+//    func getOutgoingFriendRequests(handler: @escaping (_ outgoingFriends: [String]) -> ()) {
+//        if let currentUid = Auth.auth().currentUser?.uid {
+//            if currentUid == "" {
+//                return
+//            }
+//            _REF_USERS_PENDING_FRIENDS.queryOrderedByKey().observeSingleEvent(of: .value, with: { (snapshot) in
+//                if let requestEntries = snapshot.value as? Dictionary<String, AnyObject> {
+//                    if let friendUids = requestEntries[currentUid] as? [String] {
+//                        handler(friendUids)
+//                    }
+//                }
+//            })
+//        }
+//    }
     
     /**
      * Returns an array of `User` objects that the current user is friends with. The users are
@@ -210,16 +262,19 @@ class DataService {
      *
      * - parameter handler: The callback handler that will be invoked with the user's friends.
      */
-    func getFriends(handler: @escaping (_ friends: [String]) -> ()) {
-        if let currentUid = Auth.auth().currentUser?.uid {
-            if currentUid == "" {
-                return
-            }
-            _REF_USERS_FRIENDS.child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                if let friendUids = snapshot.value as? [String] {
-                    handler(friendUids)
+    func getFriends(uid: String, success: @escaping ([String]) -> (), failure: @escaping (Error) -> ()) {
+        userFriendsCollection.document(uid).getDocument { (documentSnapshot, error) in
+            if let error = error {
+                failure(error)
+            } else  {
+                var friends = [String]()
+                let friendList = documentSnapshot?.data() ?? [String: Any]()
+                for (uid, _) in friendList {
+                    friends.append(uid)
                 }
-            })
+                
+                success(friends)
+            }
         }
     }
     
@@ -231,38 +286,41 @@ class DataService {
      * - parameter requesterUid: The user ID of the person that requested to be friends.
      * - parameter accept: If the friend request was accepted.
      */
-    func respondFriendRequest(requesterUid: String, accept: Bool) {
-        if let currentUid = Auth.auth().currentUser?.uid {
-            if currentUid == "" {
-                return
+    func respondFriendRequest(uid: String, friendUid: String, accept: Bool, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let userFriendsDoc = userFriendsCollection.document(uid)
+        let friendFriendDoc = userFriendsCollection.document(friendUid)
+        let userPendingFriendsDoc = pendingFriendsCollection.document(uid)
+        
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            var userPendingFriendsSnapshot: DocumentSnapshot
+            do {
+                userPendingFriendsSnapshot = try transaction.getDocument(userPendingFriendsDoc)
+            } catch let fetchError as NSError {
+                errorPointer?.pointee = fetchError
+                return nil
             }
-            _REF_USERS_PENDING_FRIENDS.child(requesterUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                if let pendingUids = snapshot.value as? [String] {
-                    if let currentUserIndex = pendingUids.index(of: currentUid) {
-                        var removedUids = [String]()
-                        removedUids += pendingUids
-                        removedUids.remove(at: currentUserIndex)
-                        self._REF_USERS_PENDING_FRIENDS.child(requesterUid).setValue(removedUids)
-                    }
-                }
-            })
+            
             if accept {
-                _REF_USERS_FRIENDS.child(currentUid).observeSingleEvent(of: .value, with: { (snapshot) in
-                    var appendedUids = [String]()
-                    if snapshot.exists() {
-                        if let friendUids = snapshot.value as? [String] {
-                            appendedUids += friendUids
-                        }
-                    }
-                    appendedUids.append(requesterUid)
-                    self._REF_USERS_FRIENDS.child(currentUid).setValue(appendedUids)
-                })
+                transaction.setData([friendUid: true], forDocument: userFriendsDoc)
+                transaction.setData([uid: true], forDocument: friendFriendDoc)
+            }
+            var pendingFriends = userPendingFriendsSnapshot.data() ?? [String: Any]()
+            pendingFriends[friendUid] = nil
+            
+            transaction.setData(pendingFriends, forDocument: userPendingFriendsDoc)
+            
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
             }
         }
     }
 
     func setUserSpotifyPlaylist(uid: String, uri: String, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
-        _REF_USERS_SPOTIFY_PLAYLISTS.child(uid).child("uri").setValue(uri) { (error, ref) in
+        spotifyPlaylistsCollection.document(uid).setData(["uri": uri]) { (error) in
             if let error = error {
                 failure(error)
             } else {
@@ -272,150 +330,249 @@ class DataService {
     }
     
     func getUserSpotifyPlaylist(uid: String, success: @escaping (String) -> (), failure: @escaping (Error)->()) {
-        _REF_USERS_SPOTIFY_PLAYLISTS.child(uid).child("uri").observe(.value) { (snapshot) in
-            let uri = snapshot.value as! String
-            success(uri)
-        }
-    }
-    
-    func likeSongs(appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
-        let currUserAppleMusicLikesRef = currUserLikesRef.child("AppleMusic")
-        let currUserSpotifyLikesRef = currUserLikesRef.child("Spotify")
-        
-        let songGroup = DispatchGroup()
-        
-        for song in appleMusicSongs {
-            songGroup.enter()
-            currUserAppleMusicLikesRef.child(song).setValue(true) { (error, reference) in
-                if let error = error {
-                    failure(error)
-                } else {
-                    songGroup.leave()
-                }
-            }
-        }
-        
-        for song in spotifySongs {
-            songGroup.enter()
-            currUserSpotifyLikesRef.child(song).setValue(true) { (error, reference) in
-                if let error = error {
-                    failure(error)
-                } else {
-                    songGroup.leave()
-                }
-            }
-        }
-        
-        songGroup.notify(queue: DispatchQueue .global()) {
-            MusicService.sharedInstance.addToSpotifyPlaylist(songs: spotifySongs, success: {
-                success()
-            }, failure: { (error) in
+        spotifyPlaylistsCollection.document(uid).getDocument { (snapshot, error) in
+            if let error = error {
                 failure(error)
-            })
+            } else {
+                let uri = snapshot!.data()!["uri"] as! String
+                success(uri)
+            }
         }
     }
     
-    func getLikedSongs(sucesss: @escaping ([(String, Song.SongType)]) -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
+    func likeSongs(uid: String, appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let userSpotifyLikes = userSpotifyLikesCollection.document(uid)
+        let userAppleMusicLikes = userAppleMusicLikesCollection.document(uid)
         
-        currUserLikesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let data = snapshot.value as? [String: Any] else {
-                return
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            var userSpotifyLikesSnapshot: DocumentSnapshot?
+            var userAppleMusicLikesSnapshot: DocumentSnapshot?
+            
+            do {
+                if spotifySongs.count > 0 {
+                    userSpotifyLikesSnapshot = try transaction.getDocument(userSpotifyLikes)
+                }
+                
+                if appleMusicSongs.count > 0 {
+                    userAppleMusicLikesSnapshot = try transaction.getDocument(userAppleMusicLikes)
+                }
+            } catch let fetchError as NSError {
+                var userSLikes = [String: Bool]()
+                var userAPLikes = [String: Bool]()
+                for song in spotifySongs {
+                    userSLikes[song] = true
+                }
+                
+                transaction.setData(userSLikes, forDocument: userSpotifyLikes)
+                
+                for song in appleMusicSongs {
+                    userAPLikes[song] = true
+                }
+                
+                
+                transaction.setData(userAPLikes, forDocument: userAppleMusicLikes)
+                return nil
             }
             
-            var result = [(String, Song.SongType)]()
-            if let appleMusicList = data["AppleMusic"] as? [String: Bool] {
-                for (key, _) in appleMusicList {
+            if var userLikes = userSpotifyLikesSnapshot?.data() {
+                for song in spotifySongs {
+                    userLikes[song] = true
+                }
+                
+                transaction.setData(userLikes, forDocument: userSpotifyLikes)
+            }
+            
+            if var userLikes = userAppleMusicLikesSnapshot?.data() {
+                for song in appleMusicSongs {
+                    userLikes[song] = true
+                }
+                
+                transaction.setData(userLikes, forDocument: userAppleMusicLikes)
+            }
+            
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
+            }
+        }
+        
+    }
+    
+    func getLikedSongs(uid: String, sucesss: @escaping ([(String, Song.SongType)]) -> (), failure: @escaping (Error) -> ()) {
+        let userSpotifyLikes = userSpotifyLikesCollection.document(uid)
+        let userAppleMusicLikes = userAppleMusicLikesCollection.document(uid)
+        
+        let likeGroup = DispatchGroup()
+        
+        likeGroup.enter()
+        var result = [(String, Song.SongType)]()
+        userAppleMusicLikes.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                let appleMusicLikes = snapshot?.data() ?? [String: Any]()
+                
+                for (key, _) in appleMusicLikes {
                     result.append((key, Song.SongType.AppleMusic))
                 }
+                likeGroup.leave()
             }
-            
-            if let spotifyMusicList = data["Spotify"] as? [String: Bool] {
-                for (key, _) in spotifyMusicList {
+        }
+        
+        
+        likeGroup.enter()
+        userSpotifyLikes.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                let spotifyLikes = snapshot?.data() ?? [String: Any]()
+                
+                for (key, _) in spotifyLikes {
                     result.append((key, Song.SongType.Spotify))
                 }
+                likeGroup.leave()
             }
-            
-            sucesss(result)
-        })
-    }
-
-    func getLikedSpotifySongs(sucesss: @escaping ([String]) -> ()) {
-        let currUserSpotfyLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid).child("Spotify")
+        }
         
-        currUserSpotfyLikesRef.observeSingleEvent(of: .value) { (snapshot) in
-            guard let data = snapshot.value as? [String: Any] else {
-                return
-            }
-            
-            var result: [String] = []
-            
-            for (key, _) in data {
-                result.append(key)
-            }
-            
+        likeGroup.notify(queue: .global()) {
             sucesss(result)
+        }
+    }
+
+    func getLikedSpotifySongs(uid: String, sucesss: @escaping ([String]) -> (), failure: @escaping (Error) -> ()) {
+        let userSpotifyLikes = userSpotifyLikesCollection.document(uid)
+        
+        userSpotifyLikes.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                let spotifyLikes = snapshot?.data() ?? [String: Any]()
+                
+                var result: [String] = []
+                
+                for (key, _) in spotifyLikes {
+                    result.append(key)
+                }
+                
+                sucesss(result)
+            }
         }
     }
     
-    func likeMovies(movies: Set<Int>, success: @escaping () -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
-        let currentUserMovieLikesRef = currUserLikesRef.child("Movies")
-
-        for movie in movies {
-            currentUserMovieLikesRef.child("\(movie)").setValue(true)
+    func likeMovies(uid: String, movies: Set<Int>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let userMovieLikes = userMovieLikesCollection.document(uid)
+        
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            var userMovieLikesSnapshot: DocumentSnapshot?
+            
+            do {
+                userMovieLikesSnapshot = try transaction.getDocument(userMovieLikes)
+            } catch let fetchError as NSError {
+                var userLikes = [String: Bool]()
+                
+                for movie in movies {
+                    userLikes["\(movie)"] = true
+                }
+                
+                transaction.setData(userLikes, forDocument: userMovieLikes)
+            
+                return nil
+            }
+            
+            var movieLikes = userMovieLikesSnapshot?.data() ?? [String: Any]()
+            for movie in movies {
+                movieLikes["\(movie)"] = true
+            }
+            
+            transaction.setData(movieLikes, forDocument: userMovieLikes)
+            
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
+            }
         }
-
-        success()
     }
     
-    func getLikedMovies(sucesss: @escaping ([(String)]) -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
-        currUserLikesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let data = snapshot.value as? [String: Any] else {
-                return
-            }
-
-            var result = [(String)]()
-
-            if let movies = data["Movies"] as? [String: Bool] {
-                for (key, _) in movies {
-                    result.append((key))
+    func getLikedMovies(uid: String, sucesss: @escaping ([(String)]) -> (), failure: @escaping (Error) -> ()) {
+        let userMovieLikes = userMovieLikesCollection.document(uid)
+        
+        userMovieLikes.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                let movieLikes = snapshot?.data() ?? [String: Any]()
+                
+                var result: [String] = []
+                
+                for (key, _) in movieLikes {
+                    result.append(key)
                 }
+                
+                sucesss(result)
             }
-
-            sucesss(result)
-        })
-    }
-
-    func likeShows(shows: Set<Int>, success: @escaping () -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
-        let currentUserShowLikes = currUserLikesRef.child("Shows")
-
-        for show in shows {
-            currentUserShowLikes.child("\(show)").setValue(true)
         }
-
-        success()
     }
 
-    func getLikedShows(sucesss: @escaping ([(String)]) -> ()) {
-        let currUserLikesRef = _REF_USERS_LIKES.child(Auth.auth().currentUser!.uid)
-        currUserLikesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let data = snapshot.value as? [String: Any] else {
-                return
-            }
-
-            var result = [(String)]()
-
-            if let shows = data["Shows"] as? [String: Bool] {
-                for (key, _) in shows {
-                    result.append((key))
+    func likeShows(uid: String, shows: Set<Int>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
+        let userShowLikes = userShowLikesCollection.document(uid)
+        
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            var userShowLikesSnapshot: DocumentSnapshot?
+            
+            do {
+                userShowLikesSnapshot = try transaction.getDocument(userShowLikes)
+            } catch let fetchError as NSError {
+                var userLikes = [String: Bool]()
+                
+                for show in shows {
+                    userLikes["\(show)"] = true
                 }
+                
+                transaction.setData(userLikes, forDocument: userShowLikes)
+                
+                return nil
             }
+            
+            var showLikes = userShowLikesSnapshot?.data() ?? [String: Any]()
+            for show in shows {
+                showLikes["\(show)"] = true
+            }
+            
+            transaction.setData(showLikes, forDocument: userShowLikes)
+            
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
+            }
+        }
+    }
 
-            sucesss(result)
-        })
+    func getLikedShows(uid: String, sucesss: @escaping ([(String)]) -> (), failure: @escaping (Error) -> ()) {
+        let userShowLikes = userShowLikesCollection.document(uid)
+        
+        userShowLikes.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                let showLikes = snapshot?.data() ?? [String: Any]()
+                
+                var result: [String] = []
+                
+                for (key, _) in showLikes {
+                    result.append(key)
+                }
+                
+                sucesss(result)
+            }
+        }
     }
 }
