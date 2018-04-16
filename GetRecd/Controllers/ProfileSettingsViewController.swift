@@ -140,6 +140,45 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
 
 
         switch indexPath.section {
+            case 1:
+                switch indexPath.row {
+                    // Movies Privacy
+                    case 0:
+                        let alertController = UIAlertController(title: "Movie Privacy", message:"Who should be able to see movies you like as well as movies recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                        alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+
+                        alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+
+                    // TV Show Privacy
+                    case 1:
+                        let alertController = UIAlertController(title: "Show Privacy", message:"Who should be able to see tv shows you like as well as shows recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                        alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+
+                        alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+                    // Music Privacy
+                    case 2:
+                        let alertController = UIAlertController(title: "Music Privacy", message:"Who should be able to see music you like as well as music recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                        alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+
+                        alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                            // Call backend function to update privacy preferences
+                        }))
+                    default:
+                        break
+                }
             // Music Authorization
             case 2:
                 switch indexPath.row {
