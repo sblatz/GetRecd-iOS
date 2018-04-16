@@ -21,6 +21,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var searchController = UISearchController(searchResultsController: nil)
     var timerToQuery: Timer?
     var searchString = ""
+    var selectedUser = ""
     
     /// A `DispatchQueue` used for synchornizing the setting of `friends` to avoid threading issues with various `UITableView` delegate callbacks.
     var setterQueue = DispatchQueue(label: "SearchViewController")
@@ -131,9 +132,23 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         return cell
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc =  segue.destination as? FriendsLikesViewController {
+            vc.user = selectedUser
+        }
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch segmentedControl.selectedSegmentIndex {
+        // Friends list showing
+        case 0:
+            if let cell = tableView.cellForRow(at: indexPath) as? FriendCell {
+                // Segue to a view controller that shows that user's profile:
+
+                selectedUser = cell.user
+                self.performSegue(withIdentifier: "toFriend", sender: nil)
+            }
         case 1:
             if let cell = tableView.cellForRow(at: indexPath) as? FriendCell {
                 
