@@ -15,13 +15,70 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var user = ""
 
+    var songIds = [(String, Song.SongType)](){
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    var movieIds = [(String)](){
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    var showIds = [(String)]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        
+
         DataService.sharedInstance.getUser(uid: user, success: { (user) in
-            self.navigationController?.title = user.name + " Likes"
+            self.navigationItem.title = user.name + "'s Likes"
+
+            if !user.privateMovies {
+                DataService.sharedInstance.getLikedMovies(uid: self.user, sucesss: { (movieIds) in
+                    self.movieIds = movieIds
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }) { (error) in
+                    // TODO: Show error
+                    print(error.localizedDescription)
+                }
+            }
+
+            if !user.privateMusic {
+                DataService.sharedInstance.getLikedSongs(uid: self.user, sucesss: { (songIds) in
+                    self.songIds = songIds
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }) { (error) in
+                    // TODO: Show error on get liked songs
+                    print(error.localizedDescription)
+                }
+            }
+
+            if !user.privateShows {
+                DataService.sharedInstance.getLikedShows(uid: self.user, sucesss: { (showIds) in
+                    self.showIds = showIds
+                }) { (error) in
+                    // TODO: Show error that liked shows not appearing
+                    print(error.localizedDescription)
+                }
+            }
         }) { (error) in
             print(error)
         }
@@ -47,21 +104,34 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                return songIds.count
+            case 1:
+                return movieIds.count
+            case 2:
+                return showIds.count
+            default:
+                return 0
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as? FriendCell else { return FriendCell() }
-
-        var arr: [String] = []
-
-        cell.accessoryType = .none
-
-        let user = arr[indexPath.row]
-        cell.user = user
-
-        return cell
+        switch segmentedControl.selectedSegmentIndex {
+            case 0:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as? SongCell else { return SongCell() }
+                return cell
+            case 1:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
+                return cell
+            case 2:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
+                return cell
+            default:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
+                return cell
+        }
     }
 
     /*
