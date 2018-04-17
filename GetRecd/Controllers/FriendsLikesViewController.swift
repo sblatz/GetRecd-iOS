@@ -11,9 +11,11 @@ import UIKit
 class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     
+    @IBOutlet weak var recsButton: UIBarButtonItem!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     var user = ""
+    var showingLikes = true
 
     var songIds = [(String, Song.SongType)](){
         didSet {
@@ -91,11 +93,23 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     @IBAction func switchButtonPressed(_ sender: Any) {
+        if showingLikes {
+            recsButton.title = "Likes"
+
+        } else {
+            recsButton.title = "Recs"
+        }
+
+        showingLikes = !showingLikes
+
+        tableView.reloadData()
     }
     
-    @IBAction func changedSegment(_ sender: Any) {
-        
+
+    @IBAction func didChangeSegment(_ sender: Any) {
+        tableView.reloadData()
     }
+
 
     // Table View Methods
 
@@ -104,44 +118,95 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch segmentedControl.selectedSegmentIndex {
-            case 0:
-                return songIds.count
-            case 1:
-                return movieIds.count
-            case 2:
-                return showIds.count
-            default:
-                return 0
+        if showingLikes {
+            switch segmentedControl.selectedSegmentIndex {
+                case 0:
+                    return songIds.count
+                case 1:
+                    return movieIds.count
+                case 2:
+                    return showIds.count
+                default:
+                    return 0
+            }
+        } else {
+            switch segmentedControl.selectedSegmentIndex {
+                case 0:
+                    return songIds.count
+                case 1:
+                    return movieIds.count
+                case 2:
+                    return showIds.count
+                default:
+                    return 0
+                }
         }
+
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        switch segmentedControl.selectedSegmentIndex {
+        if showingLikes {
+            switch segmentedControl.selectedSegmentIndex {
             case 0:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as? SongCell else { return SongCell() }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
+                cell.tag = indexPath.row
+
+                let song = songIds[indexPath.row]
+
+                if song.1 == .Spotify {
+
+                    MusicService.sharedInstance.getSpotifyTrack(with: song.0) { (song) in
+                        DispatchQueue.main.async {
+                            cell.song = song
+                        }
+                    }
+                } else {
+                    MusicService.sharedInstance.getAppleMusicTrack(with: song.0) { (song) in
+                        DispatchQueue.main.async {
+                            cell.song = song
+                        }
+                    }
+                }
                 return cell
+
             case 1:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+                let movie = movieIds[indexPath.row]
+
+                MovieService.sharedInstance.getMovie(with: movie) { (movie) in
+                    cell.movie = movie
+                }
+
                 return cell
             case 2:
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+                let show = showIds[indexPath.row]
+
+                TVService.sharedInstance.getShow(with: show) { (show) in
+                    cell.show = show
+                }
+
                 return cell
             default:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as? MovieCell else { return MovieCell() }
                 return cell
+            }
+        } else {
+
         }
+
+        return UITableViewCell()
     }
 
     /*
-    // MARK: - Navigation
+     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
 
 }

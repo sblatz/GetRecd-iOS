@@ -63,7 +63,6 @@ class ProfileMovieViewController: UITableViewController {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
 
-
         let movie = movieIds[indexPath.row]
 
         MovieService.sharedInstance.getMovie(with: movie) { (movie) in
