@@ -279,6 +279,14 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
         } else {
             switch segmentedControl.selectedSegmentIndex {
             case 0:
+                if songs.count == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath) as! UITableViewCell
+
+                    cell.textLabel?.text = "This user has chosen to hide their music."
+                    return cell
+
+                }
+
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
                 cell.tag = indexPath.row
                 cell.song = songs[indexPath.row]
@@ -286,11 +294,26 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
                 return cell
 
             case 1:
+                if movies.count == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath) as! UITableViewCell
+
+                    cell.textLabel?.text = "This user has chosen to hide their movies."
+                    return cell
+
+                }
+
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
                 cell.movie = movies[indexPath.row]
 
                 return cell
             case 2:
+                if shows.count == 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath) as! UITableViewCell
+
+                    cell.textLabel?.text = "This user has chosen to hide their shows."
+                    return cell
+
+                }
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
                 cell.show = shows[indexPath.row]
 
