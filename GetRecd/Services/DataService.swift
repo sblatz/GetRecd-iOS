@@ -171,6 +171,17 @@ class DataService {
             }
         }
     }
+
+    // Used to set the privacy settings of a user's music, tv shows, or movies
+    func setPrivacyFor(category: String, privacy: Bool, uid: String, completion: @escaping () -> ()) {
+        userCollection.document(uid).getDocument { (snap, error) in
+            if error == nil {
+                var data = (snap?.data())!
+                data["private\(category)"] = "\(privacy)"
+                self.userCollection.document(uid).setData(data)
+            }
+        }
+    }
     /**
      
      * Returns an array of all `User` objects. The users are

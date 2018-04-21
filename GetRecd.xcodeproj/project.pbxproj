@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		24065A2D202A6ABC00272A61 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 24065A2C202A6ABC00272A61 /* LaunchScreen.storyboard */; };
 		24270FCE202A533100AC6642 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24270FCD202A533100AC6642 /* NavigationViewController.swift */; };
+		2434DFFE208520FC00038891 /* FriendsLikesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2434DFFD208520FC00038891 /* FriendsLikesViewController.swift */; };
 		2451056B2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056C2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
 		2451056D2023DAE8001AC6F6 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */; };
@@ -114,6 +115,7 @@
 		22F7E50E8721D5DA29E28E08 /* Pods_GetRecdTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecdTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24065A2C202A6ABC00272A61 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		24270FCD202A533100AC6642 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		2434DFFD208520FC00038891 /* FriendsLikesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsLikesViewController.swift; sourceTree = "<group>"; };
 		2451055E2023D2AC001AC6F6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		245105612023DAE3001AC6F6 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		245105622023DAE4001AC6F6 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 				FCFCD1162069D367008CC2B7 /* RecFeedViewController.swift */,
 				FC3A70E9206D8FAC005532A6 /* FriendCell.swift */,
 				FC3A70EB206D8FDE005532A6 /* FriendsViewController.swift */,
+				2434DFFD208520FC00038891 /* FriendsLikesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -817,6 +820,7 @@
 				FC3A70EC206D8FDE005532A6 /* FriendsViewController.swift in Sources */,
 				24687FB7202A371000CC990D /* SignInViewController.swift in Sources */,
 				24D120A720406BCB0010BC8B /* SerializationError.swift in Sources */,
+				2434DFFE208520FC00038891 /* FriendsLikesViewController.swift in Sources */,
 				C77C4A52203CD3A50001839E /* MusicService.swift in Sources */,
 				24AEA6CA2064207F00B0C581 /* MovieService.swift in Sources */,
 				FC3A70EA206D8FAC005532A6 /* FriendCell.swift in Sources */,
@@ -1006,7 +1010,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3YC9K4952Y;
+				DEVELOPMENT_TEAM = Q72GMFLLR4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GetRecd",
@@ -1029,7 +1033,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 3YC9K4952Y;
+				DEVELOPMENT_TEAM = Q72GMFLLR4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GetRecd",

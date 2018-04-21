@@ -26,6 +26,10 @@ class AuthService: NSObject {
             } else if let user = user {
                 userInfo["password"] = nil
                 userInfo["uid"] = user.uid
+                userInfo["privateMovie"] = "false"
+                userInfo["privateShow"] = "false"
+                userInfo["privateMusic"] = "false"
+
                 DataService.sharedInstance.createUser(uid: user.uid, userData: userInfo, success: { (user) in
                     success(user)
                 }, failure: { (error) in

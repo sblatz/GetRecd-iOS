@@ -44,12 +44,12 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        
-//        DispatchQueue.main.async {
-//            self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
-//            self.profilePicture.image = self.profilePictureImage
-//            self.bioTextView.text = self.currentUser.bio
-//        }
+        //
+        //        DispatchQueue.main.async {
+        //            self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width/2
+        //            self.profilePicture.image = self.profilePictureImage
+        //            self.bioTextView.text = self.currentUser.bio
+        //        }
 
         
     }
@@ -166,63 +166,132 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
 
 
         switch indexPath.section {
-            // Music Authorization
+        case 1:
+            guard let uid = Auth.auth().currentUser?.uid else {
+                // TODO: Tell user account not signed in
+                return
+            }
+            switch indexPath.row {
+            // Movies Privacy
+            case 0:
+                
+                let alertController = UIAlertController(title: "Movie Privacy", message:"Who should be able to see movies you like as well as movies recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Movie", privacy: true, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+
+                alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Movie", privacy: false, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+
+                present(alertController, animated: true, completion: nil)
+
+            // TV Show Privacy
+            case 1:
+                let alertController = UIAlertController(title: "Show Privacy", message:"Who should be able to see tv shows you like as well as shows recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Show", privacy: true, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+
+                alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Show", privacy: false, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+                present(alertController, animated: true, completion: nil)
+
+            // Music Privacy
             case 2:
-                switch indexPath.row {
-                    case 0:
-                        if MusicService.sharedInstance.isSpotifyLoggedIn() {
-                            MusicService.sharedInstance.deAuthenticateSpotify()
-                            spotifyAuthCell.textLabel?.text = "Link Spotify"
-                        } else {
-                            if MusicService.sharedInstance.spotifyAuth.session != nil {
-                                MusicService.sharedInstance.setupSpotify()
-                            } else {
-                                MusicService.sharedInstance.authenticateSpotify()
-                            }
-                        }
-                    case 1:
-                        if MusicService.sharedInstance.isAppleMusicLoggedIn() {
-                            MusicService.sharedInstance.deAuthenticateAppleMusic()
-                            appleMusicAuthCell.textLabel?.text = "Link Apple Music"
-                        } else {
-                            MusicService.sharedInstance.requestAppleCloudServiceAuthorization(success: { (success) in
-                                print("Apple music authorized \(success)")
-                                if success {
-                                    DispatchQueue.main.async {
-                                        self.appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
-                                    }
-                                }
-                            }) { (error) in
-                                print(error.localizedDescription)
-                            }
-                        }
-                    default:
-                        break
+                let alertController = UIAlertController(title: "Music Privacy", message:"Who should be able to see music you like as well as music recommended to you?", preferredStyle: UIAlertControllerStyle.alert)
+
+                alertController.addAction(UIAlertAction(title: "Only Me", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Music", privacy: true, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+
+                alertController.addAction(UIAlertAction(title: "Friends", style: .default, handler: { (action) in
+                    // Call backend function to update privacy preferences
+                    DataService.sharedInstance.setPrivacyFor(category: "Music", privacy: false, uid: uid, completion: {
+                        print("completed privacy!")
+                    })
+                }))
+                present(alertController, animated: true, completion: nil)
+
+            default:
+                break
+            }
+
+        // Music Authorization
+        case 2:
+            switch indexPath.row {
+            case 0:
+                if MusicService.sharedInstance.isSpotifyLoggedIn() {
+                    MusicService.sharedInstance.deAuthenticateSpotify()
+                    spotifyAuthCell.textLabel?.text = "Link Spotify"
+                } else {
+                    if MusicService.sharedInstance.spotifyAuth.session != nil {
+                        MusicService.sharedInstance.setupSpotify()
+                    } else {
+                        MusicService.sharedInstance.authenticateSpotify()
                     }
-            // Account Deletion & Log Out
-            case 3:
-                switch indexPath.row {
-                case 2:
-                    let alert = UIAlertController(title: "Deleting Account", message: "Are you sure you want to delete your account? This cannot be undone!", preferredStyle: .alert)
-                    let yes = UIAlertAction(title: "Yes", style: .destructive, handler: { (action) in
-                        self.deleteAccount()
-                    })
-
-                    let no = UIAlertAction(title: "No", style: .default, handler: { (action) in
-                        alert.dismiss(animated: true, completion: nil)
-                    })
-
-                    alert.addAction(yes)
-                    alert.addAction(no)
-                    self.present(alert, animated: true, completion: nil)
-                case 3:
-                    print("logging out")
-                    logOut()
-                default:
-                    break
+                }
+            case 1:
+                if MusicService.sharedInstance.isAppleMusicLoggedIn() {
+                    MusicService.sharedInstance.deAuthenticateAppleMusic()
+                    appleMusicAuthCell.textLabel?.text = "Link Apple Music"
+                } else {
+                    MusicService.sharedInstance.requestAppleCloudServiceAuthorization(success: { (success) in
+                        print("Apple music authorized \(success)")
+                        if success {
+                            DispatchQueue.main.async {
+                                self.appleMusicAuthCell.textLabel?.text = "Unlink Apple Music"
+                            }
+                        }
+                    }) { (error) in
+                        print(error.localizedDescription)
+                    }
                 }
             default:
                 break
+            }
+        // Account Deletion & Log Out
+        case 3:
+            switch indexPath.row {
+            case 2:
+                let alert = UIAlertController(title: "Deleting Account", message: "Are you sure you want to delete your account? This cannot be undone!", preferredStyle: .alert)
+                let yes = UIAlertAction(title: "Yes", style: .destructive, handler: { (action) in
+                    self.deleteAccount()
+                })
+
+                let no = UIAlertAction(title: "No", style: .default, handler: { (action) in
+                    alert.dismiss(animated: true, completion: nil)
+                })
+
+                alert.addAction(yes)
+                alert.addAction(no)
+                self.present(alert, animated: true, completion: nil)
+            case 3:
+                print("logging out")
+                logOut()
+            default:
+                break
+            }
+        default:
+            break
         }
     }
 
