@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,11 +32,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if Auth.auth().currentUser != nil {
             // Reauthenticate!
             print(Auth.auth().currentUser?.email)
+            
+            if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+                // 2
+                print(notification)
+                UserDefaults.standard.set(notification["uid"], forKey: "notifyUID");
+                UserDefaults.standard.synchronize()
+            }
 
             window?.rootViewController = storyboard.instantiateInitialViewController()
         }
     
-
+        registerForPushNotifications()
 
         return true
     }
@@ -92,5 +100,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 sourceApplication:options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
                 annotation: [:])
     }
+    
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+        
+        let token = tokenParts.joined()
+        if let user = Auth.auth().currentUser {
+            DataService.sharedInstance.setNotificationToken(uid: user.uid, token: token, success: {
+                print("Set token in database")
+            }, failure: { (error) in
+                print(error.localizedDescription)
+            })
+        }
+        print("Device Token: \(token)")
+    }
+    
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register: \(error)")
+    }
+    
+    
+    func registerForPushNotifications() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            print("Permission granted: \(granted)")
+            
+            guard granted else { return }
+            self.getNotificationSettings()
+        }
+    }
+    
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            print("Notification settings: \(settings)")
+            guard settings.authorizationStatus == .authorized else { return }
+            DispatchQueue.main.sync {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+            
+        }
+    }
+    
 }
 

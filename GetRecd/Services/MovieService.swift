@@ -12,6 +12,8 @@ import TMDBSwift
 class MovieService: NSObject {
 
     static var sharedInstance = MovieService()
+    
+    let baseURL = "https://api.themoviedb.org/3/movie/"
 
     override init() {
         super.init()
@@ -110,7 +112,37 @@ class MovieService: NSObject {
         })
         task.resume()
     }
-
+    
+    func getVideo(id: Int, width: Int, height: Int, success: @escaping (String) -> (), failure: @escaping () -> ()) {
+        let urlString = "\(baseURL)\(id)/videos"
+        var urlComp = URLComponents(string: urlString)
+        let qItems = [URLQueryItem(name: "api_key", value: TMDBConfig.apikey)]
+        urlComp?.queryItems = qItems
+        let url = urlComp!.url!
+        let urlSession = URLSession(configuration: .default)
+        
+        let task = urlSession.dataTask(with: url, completionHandler: { (data, response, error) in
+            if error != nil {
+                failure()
+            } else if let data = data {
+                if let responseDictionary = try! JSONSerialization.jsonObject(with: data, options:[]) as? Dictionary<String, Any> {
+                    if let videos = responseDictionary["results"] as? [Dictionary<String, Any>], videos.count > 0 {
+                        let video = videos[0]
+                        let key = video["key"] as! String
+                        //let htm = "<!DOCTYPE HTML> <html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:og=\"http://opengraphprotocol.org/schema/\" xmlns:fb=\"http://www.facebook.com/2008/fbml\"> <head></head> <body style=\"margin:0 0 0 0; padding:0 0 0 0;\"> <iframe width=\"\(width)\" height=\"\(height)\" src=\"http://www.youtube.com/embed/\(key)\" frameborder=\"0\"></iframe> </body> </html> "
+                        
+                        let htm = "<!DOCTYPE html><html><head><style>body{margin:0px 0px 0px 0px;}</style></head> <body> <div id=\"player\"></div> <script> var tag = document.createElement('script'); tag.src = \"http://www.youtube.com/player_api\"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag); var player; function onYouTubePlayerAPIReady() { player = new YT.Player('player', { width:'\(width)', height:'\(height)', videoId:'\(key)', events: { 'onReady': onPlayerReady, } }); } function onPlayerReady(event) { event.target.playVideo(); } </script> </body> </html>"
+                        print(htm)
+                        success(htm)
+                    } else {
+                        failure()
+                    }
+                }
+            }
+        })
+        task.resume()
+    }
+    
     // Function to login to TMDB
     func loginToTMDB() {
     }

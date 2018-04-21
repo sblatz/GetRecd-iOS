@@ -24,7 +24,8 @@ class DataService {
     private var userFriendsCollection = Firestore.firestore().collection("UsersFriends")
     private var pendingFriendsCollection = Firestore.firestore().collection("UsersPendingFriends")
     private var spotifyPlaylistsCollection = Firestore.firestore().collection("UsersSpotifyPlaylists")
-    private var profilePictureRef = Storage.storage().reference().child("userPictures")
+    private var profilePictureRef = Storage.storage().reference().child("UserPictures")
+    private var notificationCollection = Firestore.firestore().collection("Notifications")
 
     /**
      * Updates a user's entry in the Firebase database, creating one if absent.
@@ -215,13 +216,28 @@ class DataService {
      * - parameter friendUid: The user ID of the friend the current user requested to add.
      */
     func requestFriend(uid: String, friendUid: String, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
-        pendingFriendsCollection.document(friendUid).setData([uid: true]) { (error) in
+        let pendingFriendDoc = pendingFriendsCollection.document(friendUid)
+        let notificationDoc = notificationCollection.document()
+        
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            transaction.setData([uid: true], forDocument: pendingFriendDoc)
+            transaction.setData(["uid": friendUid, "type": "friendRequest", "message": "You received a new friend request!"], forDocument: notificationDoc)
+
+            return nil
+        }) { (object, error) in
             if let error = error {
                 failure(error)
             } else {
                 success()
             }
         }
+//        pendingFriendsCollection.document(friendUid).setData([uid: true]) { (error) in
+//            if let error = error {
+//                failure(error)
+//            } else {
+//                success()
+//            }
+//        }
     }
     
     /**
@@ -379,7 +395,6 @@ class DataService {
                 for song in appleMusicSongs {
                     userAPLikes[song] = true
                 }
-                
                 
                 transaction.setData(userAPLikes, forDocument: userAppleMusicLikes)
                 return nil
@@ -585,5 +600,15 @@ class DataService {
                 sucesss(result)
             }
         }
+    }
+    
+    func setNotificationToken(uid: String, token: String, success: @escaping () ->(), failure: @escaping (Error) -> ()) {
+        let userDoc = userCollection.document(uid)
+        userDoc.updateData(["token": token], completion: { (error) in
+            if let error = error {
+                failure(error)
+            }
+            success()
+        })
     }
 }

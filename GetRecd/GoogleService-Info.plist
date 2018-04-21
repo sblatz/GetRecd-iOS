@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>1096423581800-fa37a6fsq5ibkoeblh3g3ge50gepi899.apps.googleusercontent.com</string>
+	<string>1096423581800-u2patq6p8d3bbvphtrcr6ntvt92llr78.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1096423581800-fa37a6fsq5ibkoeblh3g3ge50gepi899</string>
+	<string>com.googleusercontent.apps.1096423581800-u2patq6p8d3bbvphtrcr6ntvt92llr78</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBB4Ucl8j5WtJe_78dU2Kk2aqLCtwoQsi0</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>cs407.GetRecd</string>
+	<string>com.cs407.GetRecd</string>
 	<key>PROJECT_ID</key>
 	<string>getrecd-1652a</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1096423581800:ios:80369bb666d315dc</string>
+	<string>1:1096423581800:ios:6f25c4b8f14aaf81</string>
 	<key>DATABASE_URL</key>
 	<string>https://getrecd-1652a.firebaseio.com</string>
 </dict>

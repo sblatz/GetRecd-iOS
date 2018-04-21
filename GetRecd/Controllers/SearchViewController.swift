@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import WebKit
 
 class SearchViewController: UITableViewController {
     
@@ -50,6 +51,11 @@ class SearchViewController: UITableViewController {
     var likedMovies = Set<Int>()
     var likedTVShows = Set<Int>()
     
+    let blurEffectView = UIVisualEffectView(effect: nil)
+    
+    
+    var videoView = WKWebView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchController.searchResultsUpdater = self
@@ -64,6 +70,24 @@ class SearchViewController: UITableViewController {
         self.navigationItem.searchController = searchController
         tableView.setContentOffset(CGPoint(x: 0, y: -20), animated: true)
         view.layoutIfNeeded()
+        
+        blurEffectView.isUserInteractionEnabled = true
+        blurEffectView.effect = UIBlurEffect(style: .dark)
+        //always fill the view
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        self.blurEffectView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimissTrailer)))
+        
+        let jscript = "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);"
+        let userScript = WKUserScript(source: jscript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let wkUController = WKUserContentController()
+        wkUController.addUserScript(userScript)
+        let wkWebConfig = WKWebViewConfiguration()
+        wkWebConfig.userContentController = wkUController
+        wkWebConfig.requiresUserActionForMediaPlayback = false
+        
+        videoView = WKWebView(frame: CGRect(x: 8, y: (self.view.frame.height / 2) - ((self.view.frame.width - 16) * (9 / 32)), width: self.view.frame.width - 16, height: (self.view.frame.width - 16) * (9 / 16)), configuration: wkWebConfig)
     }
 
 
@@ -248,6 +272,8 @@ class SearchViewController: UITableViewController {
 
                 cell.tag = indexPath.row
                 cell.artworkView.tag = indexPath.row
+                cell.artworkView.isUserInteractionEnabled = true
+                cell.artworkView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showTrailer(_:))))
                 let movie = movies[indexPath.row]
                 cell.movie = movie
                 return cell
@@ -385,5 +411,40 @@ extension SearchViewController: UISearchBarDelegate {
         self.movies = []
         self.shows = []
         self.likeButton.isHidden = true
+    }
+}
+
+extension SearchViewController: UIWebViewDelegate {
+    @objc func dimissTrailer() {
+        
+        videoView.removeFromSuperview()
+        blurEffectView.removeFromSuperview()
+        
+        
+    }
+    
+    @objc func showTrailer(_ sender: Any) {
+        let tap = sender as! UITapGestureRecognizer
+        let artworkView = tap.view!
+        
+        let movie = movies[artworkView.tag]
+        MovieService.sharedInstance.getVideo(id: movie.id, width: Int(view.frame.width - 16), height: Int((view.frame.width - 16) * (9 / 16)), success: { (htm) in
+            
+            
+            DispatchQueue.main.async {
+                
+                
+                self.blurEffectView.frame = self.view.bounds
+                self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                
+                self.view.addSubview(self.blurEffectView) //if you have more UIViews, use an insertSubview
+                
+                self.videoView.loadHTMLString(htm, baseURL: nil)
+                
+                self.view.addSubview(self.videoView)
+            }
+        }) {
+            print("Error loading video")
+        }
     }
 }

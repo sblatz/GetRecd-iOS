@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseAuth
+import WebKit
 
 class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -48,6 +49,11 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
     var likedMovies = Set<Int>()
     var likedTVShows = Set<Int>()
     
+    let blurEffectView = UIVisualEffectView(effect: nil)
+    
+    
+    var videoView = WKWebView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,6 +68,24 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         refresher = UIRefreshControl()
         recFeedTableView.addSubview(refresher)
+        
+        blurEffectView.isUserInteractionEnabled = true
+        blurEffectView.effect = UIBlurEffect(style: .dark)
+        //always fill the view
+        blurEffectView.frame = self.view.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        self.blurEffectView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dimissTrailer)))
+        
+        let jscript = "var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);"
+        let userScript = WKUserScript(source: jscript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let wkUController = WKUserContentController()
+        wkUController.addUserScript(userScript)
+        let wkWebConfig = WKWebViewConfiguration()
+        wkWebConfig.userContentController = wkUController
+        wkWebConfig.requiresUserActionForMediaPlayback = false
+        
+        videoView = WKWebView(frame: CGRect(x: 8, y: (self.view.frame.height / 2) - ((self.view.frame.width - 16) * (9 / 32)), width: self.view.frame.width - 16, height: (self.view.frame.width - 16) * (9 / 16)), configuration: wkWebConfig)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,11 +113,8 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
             
             // Reset the cell from previous use:
-            cell.artistLabel.text = ""
-            cell.artworkView.image = UIImage()
-            cell.nameLabel.text = ""
-            cell.tag = indexPath.row
             cell.artworkView.tag = indexPath.row
+            
             let song = songs[indexPath.row]
             cell.song = song
             return cell
@@ -107,6 +128,8 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             cell.tag = indexPath.row
             cell.artworkView.tag = indexPath.row
+            cell.artworkView.isUserInteractionEnabled = true
+            cell.artworkView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showTrailer(_:))))
             let movie = movies[indexPath.row]
             cell.movie = movie
             return cell
@@ -165,7 +188,7 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             tableView.deselectRow(at: indexPath, animated: true)
         case 1:
             if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
-                
+
                 if cell.accessoryType == .checkmark {
                     cell.accessoryType = .none
                     likedMovies.remove(cell.movie.id)
@@ -174,13 +197,13 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
                     likedMovies.insert(cell.movie.id)
                 }
             }
-            
+
             if likedMovies.count > 0 {
                 likeButton.isHidden = false
             } else {
                 likeButton.isHidden = true
             }
-            
+
             tableView.deselectRow(at: indexPath, animated: true)
         case 2:
             if let cell = tableView.cellForRow(at: indexPath) as? MovieCell {
@@ -330,7 +353,6 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let error = error {
                 print(error.localizedDescription)
                 self.songs = []
-                self.refresher.endRefreshing()
                 return
             } else {
                 newSongs.append(contentsOf: spotifySongs)
@@ -343,7 +365,6 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             if let error = error {
                 print(error.localizedDescription)
                 self.songs = []
-                self.refresher.endRefreshing()
                 return
             } else {
                 newSongs.append(contentsOf: appleMusicSongs)
@@ -411,6 +432,41 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
         }) { (error) in
             // TODO: Show error
             print(error.localizedDescription)
+        }
+    }
+}
+
+extension RecFeedViewController: UIWebViewDelegate {
+    @objc func dimissTrailer() {
+        
+        videoView.removeFromSuperview()
+        blurEffectView.removeFromSuperview()
+        
+        
+    }
+    
+    @objc func showTrailer(_ sender: Any) {
+        let tap = sender as! UITapGestureRecognizer
+        let artworkView = tap.view!
+        
+        let movie = movies[artworkView.tag]
+        MovieService.sharedInstance.getVideo(id: movie.id, width: Int(view.frame.width - 16), height: Int((view.frame.width - 16) * (9 / 16)), success: { (htm) in
+
+
+            DispatchQueue.main.async {
+
+
+                self.blurEffectView.frame = self.view.bounds
+                self.blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+                self.view.addSubview(self.blurEffectView) //if you have more UIViews, use an insertSubview
+
+                self.videoView.loadHTMLString(htm, baseURL: nil)
+
+                self.view.addSubview(self.videoView)
+            }
+        }) {
+            print("Error loading video")
         }
     }
 }

@@ -67,8 +67,8 @@
 		5B3B4067203F13FE00AF061E /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */; };
 		672D0E3CEEFA24D2A3D349A3 /* Pods_GetRecd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */; };
 		80A1ADDA2B538296773C88D0 /* Pods_GetRecdUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20BF96BAC59818EC48223294 /* Pods_GetRecdUITests.framework */; };
-		BF8CB8F304DE0513CB0C7719 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */; };
 		C77C4A52203CD3A50001839E /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77C4A51203CD3A50001839E /* MusicService.swift */; };
+		C7E75E292077871C00184707 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C7E75E282077871C00184707 /* GoogleService-Info.plist */; };
 		C7EB9483204A3F0A00A99106 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EB9480204A3F0A00A99106 /* SpotifyAudioPlayback.framework */; };
 		C7EB9484204A3F0A00A99106 /* .gitattributes in Resources */ = {isa = PBXBuildFile; fileRef = C7EB9481204A3F0A00A99106 /* .gitattributes */; };
 		C7EB9485204A3F0A00A99106 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EB9482204A3F0A00A99106 /* SpotifyAuthentication.framework */; };
@@ -159,9 +159,10 @@
 		5B3B4066203F13FE00AF061E /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		A16198CB7811E4B353967BF8 /* Pods-GetRecd-GetRecdTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd-GetRecdTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd-GetRecdTests/Pods-GetRecd-GetRecdTests.release.xcconfig"; sourceTree = "<group>"; };
 		A934FAC0B696F03CCF370790 /* Pods_GetRecd.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GetRecd.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C3C136C3B3D671B984FF4611 /* Pods-GetRecd-GetRecdTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GetRecd-GetRecdTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GetRecd-GetRecdTests/Pods-GetRecd-GetRecdTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C77C4A51203CD3A50001839E /* MusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
+		C7E75E27207730ED00184707 /* GetRecd.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GetRecd.entitlements; sourceTree = "<group>"; };
+		C7E75E282077871C00184707 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C7EB9477204A3DA900A99106 /* GetRecd */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GetRecd; sourceTree = "<group>"; };
 		C7EB9479204A3E1B00A99106 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAuthentication.framework; path = "../../Downloads/ios-sdk-master/SpotifyAuthentication.framework"; sourceTree = "<group>"; };
 		C7EB947A204A3E1B00A99106 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpotifyAudioPlayback.framework; path = "../../Downloads/ios-sdk-master/SpotifyAudioPlayback.framework"; sourceTree = "<group>"; };
@@ -265,6 +266,7 @@
 		245156C120238B1A000E8082 /* GetRecd */ = {
 			isa = PBXGroup;
 			children = (
+				C7E75E27207730ED00184707 /* GetRecd.entitlements */,
 				C7EB9481204A3F0A00A99106 /* .gitattributes */,
 				C7EB948A204A407A00A99106 /* SpotifyMetadata.framework */,
 				C7EB9480204A3F0A00A99106 /* SpotifyAudioPlayback.framework */,
@@ -278,7 +280,7 @@
 				24E847972023D08F000033E3 /* Models */,
 				24E847982023D0A5000033E3 /* Views */,
 				24E847992023D0BA000033E3 /* Controllers */,
-				BF8CBAEF5E3F34C0E56DF4DA /* GoogleService-Info.plist */,
+				C7E75E282077871C00184707 /* GoogleService-Info.plist */,
 				C7EB9487204A404A00A99106 /* BridgeViewController.h */,
 				C7EB9488204A404A00A99106 /* BridgeViewController.m */,
 				C7EB9486204A404A00A99106 /* GetRecd-Bridging-Header.h */,
@@ -485,6 +487,11 @@
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					245156D220238B1A000E8082 = {
 						CreatedOnToolsVersion = 9.2;
@@ -531,6 +538,7 @@
 				2451057A2023DAE8001AC6F6 /* OpenSans-SemiBoldItalic.ttf in Resources */,
 				245105712023DAE8001AC6F6 /* OpenSans-SemiBold.ttf in Resources */,
 				245105802023DAE8001AC6F6 /* OpenSans-BoldItalic.ttf in Resources */,
+				C7E75E292077871C00184707 /* GoogleService-Info.plist in Resources */,
 				FC46DA81203BF3A00059BEC8 /* RecFeed.storyboard in Resources */,
 				24065A2D202A6ABC00272A61 /* LaunchScreen.storyboard in Resources */,
 				FC3A70E8206D8D21005532A6 /* Friends.storyboard in Resources */,
@@ -541,7 +549,6 @@
 				FC1229522036BA640080151B /* Profile.storyboard in Resources */,
 				245156C820238B1A000E8082 /* Main.storyboard in Resources */,
 				24D120AB20406C5E0010BC8B /* Search.storyboard in Resources */,
-				BF8CB8F304DE0513CB0C7719 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +1016,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GetRecd/GetRecd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q72GMFLLR4;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1017,7 +1025,7 @@
 				);
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.GetRecd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "GetRecd/GetRecd-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1032,6 +1040,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GetRecd/GetRecd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q72GMFLLR4;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1040,7 +1049,7 @@
 				);
 				INFOPLIST_FILE = GetRecd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = cs407.GetRecd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cs407.GetRecd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "GetRecd/GetRecd-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
