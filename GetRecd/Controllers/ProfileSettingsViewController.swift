@@ -8,8 +8,9 @@
 
 import UIKit
 import FirebaseAuth
+import MessageUI
 
-class ProfileSettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class ProfileSettingsViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
 
     @IBOutlet weak var profilePicture: UIImageView!
     @IBOutlet weak var bioTextView: UITextView!
@@ -75,7 +76,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,6 +89,8 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             return 2
         case 3:
             return 4
+        case 4:
+            return 1
         default:
             return 0
         }
@@ -290,6 +293,21 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             default:
                 break
             }
+            
+        // Sending Feedback
+        case 4:
+            switch indexPath.row {
+            case 0:
+                let mailComposeViewController = configureMailController()
+                if(MFMailComposeViewController.canSendMail()){
+                    self.present(mailComposeViewController, animated: true, completion: nil)
+                } else{
+                    showMailError()
+                }
+            default:
+                break
+            }
+            
         default:
             break
         }
@@ -363,5 +381,24 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             // TODO: Show error in retrieivng user picture
             print(error.localizedDescription)
         }
+    }
+    
+    func configureMailController() -> MFMailComposeViewController{
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        mailComposerVC.setToRecipients(["cs407getrecd@gmail.com"])
+        mailComposerVC.setSubject("Feedback")
+        return mailComposerVC
+    }
+    
+    func showMailError(){
+        let sendMailErrorAlert = UIAlertController(title: "Could not send email", message: "Your device couldn't send the email", preferredStyle: .alert)
+        let dismiss = UIAlertAction(title: "OK", style: .default, handler: nil)
+        sendMailErrorAlert.addAction(dismiss)
+        self.present(sendMailErrorAlert, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
