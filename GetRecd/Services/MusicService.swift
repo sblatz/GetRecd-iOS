@@ -22,7 +22,7 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     func setupSpotify() {
         spotifyAuth = SPTAuth.defaultInstance()
         spotifyPlayer = SPTAudioStreamingController.sharedInstance()
-        spotifyAuth.clientID = "ee396a63623f4066a6d5be5d094ffa94"
+        spotifyAuth.clientID = "b2a4e9e6c816448cb0ee30b7f62d25b1"
         spotifyAuth.redirectURL = URL(string: "GetRecd://spotify")!
         spotifyAuth.sessionUserDefaultsKey = "spotify_session"
         spotifyAuth.tokenSwapURL = URL(string: "https://getrecdspotifyrefresher.herokuapp.com/swap")
