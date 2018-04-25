@@ -18,6 +18,7 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
 
     var user = ""
     var showingLikes = true
+    var userName = ""
 
     var songIds = [(String, Song.SongType)](){
         didSet {
@@ -74,6 +75,7 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
 
         DataService.sharedInstance.getUser(uid: user, success: { (user) in
             self.navigationItem.title = user.name + "'s Likes"
+            self.userName = user.name
 
             if !user.privateMovies {
                 DataService.sharedInstance.getLikedMovies(uid: self.user, sucesss: { (movieIds) in
@@ -121,11 +123,12 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
     @IBAction func switchButtonPressed(_ sender: Any) {
         if showingLikes {
             recsButton.title = "Likes"
+            self.navigationItem.title = userName + "'s Recs"
 
         } else {
             recsButton.title = "Recs"
+            self.navigationItem.title = userName + "'s Likes"
         }
-
 
         if songs.isEmpty || movies.isEmpty || shows.isEmpty {
             DataService.sharedInstance.getUser(uid: user, success: { (user) in
