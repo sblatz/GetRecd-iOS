@@ -16,6 +16,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     @IBOutlet weak var bioTextView: UITextView!
     @IBOutlet weak var spotifyAuthCell: UITableViewCell!
     @IBOutlet weak var appleMusicAuthCell: UITableViewCell!
+    @IBOutlet weak var navbarCell: UITableViewCell!
     
     var imagePicker: UIImagePickerController!
     var currentUser: User!
@@ -24,13 +25,25 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
 
+        self.navigationItem.hidesBackButton = true
+        
+        
+        let saveButton = UIButton(type: .custom)
+        saveButton.frame = CGRect(x: 0.0, y: 0.0, width: 35, height: 35)
+        saveButton.setImage(UIImage(named:"save-button"), for: .normal)
+        saveButton.addTarget(self, action: #selector(savePressed(_:)), for: .touchUpInside)
+        
+        let navBarItem = UIBarButtonItem(customView: saveButton)
+        let currWidth = navBarItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = navBarItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        self.navigationItem.rightBarButtonItem = navBarItem
+        
         bioTextView.delegate = self
-
-        //let button = SpotifyLoginButton(viewController: self, scopes: [.streaming, .userLibraryRead])
-        //var cell = linkSpotifyButton.superview?.superview!
-        //cell?.addSubview(button)
-        //button.frame = linkSpotifyButton.frame
         
         if MusicService.sharedInstance.isSpotifyLoggedIn() {
             spotifyAuthCell.textLabel?.text = "Unlink Spotify"
@@ -76,20 +89,18 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return 1
-        case 1:
             return 3
-        case 2:
+        case 1:
             return 2
-        case 3:
+        case 2:
             return 4
-        case 4:
+        case 3:
             return 1
         default:
             return 0
@@ -98,7 +109,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
 
     @IBAction func savePressed(_ sender: Any) {
         saveUserInfo()
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
     
@@ -169,7 +180,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
 
 
         switch indexPath.section {
-        case 1:
+        case 0:
             guard let uid = Auth.auth().currentUser?.uid else {
                 // TODO: Tell user account not signed in
                 return
@@ -239,7 +250,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             }
 
         // Music Authorization
-        case 2:
+        case 1:
             switch indexPath.row {
             case 0:
                 if MusicService.sharedInstance.isSpotifyLoggedIn() {
@@ -272,7 +283,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
                 break
             }
         // Account Deletion & Log Out
-        case 3:
+        case 2:
             switch indexPath.row {
             case 2:
                 let alert = UIAlertController(title: "Deleting Account", message: "Are you sure you want to delete your account? This cannot be undone!", preferredStyle: .alert)
@@ -295,7 +306,7 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
             }
             
         // Sending Feedback
-        case 4:
+        case 3:
             switch indexPath.row {
             case 0:
                 let mailComposeViewController = configureMailController()
@@ -316,6 +327,8 @@ class ProfileSettingsViewController: UITableViewController, UIImagePickerControl
     @IBAction func editPicturePressed(_ sender: Any) {
         DispatchQueue.main.async {
             self.imagePicker = UIImagePickerController()
+            self.imagePicker.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "OpenSans-Bold", size: 16.0)!]
+            self.imagePicker.navigationBar.tintColor = .white
             self.imagePicker.delegate = self
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             self.imagePicker.allowsEditing = true

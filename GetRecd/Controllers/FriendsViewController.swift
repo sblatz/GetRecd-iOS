@@ -54,6 +54,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.tableFooterView = UIView()
 
         tableView.delegate = self
         tableView.dataSource = self

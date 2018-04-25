@@ -22,6 +22,20 @@ class ProfileMusicViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+
+        self.navigationItem.hidesBackButton = true
+        let saveButton = UIButton(type: .custom)
+        saveButton.frame = CGRect(x: 0.0, y: 0.0, width: 35, height: 35)
+        saveButton.setImage(UIImage(named:"save-button"), for: .normal)
+        saveButton.addTarget(self, action: #selector(onCheck(_:)), for: .touchUpInside)
+        
+        let navBarItem = UIBarButtonItem(customView: saveButton)
+        let currWidth = navBarItem.customView?.widthAnchor.constraint(equalToConstant: 24)
+        currWidth?.isActive = true
+        let currHeight = navBarItem.customView?.heightAnchor.constraint(equalToConstant: 24)
+        currHeight?.isActive = true
+        self.navigationItem.rightBarButtonItem = navBarItem
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,33 +60,21 @@ class ProfileMusicViewController: UITableViewController {
         }
     }
     @IBAction func onCheck(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+       navigationController?.popViewController(animated: true)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        if section == 0 {
-            return 1
-        }
         return songIds.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            return tableView.dequeueReusableCell(withIdentifier: "BarCell", for: indexPath)
-        }
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SongCell", for: indexPath) as! SongCell
         cell.tag = indexPath.row
         

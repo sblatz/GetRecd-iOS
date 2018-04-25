@@ -121,16 +121,18 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     
     func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
         print(id)
-        SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else if let data = data {
-                let track = data as! SPTPartialTrack
-                let song = try! Song(spotifyData: track)
-                
-                completion(song)
-            }
-        })
+        if isSpotifyLoggedIn() {
+            SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
+                if let error = error {
+                    print(error.localizedDescription)
+                } else if let data = data {
+                    let track = data as! SPTPartialTrack
+                    let song = try! Song(spotifyData: track)
+                    
+                    completion(song)
+                }
+            })
+        }
     }
     
     func checkIfSpotifyPlaylistExists(exists: @escaping (Bool)->()) {

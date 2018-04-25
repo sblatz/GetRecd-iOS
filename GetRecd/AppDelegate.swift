@@ -25,7 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MusicService.sharedInstance.setupSpotify()
         MusicService.sharedInstance.setupAppleMusic()
 
-    
+        let backgroundImage = UIImage(named: "launch-bg")?.resizableImage(withCapInsets: UIEdgeInsetsMake(0, 15, 0, 15), resizingMode: UIImageResizingMode.stretch)
+        
+        UINavigationBar.appearance().setBackgroundImage(backgroundImage, for: .default)
        
         let storyboard = UIStoryboard(name: "RecFeed", bundle: nil)
 
