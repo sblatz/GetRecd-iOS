@@ -321,6 +321,12 @@ extension SearchViewController: UISearchResultsUpdating {
 
 
     @objc func queryForSearch() {
+        // Reset checkmarks on search
+        for cell in self.tableView.visibleCells {
+            cell.accessoryType = .none
+            self.likeButton.isHidden = true
+        }
+        
         switch selectedScope {
         case 0:
             if searchString == "" {
@@ -365,7 +371,7 @@ extension SearchViewController: UISearchResultsUpdating {
         case 1:
             if searchString == "" {
                 self.setterQueue.sync {
-                    self.songs = []
+                    self.movies = []
                 }
             } else {
                 MovieService.sharedInstance.searchTMDB(forMovie: searchString, completion: { (movies, error) in
@@ -385,7 +391,7 @@ extension SearchViewController: UISearchResultsUpdating {
         case 2:
             if searchString == "" {
                 self.setterQueue.sync {
-                    self.songs = []
+                    self.shows = []
                 }
             } else {
                 TVService.sharedInstance.searchTMDB(forShow: searchString, completion: { (shows, error) in
