@@ -127,7 +127,7 @@ class SearchViewController: UITableViewController {
             // TODO: Show error in getting current user's uid
             return
         }
-        
+        let 
         switch selectedScope {
         case 0:
             DataService.sharedInstance.likeSongs(uid: uid, appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
