@@ -72,6 +72,7 @@ class FriendsLikesViewController: UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView()
 
         DataService.sharedInstance.getUser(uid: user, success: { (user) in
             self.navigationItem.title = user.name + "'s Likes"
