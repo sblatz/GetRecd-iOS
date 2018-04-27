@@ -261,6 +261,7 @@
                                     <action selector="onAdd:" destination="iUk-B5-z1w" eventType="touchUpInside" id="2g0-qI-8Ud"/>
                                 </connections>
                             </button>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
