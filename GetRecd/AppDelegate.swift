@@ -18,6 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
         FirebaseApp.configure()
         
         AuthService.sharedInstance.setupGoogle()
@@ -33,11 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if Auth.auth().currentUser != nil {
             // Reauthenticate!
-            print(Auth.auth().currentUser?.email)
             
             if let notification = launchOptions?[.remoteNotification] as? [String: AnyObject] {
                 // 2
-                print(notification)
                 UserDefaults.standard.set(notification["uid"], forKey: "notifyUID");
                 UserDefaults.standard.synchronize()
             }
@@ -85,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     MusicService.sharedInstance.checkIfSpotifyPlaylistExists { (exists) in
                         if !exists {
                             MusicService.sharedInstance.createSpotifyPlaylist(success: {
-                                print("Hello")
+                                print("Spotify playlist created")
                             }, failure: { (error) in
                                 print(error.localizedDescription)
                             })

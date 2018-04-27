@@ -61,13 +61,7 @@ class MovieService: NSObject {
                 movieDictionary["releaseDate"] = movie.release_date
                 movieDictionary["posterPath"] = movie.poster_path
                 movieDictionary["overview"] = movie.overview
-
-                print(movie.title)
-                print(movie.revenue)
-                print(movie.genres[0].name)
-                print(movie.production_companies?[0].name)
-                print(movie.popularity)
-
+                
                 do {
                     completion(try Movie(movieDict: movieDictionary))
                 } catch {
@@ -132,7 +126,6 @@ class MovieService: NSObject {
                         //let htm = "<!DOCTYPE HTML> <html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:og=\"http://opengraphprotocol.org/schema/\" xmlns:fb=\"http://www.facebook.com/2008/fbml\"> <head></head> <body style=\"margin:0 0 0 0; padding:0 0 0 0;\"> <iframe width=\"\(width)\" height=\"\(height)\" src=\"http://www.youtube.com/embed/\(key)\" frameborder=\"0\"></iframe> </body> </html> "
                         
                         let htm = "<!DOCTYPE html><html><head><style>body{margin:0px 0px 0px 0px;}</style></head> <body> <div id=\"player\"></div> <script> var tag = document.createElement('script'); tag.src = \"http://www.youtube.com/player_api\"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag); var player; function onYouTubePlayerAPIReady() { player = new YT.Player('player', { width:'\(width)', height:'\(height)', videoId:'\(key)', events: { 'onReady': onPlayerReady, } }); } function onPlayerReady(event) { event.target.playVideo(); } </script> </body> </html>"
-                        print(htm)
                         success(htm)
                     } else {
                         failure()

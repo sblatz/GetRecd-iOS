@@ -80,9 +80,7 @@ class Song: NSObject {
     
     init(spotifyData: SPTPartialTrack) throws {
         
-        print(spotifyData)
         guard let artists = spotifyData.artists as? [SPTPartialArtist] else {
-            print(spotifyData.artists)
             throw SerializationError.missing("artists")
         }
         

@@ -57,7 +57,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 }
             } else {
                 spotifyPlayer.login(withAccessToken: spotifyAuth.session.accessToken)
-                print(self.spotifyAuth.session.accessToken)
             }
         } 
     }
@@ -120,7 +119,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
     }
     
     func getSpotifyTrack(with id: String, completion: @escaping (Song) -> ()) {
-        print(id)
         if isSpotifyLoggedIn() {
             SPTTrack.track(withURI: URL(string: "spotify:track:\(id)")!, accessToken: spotifyAuth.session.accessToken, market: nil, callback: { (error, data) in
                 if let error = error {
@@ -139,15 +137,12 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         SPTPlaylistList.playlists(forUser: spotifyAuth.session.canonicalUsername, withAccessToken: spotifyAuth.session.accessToken) { (error, playlistsObject) in
             if let error = error {
                 print(error.localizedDescription)
-            } else if var playlistsPage = playlistsObject as? SPTPlaylistList {
+            } else if let playlistsPage = playlistsObject as? SPTPlaylistList {
                 for item in playlistsPage.items {
                     let playlist = item as! SPTPartialPlaylist
-                    print(playlist.name)
                     if playlist.name == "GetRec'd" {
                         exists(true)
                         return
-                    } else {
-                        print("not get recd first!")
                     }
                 }
 
@@ -379,7 +374,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 userToken = token
                 if self.cloudServiceStorefrontCountryCode == "" {
                     self.requestAppleStorefrontCountryCode(success: {
-                        print("Yay")
                     }, failure: { (error) in
                         print(error.localizedDescription)
                     })
@@ -511,7 +505,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 let results = json["results"] as! [String: Any]
                 let songs = results["songs"] as! [String: Any]
                 let data = songs["data"] as! [[String: Any]]
-                print(data)
                 var songResult = [Song]()
                 for songData in data {
                     songResult.append(try Song(appleMusicData: songData))
@@ -591,7 +584,6 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
                 let insideData = contents["data"] as! [[String: Any]]
                  var songResult = [Song]()
                 for songData in insideData {
-                    print(songData["attributes"])
                     songResult.append(try Song(appleMusicData: songData))
                 }
                 completion(songResult, nil)
