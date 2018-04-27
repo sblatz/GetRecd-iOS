@@ -127,12 +127,20 @@ class SearchViewController: UITableViewController {
             // TODO: Show error in getting current user's uid
             return
         }
-        let 
+
+        let alert = UIAlertController(title: "Liked!", message: "This content has been added to your profile!", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+
+        }))
+
         switch selectedScope {
         case 0:
             DataService.sharedInstance.likeSongs(uid: uid, appleMusicSongs: likedAppleMusicSongs, spotifySongs: likedSpotifySongs, success: {
                 // TODO: Show successful add
                 print("Yay")
+                self.present(alert, animated: true)
+
             }) { (error) in
                 print(error.localizedDescription)
             }
@@ -140,6 +148,8 @@ class SearchViewController: UITableViewController {
             DataService.sharedInstance.likeMovies(uid: uid, movies: likedMovies, success: {
                 // TODO: Show successful add
                 print("Yay")
+                self.present(alert, animated: true)
+
             }) { (error) in
                 // TODO: Show error on like movies
                 print(error.localizedDescription)
@@ -148,6 +158,8 @@ class SearchViewController: UITableViewController {
             DataService.sharedInstance.likeShows(uid: uid, shows: likedTVShows, success: {
                 // TODO: Show successful add
                 print("Yay")
+                self.present(alert, animated: true)
+
             }) { (error) in
                 // TODO: Show error on like movies
                 print(error.localizedDescription)
