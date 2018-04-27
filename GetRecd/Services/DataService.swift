@@ -27,6 +27,10 @@ class DataService {
     private var profilePictureRef = Storage.storage().reference().child("UserPictures")
     private var notificationCollection = Firestore.firestore().collection("Notifications")
 
+    enum ContentType {
+        case AppleSong, SpotifySong, Movie, Show
+    }
+    
     /**
      * Updates a user's entry in the Firebase database, creating one if absent.
      *
@@ -367,6 +371,82 @@ class DataService {
         }
     }
     
+    private func getDocumentForContentType(uid: String, contentType: ContentType) -> DocumentReference {
+        var contentCollection: CollectionReference
+        switch contentType {
+        case .AppleSong:
+            contentCollection = userAppleMusicLikesCollection
+        case .SpotifySong:
+            contentCollection = userSpotifyLikesCollection
+        case .Movie:
+            contentCollection = userMovieLikesCollection
+        case .Show:
+            contentCollection = userShowLikesCollection
+        }
+        return contentCollection.document(uid)
+    }
+    
+    func rateContent(uid: String,
+                     contentType: ContentType,
+                     contentId: String,
+                     rating: Int,
+                     success: @escaping () -> (),
+                     failure: @escaping (Error) -> ()) {
+        let contentDocument = getDocumentForContentType(uid: uid, contentType: contentType)
+        db.runTransaction({ (transaction, errorPointer) -> Any? in
+            transaction.updateData([contentId: rating], forDocument: contentDocument)
+            return nil
+        }) { (object, error) in
+            if let error = error {
+                failure(error)
+            } else {
+                success()
+            }
+        }
+    }
+    
+    func getRating(uid: String,
+                   contentType: ContentType,
+                   contentId: String,
+                   success: @escaping (Int) -> (),
+                   failure: @escaping (Error) -> ()) {
+        let contentDocument = getDocumentForContentType(uid: uid, contentType: contentType)
+        contentDocument.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+                return
+            }
+            let ratingData = snapshot?.data() ?? [String: Any]()
+            if let rating = ratingData[contentId] as? Int {
+                success(rating)
+            }
+        }
+    }
+    
+    func getContentWithRating(uid: String,
+                              contentType: ContentType,
+                              minimumRating: Int,
+                              success: @escaping ([String]) -> (),
+                              failure: @escaping (Error) -> ()) {
+        let contentDocument = getDocumentForContentType(uid: uid, contentType: contentType)
+        contentDocument.getDocument { (snapshot, error) in
+            if let error = error {
+                failure(error)
+                return
+            }
+            let ratingData = snapshot?.data() ?? [String: Any]()
+            var filtered = [String]()
+            for (id, rating) in ratingData {
+                if let ratingNumber = rating as? Int {
+                    if ratingNumber >= minimumRating {
+                        filtered.append(id)
+                    }
+                }
+            }
+            success(filtered)
+        }
+    }
+    
     func likeSongs(uid: String, appleMusicSongs: Set<String>, spotifySongs: Set<String>, success: @escaping () -> (), failure: @escaping (Error) -> ()) {
         let userSpotifyLikes = userSpotifyLikesCollection.document(uid)
         let userAppleMusicLikes = userAppleMusicLikesCollection.document(uid)
@@ -384,16 +464,16 @@ class DataService {
                     userAppleMusicLikesSnapshot = try transaction.getDocument(userAppleMusicLikes)
                 }
             } catch let fetchError as NSError {
-                var userSLikes = [String: Bool]()
-                var userAPLikes = [String: Bool]()
+                var userSLikes = [String: Int]()
+                var userAPLikes = [String: Int]()
                 for song in spotifySongs {
-                    userSLikes[song] = true
+                    userSLikes[song] = 0
                 }
                 
                 transaction.setData(userSLikes, forDocument: userSpotifyLikes)
                 
                 for song in appleMusicSongs {
-                    userAPLikes[song] = true
+                    userAPLikes[song] = 0
                 }
                 
                 transaction.setData(userAPLikes, forDocument: userAppleMusicLikes)
@@ -402,7 +482,7 @@ class DataService {
             
             if var userLikes = userSpotifyLikesSnapshot?.data() {
                 for song in spotifySongs {
-                    userLikes[song] = true
+                    userLikes[song] = 0
                 }
                 
                 transaction.setData(userLikes, forDocument: userSpotifyLikes)
@@ -410,7 +490,7 @@ class DataService {
             
             if var userLikes = userAppleMusicLikesSnapshot?.data() {
                 for song in appleMusicSongs {
-                    userLikes[song] = true
+                    userLikes[song] = 0
                 }
                 
                 transaction.setData(userLikes, forDocument: userAppleMusicLikes)
@@ -497,10 +577,10 @@ class DataService {
             do {
                 userMovieLikesSnapshot = try transaction.getDocument(userMovieLikes)
             } catch let fetchError as NSError {
-                var userLikes = [String: Bool]()
+                var userLikes = [String: Int]()
                 
                 for movie in movies {
-                    userLikes["\(movie)"] = true
+                    userLikes["\(movie)"] = 0
                 }
                 
                 transaction.setData(userLikes, forDocument: userMovieLikes)
@@ -510,7 +590,7 @@ class DataService {
             
             var movieLikes = userMovieLikesSnapshot?.data() ?? [String: Any]()
             for movie in movies {
-                movieLikes["\(movie)"] = true
+                movieLikes["\(movie)"] = 0
             }
             
             transaction.setData(movieLikes, forDocument: userMovieLikes)
@@ -554,10 +634,10 @@ class DataService {
             do {
                 userShowLikesSnapshot = try transaction.getDocument(userShowLikes)
             } catch let fetchError as NSError {
-                var userLikes = [String: Bool]()
+                var userLikes = [String: Int]()
                 
                 for show in shows {
-                    userLikes["\(show)"] = true
+                    userLikes["\(show)"] = 0
                 }
                 
                 transaction.setData(userLikes, forDocument: userShowLikes)
@@ -567,7 +647,7 @@ class DataService {
             
             var showLikes = userShowLikesSnapshot?.data() ?? [String: Any]()
             for show in shows {
-                showLikes["\(show)"] = true
+                showLikes["\(show)"] = 0
             }
             
             transaction.setData(showLikes, forDocument: userShowLikes)

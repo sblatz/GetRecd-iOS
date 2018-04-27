@@ -299,9 +299,27 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             return
         }
         
-        DataService.sharedInstance.getLikedMovies(uid: uid, sucesss: { (likedMovies) in
+        DataService.sharedInstance.getContentWithRating(uid: uid, contentType: DataService.ContentType.Movie, minimumRating: 4, success: { (movieIds) in
             self.movies = []
-            
+            for id in movieIds {
+                MovieService.sharedInstance.getRecommendedMovies(id: id, success: { (recommendedIds) in
+                    var selectedCount = 0
+                    for recommendedId in recommendedIds {
+                        if !self.movies.contains(recommendedId) {
+                            self.movies.append(recommendedId)
+                        }
+                        selectedCount += 1
+                        if selectedCount == 2 {
+                            break
+                        }
+                    }
+                })
+            }
+        }) { (error) in
+            print("Failed to retrieve movie ratings: \(error)")
+        }
+        
+        DataService.sharedInstance.getLikedMovies(uid: uid, sucesss: { (likedMovies) in
             for cell in self.recFeedTableView.visibleCells {
                 cell.accessoryType = .none
                 self.likeButton.isHidden = true
@@ -429,9 +447,28 @@ class RecFeedViewController: UIViewController, UITableViewDelegate, UITableViewD
             // TODO: Show error in getting current user's uid
             return
         }
-        DataService.sharedInstance.getLikedShows(uid: uid, sucesss: { (likedShows) in
+        
+        DataService.sharedInstance.getContentWithRating(uid: uid, contentType: DataService.ContentType.Show, minimumRating: 4, success: { (movieIds) in
             self.shows = []
-            
+            for id in movieIds {
+                TVService.sharedInstance.getRecommendedTV(id: id, success: { (recommendedIds) in
+                    var selectedCount = 0
+                    for recommendedId in recommendedIds {
+                        if !self.shows.contains(recommendedId) {
+                            self.shows.append(recommendedId)
+                        }
+                        selectedCount += 1
+                        if selectedCount == 2 {
+                            break
+                        }
+                    }
+                })
+            }
+        }) { (error) in
+            print("Failed to retrieve show ratings: \(error)")
+        }
+        
+        DataService.sharedInstance.getLikedShows(uid: uid, sucesss: { (likedShows) in
             for cell in self.recFeedTableView.visibleCells {
                 cell.accessoryType = .none
                 self.likeButton.isHidden = true

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SongCell: UITableViewCell {
 
@@ -15,6 +16,7 @@ class SongCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var ratingsView: RatingController!
     
     static var currPlaying = -1
     
@@ -23,16 +25,22 @@ class SongCell: UITableViewCell {
             self.artistLabel.text = ""
             self.artworkView.image = UIImage()
             self.nameLabel.text = ""
+            if self.ratingsView != nil {
+                self.ratingsView.rating = 0
+            }
             
             self.playButton.setImage(nil, for: .normal)
             
             self.nameLabel.text = song.name
             self.artistLabel.text = song.artist
             
+            var songType: DataService.ContentType
             if song.type == .AppleMusic {
                 typeView.image = UIImage(named: "AppleMusicIcon")
+                songType = DataService.ContentType.AppleSong
             } else {
                 typeView.image = UIImage(named: "SpotifyIcon")
+                songType = DataService.ContentType.SpotifySong
             }
             
             if SongCell.currPlaying == self.tag {
@@ -46,10 +54,22 @@ class SongCell: UITableViewCell {
                     self.artworkView.image = image
                 }
             }
+
+            if ratingsView != nil {
+                guard let uid = Auth.auth().currentUser?.uid else {
+                    print("Tried to retrieve a rating before authenticating!")
+                    return
+                }
+
+                DataService.sharedInstance.getRating(
+                        uid: uid,
+                        contentType: songType,
+                        contentId: song.id,
+                        success: { (rating) in self.ratingsView.rating = rating },
+                        failure: { (error) in print("Failed to retrieve a song rating: \(error)") })
+            }
         }
     }
-    
- 
         
     override func awakeFromNib() {
         super.awakeFromNib()

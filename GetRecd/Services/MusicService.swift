@@ -263,62 +263,68 @@ class MusicService: NSObject, SPTAudioStreamingDelegate {
         DataService.sharedInstance.getLikedSpotifySongs(uid: uid, sucesss: { (songs) in
             var recommendURLComponents = URLComponents(string: "https://api.spotify.com/v1/recommendations")
             var tracksString = ""
-            if songs.count == 0 {}
-            if songs.count > 5 {
-                var used = Set<Int>()
-                for _ in 0...4 {
-                    var index = Int(arc4random_uniform(UInt32(songs.count)))
-                    while used.contains(index) {
-                        index = Int(arc4random_uniform(UInt32(songs.count)))
-                    }
-                    if (tracksString == "") {
-                        tracksString.append(songs[index])
-                    } else {
-                        tracksString.append(",\(songs[index])")
-                    }
-                    
-                }
-            } else {
-                for song in songs {
-                    if (tracksString == "") {
-                        tracksString.append(song)
-                    } else {
-                        tracksString.append(",\(song)")
+            var newSongs = [String]()
+            var selectedSongs = [String]()
+            newSongs += songs
+            DataService.sharedInstance.getContentWithRating(uid: uid, contentType: DataService.ContentType.SpotifySong, minimumRating: 3, success: { (recommendedIds) in
+                for recommendedId in recommendedIds {
+                    for _ in 1...3 {
+                        newSongs.append(recommendedId)
                     }
                 }
-            }
-            recommendURLComponents?.queryItems = [URLQueryItem(name: "seed_tracks", value: tracksString)]
-            let recommendURL = recommendURLComponents!.url!
-            var recommendRequest = URLRequest(url: recommendURL)
-            recommendRequest.addValue("Bearer \(self.spotifyAuth.session.accessToken!)", forHTTPHeaderField: "Authorization")
-            print(recommendRequest)
-            let recommendSession = URLSession(configuration: .default)
-            let task = recommendSession.dataTask(with: recommendRequest, completionHandler: { (data, response, error) in
-                var trackResults = [Song]()
-                if let error = error {
-                    completion(trackResults, error)
-                } else if let data = data {
-                    if let trackJSON = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        if let tracks = trackJSON["tracks"] as? [[String: Any]] {
-                            
-                            for track in tracks {
-                                let newTrack = try! SPTPartialTrack(fromDecodedJSON: track)
-                                trackResults.append(try! Song(spotifyData: newTrack))
+                
+                if songs.count > 5 {
+                    for _ in 0...4 {
+                        let index = Int(arc4random_uniform(UInt32(newSongs.count)))
+                        if !selectedSongs.contains(newSongs[index]) {
+                            selectedSongs.append(newSongs[index])
+                            if (tracksString == "") {
+                                tracksString.append(songs[index])
+                            } else {
+                                tracksString.append(",\(songs[index])")
+                            }
+                        }
+                    }
+                } else {
+                    for song in newSongs {
+                        if (tracksString == "") {
+                            tracksString.append(song)
+                        } else {
+                            tracksString.append(",\(song)")
+                        }
+                    }
+                }
+                recommendURLComponents?.queryItems = [URLQueryItem(name: "seed_tracks", value: tracksString)]
+                let recommendURL = recommendURLComponents!.url!
+                var recommendRequest = URLRequest(url: recommendURL)
+                recommendRequest.addValue("Bearer \(self.spotifyAuth.session.accessToken!)", forHTTPHeaderField: "Authorization")
+                print(recommendRequest)
+                let recommendSession = URLSession(configuration: .default)
+                let task = recommendSession.dataTask(with: recommendRequest, completionHandler: { (data, response, error) in
+                    var trackResults = [Song]()
+                    if let error = error {
+                        completion(trackResults, error)
+                    } else if let data = data {
+                        if let trackJSON = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            if let tracks = trackJSON["tracks"] as? [[String: Any]] {
+                                
+                                for track in tracks {
+                                    let newTrack = try! SPTPartialTrack(fromDecodedJSON: track)
+                                    trackResults.append(try! Song(spotifyData: newTrack))
+                                }
+                                
+                                completion(trackResults, nil)
+                                return
                             }
                             
                             completion(trackResults, nil)
-                            return
                         }
-                        
-                        completion(trackResults, nil)
                     }
-                }
-            })
-            
-            task.resume()
-        }) { (error) in
-            completion([], error)
-        }
+                })
+                
+                task.resume()
+            }, failure: { (error) in completion([], error) })
+        }) { (error) in completion([], error) }
     }
     
     // Apple Music stuff
